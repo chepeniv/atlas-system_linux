@@ -10,7 +10,7 @@ static data_type var_name = var_value;
 
 they offer persistence across function calls
 
-# points of interest
+## points of interest
 
 static `int` variables remain in memory throughout the lifetime of a program.
 basic variables are destroyed after a function returns.

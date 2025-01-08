@@ -1,0 +1,8 @@
+*.doc
+*.error
+*.ignore
+*.log
+*.o
+*.out
+*.test.*
+*~

@@ -20,14 +20,19 @@
 
 ### allowed functions and system calls
 
-- `read`
-- `write`
-- `malloc`
-- `realloc`
-- `free`
-- `strcpy`
-- `strncpy`
-- `strcat`
-- `strdup`
-- `memset`
-- `memcpy`
+- `#include <unistd.h>` # man 2 read; man 2 write
+	- `read`
+	- `write`
+
+- `#include <stdlib.h>` # man malloc
+	- `malloc`
+	- `realloc`
+	- `free`
+
+- `#include <string.h>` # man 3 string
+	- `strcpy`
+	- `strncpy`
+	- `strcat`
+	- `strdup`
+	- `memset`
+	- `memcpy`

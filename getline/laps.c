@@ -1,7 +1,8 @@
-#include <stdio.h>
-#include "laps.h"
+#include <unistd.h>		/* read, write */
+#include <stdlib.h>		/* malloc, realloc, free */
+#include <string.h>		/* strcpy, strncpy, strdup, strcat; memset, memcpy */
 
-void race_state(int *id, size_t size);
+#include "laps.h"
 
 /*
  * task0 racing cars
@@ -21,4 +22,11 @@ void race_state(int *id, size_t size);
  * sort cars by their identifier and print "Car X [Y laps]
  *
  * if the function is called with `size = 0` free all allocated memory
+ */
+
+void race_state(int *id, size_t size);
+
+/* {
+ * static unsigned char * race_status = malloc(sizeof(unsigned char) * 64)
+ * }
  */

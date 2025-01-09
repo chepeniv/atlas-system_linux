@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
-SRC = $(wildcard *.c)
+SRC = _getline.c
 OBJ = $(SRC:.c=.o)
-NAME = c.exec
+NAME = _getline.exec
 
 .DELETE_ON_ERROR:
 

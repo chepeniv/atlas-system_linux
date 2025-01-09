@@ -16,6 +16,7 @@
 	- it is checked with [betty-style.pl]() and [betty-doc.pl]()
 - all headers should be include guarded
 - no more than 6 functions are permitted in `_getline.c`
+- `valgrind` must pass with no leaks
 
 ### allowed functions and system calls
 

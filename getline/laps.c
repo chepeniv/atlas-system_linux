@@ -50,8 +50,8 @@ void race_state(int *racers, size_t number_of){
 	static int lap_tracker[MAX_CARS];
 	init_array(lap_tracker, MAX_CARS);
 
-	sort_array(racers, number_of);
 	check_participation(racers, lap_tracker, number_of);
+	sort_array(racers, number_of);
 
 	printf("Race state:\n");
 	for (size_t i = 0; i < number_of; i++)
@@ -62,4 +62,3 @@ void race_state(int *racers, size_t number_of){
 		printf( "Car %d [%d laps]\n", car, lap);
 	}
 }
-

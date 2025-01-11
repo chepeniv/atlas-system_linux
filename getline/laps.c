@@ -1,16 +1,12 @@
 #include <unistd.h>		/* read, write */
 #include <stdlib.h>		/* malloc, realloc, free */
 #include <string.h>		/* strcpy, strncpy, strdup, strcat; memset, memcpy */
-#include <stdio.h>		/* REMOVE AFTER TESTING */
 #include "laps.h"
 
 #define LENGTH_OF(arr) sizeof(arr) / sizeof(*arr)
 
-/* task0 racing cars
- * write a function which keeps track of laps made by each car in a race
- *
- * `id` (an array of ints) represents the identifier for each car
- * `size` is the length of this array
+/*
+ * keep track of the number of laps made by each car
  *
  * each identifier is expected to be unique
  *
@@ -22,33 +18,41 @@
  * "Race state:\n"
  * sort cars by their identifier and print "Car X [Y laps]
  *
+ * if size is 0 free all allocated memory
  */
 
-void print_int_array(int * numbers, int length)
-{
-	int i;
-
-	putchar('[');
-	for (i = 0; i < length - 1; i++)
-		printf("%d, ", numbers[i]);
-	printf("%d", numbers[i]);
-	printf("] ");
-}
-
-void race_state(int *id, size_t length){
-	if (length == 0) {
-		/* if size is 0 free all allocated memory */
+void race_state(int *racers, size_t number_of){
+	if (number_of == 0) {
 		return;
 	}
 
-	print_int_array(id, length);
+	static int lap_tracker[128] = {[0 ... 127] = -1};
+	sort_array(racers, number_of);
+
+	for (size_t i = 0; i < number_of; i++)
+	{
+		int contestant = racers[i];
+		lap_tracker[contestant] = lap_tracker[contestant] + 1;
+		printf(
+			"contestant %d completed %d laps\n",
+			contestant,
+			lap_tracker[contestant]);
+	}
 }
 
 int main(void) {
 	int car_ids[3] = {2, 5, 7};
+	int car_ids_2[5] = {10, 4, 3, 11, 44};
 	int length = LENGTH_OF(car_ids);
+	int length_2 = LENGTH_OF(car_ids_2);
 
 	race_state(car_ids, length);
+	race_state(car_ids_2, length_2);
+	race_state(car_ids, length);
+	race_state(car_ids_2, length_2);
+	race_state(car_ids, length);
+	race_state(car_ids, length);
+	race_state(car_ids_2, length_2);
 
 	return 0;
 }

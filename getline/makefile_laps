@@ -6,14 +6,14 @@ NAME = laps.exec
 
 .DELETE_ON_ERROR:
 
-.PHONY: all clean oclean fclean re
+.PHONY: all clean oclean fclean force
 
 all: $(OBJ)
 	$(CC) $(OBJ) -o $(NAME)
 
 $(SRC): %.c: %.h
 
-re: oclean all
+force: oclean all
 
 fclean: clean oclean
 

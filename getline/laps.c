@@ -1,11 +1,12 @@
 #include <unistd.h>		/* read, write */
 #include <stdlib.h>		/* malloc, realloc, free */
 #include <string.h>		/* strcpy, strncpy, strdup, strcat; memset, memcpy */
-
+#include <stdio.h>		/* REMOVE AFTER TESTING */
 #include "laps.h"
 
-/*
- * task0 racing cars
+#define LENGTH_OF(arr) sizeof(arr) / sizeof(*arr)
+
+/* task0 racing cars
  * write a function which keeps track of laps made by each car in a race
  *
  * `id` (an array of ints) represents the identifier for each car
@@ -21,12 +22,33 @@
  * "Race state:\n"
  * sort cars by their identifier and print "Car X [Y laps]
  *
- * if the function is called with `size = 0` free all allocated memory
  */
 
-void race_state(int *id, size_t size);
+void print_int_array(int * numbers, int length)
+{
+	int i;
 
-/* {
- * static unsigned char * race_status = malloc(sizeof(unsigned char) * 64)
- * }
- */
+	putchar('[');
+	for (i = 0; i < length - 1; i++)
+		printf("%d, ", numbers[i]);
+	printf("%d", numbers[i]);
+	printf("] ");
+}
+
+void race_state(int *id, size_t length){
+	if (length == 0) {
+		/* if size is 0 free all allocated memory */
+		return;
+	}
+
+	print_int_array(id, length);
+}
+
+int main(void) {
+	int car_ids[3] = {2, 5, 7};
+	int length = LENGTH_OF(car_ids);
+
+	race_state(car_ids, length);
+
+	return 0;
+}

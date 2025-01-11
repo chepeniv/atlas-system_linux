@@ -1,9 +1,14 @@
-*.exec
 *.doc
+*.err
 *.error
+*.exec
 *.ignore
 *.log
 *.o
 *.out
+*.ref
+*.ref.*
+*.skip
+*.test
 *.test.*
 *~

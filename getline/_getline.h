@@ -1,7 +1,8 @@
 #ifndef _GETLINE_
 #define _GETLINE_
 
-#include <unistd.h>		/* read, write, size_t */
+/* the number of bytes to extract each iteration */
+#define READ_SIZE 128
 
 char *_getline(const int file_desc);
 

@@ -6,7 +6,7 @@
 /**
  * init_array - initializes every value in a given array to -1
  * @zero_array: array to operate on
- * @length: number of elements in given array
+ * @length: number of elements in the given array
  *
  * Return: void - since the array is operated on directly, there's no need to
  * return any new construction
@@ -18,12 +18,14 @@ void init_array(int *zero_array, size_t length)
 }
 
 /**
- * verify_cars -
- * @racers:
- * @lap_tracker:
- * @number:
+ * verify_cars - checks whether or not the cars given are already participating.
+ * @racers: the cars currently completing a lap
+ * @lap_tracker: an array that stores the race state. each index corresponds to
+ * a unique car id, and it's value indicates the laps completed.
+ * @number: the total number of cars completing the current lap
  *
- * Return: number of new cars joining the race
+ * Return: void - since the array is operated on directly, there's no need to
+ * return any new construction
  */
 void verify_cars(int *racers, int *lap_tracker, size_t number)
 {
@@ -37,11 +39,11 @@ void verify_cars(int *racers, int *lap_tracker, size_t number)
 }
 
 /**
- * race_state -
- * @racers:
- * @number:
+ * race_state - monitor, update, and output the state of the race
+ * @racers: an array of id numbers representing each car
+ * @number: the size of the array passed
  *
- * Return:
+ * Return: void
  */
 void race_state(int *racers, size_t number)
 {
@@ -62,6 +64,7 @@ void race_state(int *racers, size_t number)
 	for (size_t i = 0; i < number; i++)
 	{
 		int car = racers[i];
+
 		lap_tracker[car] += 1;
 	}
 
@@ -69,6 +72,7 @@ void race_state(int *racers, size_t number)
 	for (int car = 0; car < MAX_CARS; car++)
 	{
 		int  lap = lap_tracker[car];
+
 		if (lap != -1)
 			printf("Car %d [%d laps]\n", car, lap);
 	}

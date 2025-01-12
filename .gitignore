@@ -1,10 +1,12 @@
 *.doc
+*.doc.*
 *.err
 *.error
 *.exec
 *.ignore
 *.ignore.*
 *.log
+*.man
 *.o
 *.out
 *.ref

@@ -1,5 +1,3 @@
-#include <stdlib.h>		/* malloc, realloc, free */
-#include <string.h>		/* strcpy, strncpy, strdup, strcat; memset, memcpy */
 #include <stdio.h>		/* printf */
 #include "laps.h"
 

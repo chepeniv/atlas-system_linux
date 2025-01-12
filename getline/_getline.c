@@ -17,11 +17,23 @@
  */
 char *_getline(const int file_desc)
 {
-	/* presume the file descriptor will remain the same */
-	/* use malloc/realloc to setup a string varible */
-	/* READ EXACTLY READ_SIZE BYTES AT A TIME */
-	/* read(file_desc, buffer, READ_SIZE); */
-	/* if there are no more lines, or an error occurs, return NULL */
-	/* remove any trailing newline and terminate with null character */
-	return "hello, world";
+	char *buffer = malloc(sizeof(char) * READ_SIZE);
+	int rlength = read(file_desc, buffer, READ_SIZE);
+
+	if(rlength <= 0)
+	{
+		free(buffer);
+		return NULL;
+	}
+
+	for (int i = 0; i < READ_SIZE; i++)
+	{
+		if (buffer[i] == '\0' && buffer[i - 1] == '\n')
+		{
+			buffer[i - 1] = '\0';
+			break;
+		}
+	}
+
+	return buffer;
 }

@@ -4,26 +4,28 @@
 
 #include "_getline.h"
 
-/* task 2 - multi-fd
+/*
+ * task 2 - multi-fd
  * handle multiple file descriptors
  * if called with -1, free everything and reset all static variables
  */
 
 /**
- * _getline -  read an entire line from a given file descriptor
- * @file_desc:
+ * _getline -  copy a READ_SIZE-length line from a given file descriptor in to
+ * an internal buffer
+ * @file_desc: the file id to reference and read from
  *
- * Return:
+ * Return: a pointer to the written buffer or NULL upon eof or error
  */
 char *_getline(const int file_desc)
 {
 	char *buffer = malloc(sizeof(char) * READ_SIZE);
 	int rlength = read(file_desc, buffer, READ_SIZE);
 
-	if(rlength <= 0)
+	if (rlength <= 0)
 	{
 		free(buffer);
-		return NULL;
+		return (NULL);
 	}
 
 	for (int i = 0; i < READ_SIZE; i++)
@@ -35,5 +37,5 @@ char *_getline(const int file_desc)
 		}
 	}
 
-	return buffer;
+	return (buffer);
 }

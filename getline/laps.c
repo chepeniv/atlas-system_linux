@@ -18,7 +18,8 @@ void init_array(int *zero_array, size_t length)
 }
 
 /**
- * verify_cars - checks whether or not the cars given are already participating.
+ * verify_cars - checks whether or not the cars given are already
+ * participating.
  * @racers: the cars currently completing a lap
  * @lap_tracker: an array that stores the race state. each index corresponds to
  * a unique car id, and it's value indicates the laps completed.

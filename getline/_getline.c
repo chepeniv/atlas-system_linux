@@ -7,8 +7,7 @@
  * task 1 :
  *
  * create a function that reads an entire line from a given file descriptor
- * prototype:
- * 		char *_getline(const int fd);
+ *
  * wherein fd is the file descriptor to read from
  * return a null-terminated string without a newline character
  * if there are no more lines, or an error occurs, return NULL

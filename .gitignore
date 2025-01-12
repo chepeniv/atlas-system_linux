@@ -3,12 +3,13 @@
 *.error
 *.exec
 *.ignore
+*.ignore.*
 *.log
 *.o
 *.out
 *.ref
 *.ref.*
-*.skip
 *.test
 *.test.*
 *~
+test-*

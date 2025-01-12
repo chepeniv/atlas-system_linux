@@ -6,8 +6,7 @@
 
 #include <unistd.h>		/* read, write, size_t */
 
-int verify_cars(int *racers, int *lap_tracker, size_t number);
-void increment_laps(int *tracker, int total);
+void verify_cars(int *racers, int *lap_tracker, size_t number);
 void init_array(int *zero_array, size_t length);
 void race_state(int *racers, size_t number_of);
 

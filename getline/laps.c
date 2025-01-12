@@ -25,30 +25,14 @@ void init_array(int *zero_array, size_t length)
  *
  * Return: number of new cars joining the race
  */
-int verify_cars(int *racers, int *lap_tracker, size_t number)
+void verify_cars(int *racers, int *lap_tracker, size_t number)
 {
-	int new_racers = 0;
-
 	for (size_t i = 0; i < number; i++)
 	{
 		int car = racers[i];
 
 		if (lap_tracker[car] == -1)
-		{
 			printf("Car %d joined the race\n", car);
-			lap_tracker[car] = 0;
-			new_racers++;
-		}
-	}
-	return new_racers;
-}
-
-void increment_laps(int *lap_tracker, int total)
-{
-	for (int i = 0; i < total; i++)
-	{
-		if (lap_tracker[i] != -1)
-			lap_tracker[i] += 1;
 	}
 }
 
@@ -65,8 +49,6 @@ void race_state(int *racers, size_t number)
 		return;
 
 	static int lap_tracker[MAX_CARS];
-	static int total_cars;
-	static int lap_progress;
 	static int race_in_progress;
 
 	if (!race_in_progress)
@@ -75,9 +57,13 @@ void race_state(int *racers, size_t number)
 		race_in_progress++;
 	}
 
-	int new_racers = verify_cars(racers, lap_tracker, number);
+	verify_cars(racers, lap_tracker, number);
 
-	/* NOTE TO SELF: the cars in racers are the ones that get incremented */
+	for (size_t i = 0; i < number; i++)
+	{
+		int car = racers[i];
+		lap_tracker[car] += 1;
+	}
 
 	printf("Race state:\n");
 	for (int car = 0; car < MAX_CARS; car++)
@@ -85,20 +71,5 @@ void race_state(int *racers, size_t number)
 		int  lap = lap_tracker[car];
 		if (lap != -1)
 			printf("Car %d [%d laps]\n", car, lap);
-	}
-
-	if (new_racers)
-	{
-		total_cars += new_racers;
-		lap_progress = new_racers;
-		return;
-	}
-
-	lap_progress += number;
-
-	if (lap_progress == total_cars)
-	{
-		increment_laps(lap_tracker, MAX_CARS);
-		lap_progress = 0;
 	}
 }

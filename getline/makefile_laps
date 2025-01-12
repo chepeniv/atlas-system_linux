@@ -1,17 +1,14 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra # -pedantic
-SRC = laps.c
-OBJ = $(SRC:.c=.o)
+CFLAGS = -Wall -Werror -Wextra -pedantic
+SRC = laps.c main_laps.test.c
 NAME = laps.exec
 
 .DELETE_ON_ERROR:
 
 .PHONY: all clean oclean fclean force
 
-all: $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
-
-$(SRC): %.c: %.h
+all: $(SRC)
+	$(CC) $(SRC) -o $(NAME)
 
 force: oclean all
 

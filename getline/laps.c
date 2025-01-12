@@ -1,19 +1,6 @@
 #include <stdio.h>		/* printf */
+#include <string.h>
 #include "laps.h"
-
-/**
- * init_array - initializes every value in a given array to -1
- * @zero_array: array to operate on
- * @length: number of elements in the given array
- *
- * Return: void - since the array is operated on directly, there's no need to
- * return any new construction
- */
-void init_array(int *zero_array, size_t length)
-{
-	for (size_t i = 0; i < length; i++)
-		zero_array[i] = -1;
-}
 
 /**
  * verify_cars - checks whether or not the cars given are already
@@ -54,7 +41,7 @@ void race_state(int *racers, size_t number)
 
 	if (!race_in_progress)
 	{
-		init_array(lap_tracker, MAX_CARS);
+		memset(&lap_tracker, -1, (MAX_CARS * sizeof(int)));
 		race_in_progress++;
 	}
 

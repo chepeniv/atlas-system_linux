@@ -1,26 +1,53 @@
-#include <stdlib.h>		/* malloc, realloc, free */
-#include <string.h>		/* strcpy, strncpy, strdup, strcat; memset, memcpy */
-#include <unistd.h>		/* read, write, size_t */
+#include <stdlib.h>	/* malloc, realloc, free */
+#include <string.h>	/* strcpy, strncpy, strdup, strcat; memset, memcpy */
+#include <unistd.h>	/* read, write, size_t */
+
+#include <stdio.h>	/* TESTING: getchar, printf */
 
 #include "_getline.h"
 
-/*
- * task 2 - multi-fd
- * handle multiple file descriptors
- * if called with -1, free everything and reset all static variables
- */
-
-int set_line_end(char *buffer, int read_length)
+int find_line(
+char *file_buffer,
+char *line_buffer,
+int read_length,
+int position)
 {
-	for (int i = 0; i < read_length; i++)
-	{
-		if (buffer[i] == '\n')
-		{
-			buffer[i] = '\0';
-			return (i);
-		}
-	}
-	return (read_length);
+	int line_length = 0;
+	int i = 0;
+
+	if (file_buffer[position] == '\n')
+		position++;
+	if (position == read_length - 1)
+		return (0);
+
+	i = position;
+
+	/* DEBUG OUTPUT */
+	/* printf("current values: %d, %d, %d, %d\n", */
+	/* 	read_length, */
+	/* 	position, */
+	/* 	line_length, */
+	/* 	i); */
+	/* printf("before while loop\n"); */
+	/* /1* getchar(); *1/ */
+
+	while (
+	file_buffer[i] != '\n' ||
+	file_buffer[i] != '\0' ||
+	position < read_length - 1)
+		i++;
+
+	line_length = i - position - 1;
+
+	strncpy(
+		line_buffer,
+		&file_buffer[position],
+		line_length);
+
+	if (file_buffer[i] == '\0')
+		return (0);
+
+	return (i);
 }
 
 /**
@@ -32,42 +59,32 @@ int set_line_end(char *buffer, int read_length)
  */
 char *_getline(const int file_desc)
 {
-	static int start_pos;
-	static int end_pos;
-	static int read_length;
+	static int position = 0;
+	static int read_length = 0;
 	static char *file_buffer;
 	static char *line_buffer;
 
 	if (read_length == 0)
 	{
 		file_buffer = malloc(sizeof(char) * READ_SIZE);
-		line_buffer = malloc(sizeof(char) * READ_SIZE * 2);
-	}
+		line_buffer = malloc(sizeof(char) * LINE_SIZE);
+		memset(file_buffer, '\0', READ_SIZE);
+		memset(line_buffer, '\0', LINE_SIZE);
 
-	if (end_pos == 0)
 		read_length = read(file_desc, file_buffer, READ_SIZE);
 
-	if (read_length <= 0)
-	{
-		free(file_buffer);
-		free(line_buffer);
-		return (NULL);
+		if (read_length <= 0)
+		{
+			free(file_buffer);
+			free(line_buffer);
+			return (NULL);
+		}
 	}
 
-	end_pos += set_line_end(file_buffer, read_length);
+	position = find_line(file_buffer, line_buffer, read_length, position);
 
-	strncpy(
-		&line_buffer[start_pos],
-		&file_buffer[start_pos],
-		end_pos - start_pos);
-
-	start_pos = end_pos + 1;
-
-	if (start_pos >= read_length)
-	{
-		start_pos = 0;
-		end_pos =0;
-	}
+	if (position == 0)
+		read_length = 0;
 
 	return (strdup(line_buffer));
 }

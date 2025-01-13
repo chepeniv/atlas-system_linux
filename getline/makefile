@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic
+CFLAGS = -Wall -Werror -Wextra -pedantic -ggdb3
 TASK0 = laps.c 
 TASK1 = _getline.c
 TASK2 = _getline.c

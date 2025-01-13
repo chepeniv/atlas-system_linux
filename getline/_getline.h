@@ -2,7 +2,8 @@
 #define _GETLINE_
 
 /* the number of bytes to extract each iteration */
-#define READ_SIZE 128
+#define READ_SIZE 2048
+#define LINE_SIZE 128
 
 char *_getline(const int file_desc);
 

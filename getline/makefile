@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -g -ggdb3 # -ggdb -O0
+CFLAGS = -Wall -Werror -Wextra -pedantic
 GDB_FLAGS= -g -ggdb3
 GCC_CMD = $(CC) $(CFLAGS) $(GDB_FLAGS)
 TASK0 = laps.c 
@@ -14,13 +14,13 @@ all:
 	@echo "-------- specify a task# to compile --------"
 
 task0: $(TASK0)
-	$(CC) $(CFLAGS) $(TASK0) $(TASK0:%.c=test-0_%.c) -o $(TASK0:.c=.exec)
+	$(CC) $(CFLAGS) $(TASK0) $(TASK0:%.c=test-0_%.c) -o task0.exec
 
 task1: $(TASK1)
-	$(CC) $(CFLAGS) $(TASK1) $(TASK1:%.c=test-1_%.c) -o $(TASK1:.c=.exec)
+	$(GCC_CMD) $(TASK1) $(TASK1:%.c=test-1_%.c) -o task1.exec
 
 task2: $(TASK2)
-	$(CC) $(CFLAGS) $(TASK2) $(TASK2:%.c=test-2_%.c) -o $(TASK2:.c=.exec)
+	$(GCC_CMD) $(TASK2) $(TASK2:%.c=test-2_%.c) -o task2.exec
 
 force: oclean all
 

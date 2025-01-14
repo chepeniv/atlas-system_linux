@@ -1,5 +1,7 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -ggdb3
+CFLAGS = -Wall -Werror -Wextra -pedantic -g -ggdb3 # -ggdb -O0
+GDB_FLAGS= -g -ggdb3
+GCC_CMD = $(CC) $(CFLAGS) $(GDB_FLAGS)
 TASK0 = laps.c 
 TASK1 = _getline.c
 TASK2 = _getline.c

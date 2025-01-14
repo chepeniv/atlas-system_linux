@@ -31,11 +31,11 @@ int position)
 	/* printf("before while loop\n"); */
 	/* /1* getchar(); *1/ */
 
-	while (
-	file_buffer[i] != '\n' ||
-	file_buffer[i] != '\0' ||
-	position < read_length - 1)
+	while ((file_buffer[i] != '\n') || (file_buffer[i] != '\0') || (i < read_length - position - 1))
+	{
+		printf("%c", file_buffer[i]);
 		i++;
+	}
 
 	line_length = i - position - 1;
 

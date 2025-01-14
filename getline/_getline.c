@@ -22,29 +22,18 @@ int position)
 
 	i = position;
 
-	/* DEBUG OUTPUT */
-	/* printf("current values: %d, %d, %d, %d\n", */
-	/* 	read_length, */
-	/* 	position, */
-	/* 	line_length, */
-	/* 	i); */
-
-	while(
-	(char) file_buffer[i] != '\n' &&
-	(char) file_buffer[i] != '\0' &&
-	i < (read_length - 1)
-	)
+	while (
+	file_buffer[i] != '\n' &&
+	file_buffer[i] != '\0' &&
+	i < (read_length - 1))
 		i++;
 
-	line_length = i - position - 1;
+	line_length = i - position;
 
 	strncpy(
 		line_buffer,
 		&file_buffer[position],
 		line_length);
-
-	if (file_buffer[i] == '\0')
-		return (0);
 
 	return (i);
 }
@@ -61,29 +50,32 @@ char *_getline(const int file_desc)
 	static int position;
 	static int read_length;
 	static char *file_buffer;
-	static char *line_buffer;
+	char *line_buffer;
 
 	if (read_length == 0)
 	{
 		file_buffer = malloc(sizeof(char) * READ_SIZE);
-		line_buffer = malloc(sizeof(char) * LINE_SIZE);
-		memset(file_buffer, '\0', READ_SIZE);
-		memset(line_buffer, '\0', LINE_SIZE);
+		if (!file_buffer)
+			return (NULL);
 
+		/* memset(file_buffer, '\0', READ_SIZE); */
 		read_length = read(file_desc, file_buffer, READ_SIZE);
 
 		if (read_length <= 0)
 		{
 			free(file_buffer);
-			free(line_buffer);
 			return (NULL);
 		}
 	}
 
+	line_buffer = malloc(sizeof(char) * LINE_SIZE);
+	memset(line_buffer, '\0', LINE_SIZE);
 	position = find_line(file_buffer, line_buffer, read_length, position);
 
 	if (position == 0)
 		read_length = 0;
+	if (position >= READ_SIZE)
+		return (NULL);
 
-	return (strdup(line_buffer));
+	return (line_buffer);
 }

@@ -28,14 +28,13 @@ int position)
 	/* 	position, */
 	/* 	line_length, */
 	/* 	i); */
-	/* printf("before while loop\n"); */
-	/* /1* getchar(); *1/ */
 
-	while ((file_buffer[i] != '\n') || (file_buffer[i] != '\0') || (i < read_length - position - 1))
-	{
-		printf("%c", file_buffer[i]);
+	while(
+	(char) file_buffer[i] != '\n' &&
+	(char) file_buffer[i] != '\0' &&
+	i < (read_length - 1)
+	)
 		i++;
-	}
 
 	line_length = i - position - 1;
 
@@ -59,8 +58,8 @@ int position)
  */
 char *_getline(const int file_desc)
 {
-	static int position = 0;
-	static int read_length = 0;
+	static int position;
+	static int read_length;
 	static char *file_buffer;
 	static char *line_buffer;
 

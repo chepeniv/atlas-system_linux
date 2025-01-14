@@ -2,25 +2,22 @@
 #include <string.h>	/* strcpy, strncpy, strdup, strcat; memset, memcpy */
 #include <unistd.h>	/* read, write, size_t */
 
-#include <stdio.h>	/* TESTING: getchar, printf */
-
 #include "_getline.h"
 
-int find_line(
+void find_line(
 char *file_buffer,
 char *line_buffer,
-int read_length,
-int position)
+int position[1],
+int read_length
+)
 {
 	int line_length = 0;
 	int i = 0;
 
-	if (file_buffer[position] == '\n')
-		position++;
-	if (position == read_length - 1)
-		return (0);
+	if (file_buffer[position[0]] == '\n')
+		position[0]++;
 
-	i = position;
+	i = position[0];
 
 	while (
 	file_buffer[i] != '\n' &&
@@ -28,14 +25,16 @@ int position)
 	i < (read_length - 1))
 		i++;
 
-	line_length = i - position;
+	line_length = i - position[0];
+	line_buffer = realloc(line_buffer, line_length + 1);
+	memset(line_buffer, '\0', line_length + 1);
 
 	strncpy(
 		line_buffer,
-		&file_buffer[position],
+		&file_buffer[position[0]],
 		line_length);
 
-	return (i);
+	position[0] = i;
 }
 
 /**
@@ -47,18 +46,19 @@ int position)
  */
 char *_getline(const int file_desc)
 {
-	static int position;
+	static int position[1];
 	static int read_length;
 	static char *file_buffer;
 	char *line_buffer;
 
 	if (read_length == 0)
 	{
+		position[0] = 0;
 		file_buffer = malloc(sizeof(char) * READ_SIZE);
 		if (!file_buffer)
 			return (NULL);
 
-		/* memset(file_buffer, '\0', READ_SIZE); */
+		memset(file_buffer, '\0', READ_SIZE);
 		read_length = read(file_desc, file_buffer, READ_SIZE);
 
 		if (read_length <= 0)
@@ -68,13 +68,12 @@ char *_getline(const int file_desc)
 		}
 	}
 
-	line_buffer = malloc(sizeof(char) * LINE_SIZE);
-	memset(line_buffer, '\0', LINE_SIZE);
-	position = find_line(file_buffer, line_buffer, read_length, position);
+	line_buffer = malloc(sizeof(char));
+	find_line(file_buffer, line_buffer, position, read_length);
 
-	if (position == 0)
+	if (position[0] == 0)
 		read_length = 0;
-	if (position >= READ_SIZE)
+	if (position[0] >= read_length)
 		return (NULL);
 
 	return (line_buffer);

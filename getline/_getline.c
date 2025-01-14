@@ -4,6 +4,17 @@
 
 #include "_getline.h"
 
+/**
+ * find_line - from a given buffer copy a single line into another buffer
+ * starting from a given position
+ * @file_buffer: the source buffer to analyse
+ * @line_buffer: the destination buffer to write the extracted line into
+ * @position: the position to from which to start reading the source buffer
+ * @read_length: the length of the source buffer
+ *
+ * Return: void, values for line_buffer and position are written directly into
+ * their corresponding static buffers
+ */
 void find_line(
 char *file_buffer,
 char *line_buffer,
@@ -25,6 +36,7 @@ int read_length
 	i < (read_length - 1))
 		i++;
 
+	/* dynamically set needed memory */
 	line_length = i - position[0];
 	line_buffer = realloc(line_buffer, line_length + 1);
 	memset(line_buffer, '\0', line_length + 1);
@@ -38,29 +50,25 @@ int read_length
 }
 
 /**
- * _getline -  copy a READ_SIZE-length line from a given file descriptor in to
- * an internal buffer
- * @file_desc: the file id to reference and read from
+ * _getline -  extract a line from the given file descriptor
+ * @file_desc: the file id to parse
  *
- * Return: a pointer to the written buffer or NULL upon eof or error
+ * Return: a pointer to the line buffer or NULL upon eof or error
  */
 char *_getline(const int file_desc)
 {
-	static int position[1];
 	static int read_length;
+	static int position[1];
 	static char *file_buffer;
 	char *line_buffer;
 
 	if (read_length == 0)
 	{
-		position[0] = 0;
 		file_buffer = malloc(sizeof(char) * READ_SIZE);
 		if (!file_buffer)
 			return (NULL);
 
-		memset(file_buffer, '\0', READ_SIZE);
 		read_length = read(file_desc, file_buffer, READ_SIZE);
-
 		if (read_length <= 0)
 		{
 			free(file_buffer);
@@ -68,9 +76,11 @@ char *_getline(const int file_desc)
 		}
 	}
 
+	/* initialize pointer before passing it along */
 	line_buffer = malloc(sizeof(char));
 	find_line(file_buffer, line_buffer, position, read_length);
 
+	/* figure out how to handle files larger than READ_SIZE */
 	if (position[0] == 0)
 		read_length = 0;
 	if (position[0] >= read_length)

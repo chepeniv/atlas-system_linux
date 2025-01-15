@@ -59,7 +59,7 @@ char *_getline(const int file_desc)
 {
 	static data_buffer file = { .length = -1, .position = 0, .data = NULL };
 	data_buffer line = { .length = 0, .position = 0, .data = NULL };
-	char item;
+	char symbol;
 
 	if (file.length < 0)
 		file = extract_file_data(file_desc, file);
@@ -72,10 +72,10 @@ char *_getline(const int file_desc)
 		file.position++;
 
 	line.position = file.position;
-	item = file.data[line.position];
-	while (item != '\n' && item != '\0' && item != '\r' &&
+	symbol = file.data[line.position];
+	while (symbol != '\n' && symbol != '\r' && symbol > 0 &&
 	line.position < (file.length - 1))
-		item = file.data[++line.position];
+		symbol = file.data[++line.position];
 
 	line.length = line.position - file.position;
 	line.data = malloc(sizeof(char) * (line.length + 1));

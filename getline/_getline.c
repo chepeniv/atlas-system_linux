@@ -68,12 +68,10 @@ char *_getline(const int file_desc)
 		free(file.data);
 		return (NULL);
 	}
-	if (file.data[file.position] == '\n') /* move pass newline char */
-		file.position++;
 
 	line.position = file.position;
 	do {
-		symbol = file.data[++line.position];
+		symbol = file.data[line.position++];
 	} while (symbol != '\n' && symbol != '\r' && symbol > 0 &&
 			line.position < (file.length - 1));
 
@@ -90,11 +88,13 @@ char *_getline(const int file_desc)
 	strncpy(line.data, &file.data[file.position], line.length);
 
 	file.position = line.position;
-	if (file.position >= file.length) /* terminate */
+	if (file.position > file.length) /* terminate */
 	{
 		free(file.data);
 		free(line.data);
 		return (NULL);
 	}
+	if (line.data[line.length - 1] == '\n')
+		line.data[line.length - 1] = '\0';
 	return (line.data);
 }

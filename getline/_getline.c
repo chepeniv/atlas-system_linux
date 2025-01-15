@@ -62,7 +62,7 @@ char *_getline(const int file_desc)
 
 	if (file.length < 0)
 		file = extract_file_data(file_desc, file);
-	if (file.length <= 1) /* abandon empty file */
+	if (file.length < 1)
 	{
 		free(file.data);
 		return (NULL);

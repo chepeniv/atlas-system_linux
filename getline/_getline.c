@@ -40,9 +40,8 @@ data_buffer extract_file_data(int file_desc, data_buffer file)
 			}
 			strncpy(&file.data[file.length], chunk, read_length);
 			file.length += read_length;
-		} else {
+		} else
 			break;
-		}
 	} while (read_length > 0);
 
 	free(chunk);

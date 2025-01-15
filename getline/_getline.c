@@ -72,8 +72,7 @@ char *_getline(const int file_desc)
 	line.position = file.position;
 	do {
 		symbol = file.data[line.position++];
-	} while (symbol != '\n' && symbol != '\r' && symbol > 0 &&
-			line.position < (file.length - 1));
+	} while (symbol != '\n' && symbol > 0 && line.position < file.length);
 
 	line.length = line.position - file.position;
 	line.data = malloc(sizeof(char) * (line.length + 1));

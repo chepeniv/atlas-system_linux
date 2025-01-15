@@ -13,40 +13,67 @@
  * @read_length: the length of the source buffer
  *
  * Return: void, values for line_buffer and position are written directly into
- * their corresponding static buffers
+ * their corresponding buffers
  */
-void find_line(
-char *file_buffer,
-char *line_buffer,
-int position[1],
-int read_length
-)
+data_buffer extract_line(data_buffer file)
 {
-	int line_length = 0;
-	int i = 0;
+	const char *data = file.data;
+	data_buffer line = { .length = 0, .position = 0, .data = NULL };
 
-	if (file_buffer[position[0]] == '\n')
-		position[0]++;
+	/* move pass newline char */
+	if (data[file.position] == '\n')
+		file.position++;
 
-	i = position[0];
-
+	/* find end of line */
+	line.position = file.position;
 	while (
-	file_buffer[i] != '\n' &&
-	file_buffer[i] != '\0' &&
-	i < (read_length - 1))
-		i++;
+	data[line.position] != '\n' &&
+	data[line.position] != '\0' &&
+	line.position < (file.length - 1))
+		line.position++;
 
-	/* dynamically set needed memory */
-	line_length = i - position[0];
-	line_buffer = realloc(line_buffer, line_length + 1);
-	memset(line_buffer, '\0', line_length + 1);
+	/* allocate needed memory for line data */
+	line.length = line.position - file.position;
+	line.data = malloc(sizeof(char) * (line.length + 1));
+	memset(line.data, '\0', line.length + 1);
 
+	/* copy line data from file_buffer into line_buffer */
 	strncpy(
-		line_buffer,
-		&file_buffer[position[0]],
-		line_length);
+		line.data,
+		&data[file.position],
+		line.length);
 
-	position[0] = i;
+	/* advance position to next line*/
+	return (line);
+}
+
+data_buffer extract_file_data(int file_desc, data_buffer file)
+{
+	char *data_buffer = malloc(sizeof(char) * READ_SIZE);
+	int read_length = 0;
+
+	file.data = malloc(sizeof(char));
+	file.length = 0;
+	do {
+		memset(data_buffer, '\0', READ_SIZE);
+		read_length = read(file_desc, data_buffer, READ_SIZE);
+
+		if (read_length > 0)
+		{
+			file.data = realloc(file.data, file.length + read_length + 1);
+
+			strncpy(
+				&file.data[file.length],
+				data_buffer,
+				read_length);
+
+			file.length += read_length;
+		}
+	} while (read_length);
+
+	free(data_buffer);
+
+	return (file);
 }
 
 /**
@@ -57,34 +84,21 @@ int read_length
  */
 char *_getline(const int file_desc)
 {
-	static int read_length;
-	static int position[1];
-	static char *file_buffer;
-	char *line_buffer;
+	static data_buffer file = { .length = -1, .position = 0, .data = NULL };
+	data_buffer line;
 
-	if (read_length == 0)
+	if (file.length < 0)
+		file = extract_file_data(file_desc, file);
+
+	line = extract_line(file);
+
+	file.position = line.position;
+	if (file.position >= file.length)
 	{
-		file_buffer = malloc(sizeof(char) * READ_SIZE);
-		if (!file_buffer)
-			return (NULL);
-
-		read_length = read(file_desc, file_buffer, READ_SIZE);
-		if (read_length <= 0)
-		{
-			free(file_buffer);
-			return (NULL);
-		}
+		free(file.data);
+		free(line.data);
+		return (NULL);
 	}
 
-	/* initialize pointer before passing it along */
-	line_buffer = malloc(sizeof(char));
-	find_line(file_buffer, line_buffer, position, read_length);
-
-	/* figure out how to handle files larger than READ_SIZE */
-	if (position[0] == 0)
-		read_length = 0;
-	if (position[0] >= read_length)
-		return (NULL);
-
-	return (line_buffer);
+	return (line.data);
 }

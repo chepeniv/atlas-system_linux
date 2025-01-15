@@ -35,7 +35,6 @@ data_buffer extract_file_data(int file_desc, data_buffer file)
 			file.data = realloc(file.data, file.length + read_length + 1);
 			if (!file.data)
 			{
-				free(chunk);
 				free(file.data);
 				break;
 			}
@@ -43,10 +42,7 @@ data_buffer extract_file_data(int file_desc, data_buffer file)
 			file.length += read_length;
 		}
 		else if (read_length == -1)
-		{
-			free(chunk);
 			free(file.data);
-		}
 	} while (read_length > 0);
 
 	free(chunk);
@@ -63,6 +59,7 @@ char *_getline(const int file_desc)
 {
 	static data_buffer file = { .length = -1, .position = 0, .data = NULL };
 	data_buffer line = { .length = 0, .position = 0, .data = NULL };
+	char item;
 
 	if (file.length < 0)
 		file = extract_file_data(file_desc, file);
@@ -75,11 +72,10 @@ char *_getline(const int file_desc)
 		file.position++;
 
 	line.position = file.position;
-	while (
-	file.data[line.position] != '\n' &&
-	file.data[line.position] != '\0' &&
+	item = file.data[line.position];
+	while (item != '\n' && item != '\0' && item != '\r' &&
 	line.position < (file.length - 1))
-		line.position++;
+		item = file.data[++line.position];
 
 	line.length = line.position - file.position;
 	line.data = malloc(sizeof(char) * (line.length + 1));

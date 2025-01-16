@@ -25,8 +25,6 @@ char *_getline(const int file_desc);
 int get_file_index(data_buffer **chain, int *count, int desc);
 void extract_file_data(data_buffer **file);
 void *free_buffers(int *count, data_buffer **chain);
-
-/* data_buffer extract_line(data_buffer file); */
-/* data_buffer extract_file_data(int file_desc, data_buffer file); */
+data_buffer extract_line(data_buffer **file);
 
 #endif /* _GETLINE_ */

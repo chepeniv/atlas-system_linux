@@ -53,8 +53,9 @@ void extract_file_data(data_buffer **file)
 	if (!data_chunk)
 		return;
 
+	/* incrementally build data from given file */
 	handle->length = 0;
-	do { /* incrementally extract all data from given file */
+	do {
 		memset(data_chunk, '\0', READ_SIZE);
 		read_length = read(handle->desc, data_chunk, READ_SIZE);
 		if (read_length > 0)
@@ -92,6 +93,43 @@ void *free_buffers(int *count, data_buffer **buffers)
 }
 
 /**
+ * extract_line -
+ * @file:
+ *
+ * Return:
+ */
+data_buffer extract_line(data_buffer **file)
+{
+	data_buffer line = { .length = 0, .position = 0, .data = NULL };
+	data_buffer *handle = *file;
+	char symbol;
+
+	line.position = handle->position;
+	if (line.position >= handle->length)
+		return (line);
+
+	do {
+		symbol = handle->data[line.position++];
+	} while (symbol != '\n' && symbol != '\0');
+
+	line.length = line.position - handle->position;
+	line.data = malloc(sizeof(char) * (line.length + 1));
+	if (!line.data)
+		return (line);
+
+	memset(line.data, '\0', line.length + 1);
+	strncpy(line.data, &handle->data[handle->position], line.length);
+
+	handle->position = line.position;
+
+	/* replace newline with zero-terminator */
+	if (line.data[line.length - 1] == '\n')
+		line.data[line.length - 1] = '\0';
+
+	return (line);
+}
+
+/**
  * _getline -  extract a line from the given file
  * @desc: the file id to reference
  *
@@ -102,8 +140,7 @@ char *_getline(const int desc)
 	static data_buffer *file_chain;
 	static int count;
 	data_buffer *file;
-	data_buffer line = { .length = 0, .position = 0, .data = NULL };
-	char symbol;
+	data_buffer line;
 	int index = 0;
 
 	if (desc < 0)
@@ -114,27 +151,7 @@ char *_getline(const int desc)
 	if (file->length < 0)
 		extract_file_data(&file);
 
-	line.position = file->position;
-	if (line.position >= file->length)
-		return (NULL);
-
-	do {
-		symbol = file->data[line.position++];
-	} while (symbol != '\n' && symbol != '\0');
-
-	line.length = line.position - file->position;
-	line.data = malloc(sizeof(char) * (line.length + 1));
-	if (!line.data)
-		return (NULL);
-
-	memset(line.data, '\0', line.length + 1);
-	strncpy(line.data, &file->data[file->position], line.length);
-
-	file->position = line.position;
-
-	/* replace newline with zero-terminator */
-	if (line.data[line.length - 1] == '\n')
-		line.data[line.length - 1] = '\0';
+	line = extract_line(&file);
 
 	return (line.data);
 }

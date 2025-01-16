@@ -14,13 +14,14 @@
  */
 typedef struct _data_buffer
 {
+	int desc;
 	int length;
 	int position;
 	char *data;
 } data_buffer;
 
 char *_getline(const int file_desc);
-data_buffer extract_file_data(int file_desc, data_buffer file);
+/* data_buffer extract_file_data(int file_desc, data_buffer file); */
 /* data_buffer extract_line(data_buffer file); */
 
 #endif /* _GETLINE_ */

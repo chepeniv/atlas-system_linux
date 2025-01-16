@@ -45,11 +45,16 @@ void extract_file_data(data_buffer **file)
 	int read_length = 0;
 
 	file_data = malloc(sizeof(char));
-	if (!file_data)
+	data_chunk = malloc(sizeof(char) * READ_SIZE);
+	if (!file_data || !data_chunk)
+	{
 		free(file_data);
+		free(data_chunk);
+		handle->position = -1;
+		return;
+	}
 
 	handle->length = 0;
-	data_chunk = malloc(sizeof(char) * READ_SIZE);
 	do { /* incrementally extract all data from given file */
 		memset(data_chunk, '\0', READ_SIZE);
 		read_length = read(handle->desc, data_chunk, READ_SIZE);
@@ -60,13 +65,13 @@ void extract_file_data(data_buffer **file)
 				handle->length + read_length + 1);
 			if (!handle->data)
 			{
-				free(handle->data);
+				handle->position = -1;
 				break;
 			}
+
 			strncpy(&handle->data[handle->length], data_chunk, read_length);
 			handle->length += read_length;
-		} else
-			break;
+		}
 	} while (read_length > 0);
 
 	free(data_chunk);
@@ -109,8 +114,6 @@ char *_getline(const int desc)
 		return (free_buffers(&count, &file_chain));
 
 	index = get_file_index(&file_chain, &count, desc);
-	if (index < 0)
-		return (free_buffers(&count, &file_chain));
 
 	file = &file_chain[index];
 	if (file->length < 0)
@@ -119,28 +122,24 @@ char *_getline(const int desc)
 	line.position = file->position;
 	do {
 		symbol = file->data[line.position++];
-	} while (symbol != '\n' && symbol > 0 && line.position < file->length);
+	} while (symbol != '\n' && symbol != '\0');
+
+	if (line.position > file->length)
+		return (NULL);
 
 	line.length = line.position - file->position;
 	line.data = malloc(sizeof(char) * (line.length + 1));
 	if (!line.data)
-	{
-		free(line.data);
-		free(file->data);
 		return (NULL);
-	}
 
 	memset(line.data, '\0', line.length + 1);
 	strncpy(line.data, &file->data[file->position], line.length);
 
 	file->position = line.position;
-	if (file->position > file->length) /* terminate */
-	{
-		free(file->data);
-		free(line.data);
-		return (NULL);
-	}
+
+	/* replace newline with zero-terminator */
 	if (line.data[line.length - 1] == '\n')
 		line.data[line.length - 1] = '\0';
+
 	return (line.data);
 }

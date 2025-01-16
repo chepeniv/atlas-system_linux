@@ -5,12 +5,13 @@
 #include "_getline.h"
 
 /**
- * get_file_index -
- * @file_chain:
- * @count:
- * @desc:
+ * get_file_index - returns an index to a data_buffer given a descriptor and an
+ * array. if it doesn't exist on the array it will be appended to it
+ * @file_chain: the array to examine and operate on
+ * @count: the current size of the array
+ * @desc: the file id to search for
  *
- * Return:
+ * Return: the index at which the array is stored in the array
  */
 int get_file_index(data_buffer **file_chain, int *count, int desc)
 {
@@ -36,10 +37,11 @@ int get_file_index(data_buffer **file_chain, int *count, int desc)
 }
 
 /**
- * extract_file_data -
- * @file:
+ * extract_file_data - completely write the given file's data into a
+ * data_buffer
+ * @file: a pointer to a data_buffer into which the data is stored
  *
- * Return:
+ * Return: void
  */
 void extract_file_data(data_buffer **file)
 {
@@ -49,10 +51,7 @@ void extract_file_data(data_buffer **file)
 
 	data_chunk = malloc(sizeof(char) * READ_SIZE);
 	if (!data_chunk)
-	{
-		handle->position = -1;
 		return;
-	}
 
 	handle->length = 0;
 	do { /* incrementally extract all data from given file */
@@ -64,10 +63,7 @@ void extract_file_data(data_buffer **file)
 				handle->data,
 				handle->length + read_length + 1);
 			if (!handle->data)
-			{
-				handle->position = -1;
 				break;
-			}
 
 			strncpy(&handle->data[handle->length], data_chunk, read_length);
 			handle->length += read_length;
@@ -78,11 +74,11 @@ void extract_file_data(data_buffer **file)
 }
 
 /**
- * free_buffers -
- * @count:
- * @buffers:
+ * free_buffers - completely liberates all allocated memory within an array
+ * @count: the size of the array
+ * @buffers: the double buffered array to clean up
  *
- * Return:
+ * Return: if no errors occurs it returns NULL
  */
 void *free_buffers(int *count, data_buffer **buffers)
 {
@@ -97,7 +93,7 @@ void *free_buffers(int *count, data_buffer **buffers)
 
 /**
  * _getline -  extract a line from the given file
- * @file_desc: the file id to reference
+ * @desc: the file id to reference
  *
  * Return: a pointer to the line buffer or NULL upon eof or error
  */
@@ -114,7 +110,6 @@ char *_getline(const int desc)
 		return (free_buffers(&count, &file_chain));
 
 	index = get_file_index(&file_chain, &count, desc);
-
 	file = &file_chain[index];
 	if (file->length < 0)
 		extract_file_data(&file);

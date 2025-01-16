@@ -8,6 +8,7 @@
 /**
  * struct _data_buffer - a structure for storing read data along with some
  * metadata
+ * @desc: the id assigned to the file by the operating system
  * @length: how long the number of characters are stored within
  * @position: where along the data was the last read point
  * @data: a pointer to a buffer holding the data
@@ -21,7 +22,11 @@ typedef struct _data_buffer
 } data_buffer;
 
 char *_getline(const int file_desc);
-/* data_buffer extract_file_data(int file_desc, data_buffer file); */
+int get_file_index(data_buffer **chain, int *count, int desc);
+void extract_file_data(data_buffer **file);
+void *free_buffers(int *count, data_buffer **chain);
+
 /* data_buffer extract_line(data_buffer file); */
+/* data_buffer extract_file_data(int file_desc, data_buffer file); */
 
 #endif /* _GETLINE_ */

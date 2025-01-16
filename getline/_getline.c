@@ -23,7 +23,10 @@ int get_file_index(data_buffer **file_chain, int *count, int desc)
 
 	/* file desc not found, append new index */
 	*count = *count + 1;
-	*file_chain = realloc(*file_chain, sizeof(data_buffer) * (*count));
+	if (*count == 1)
+		*file_chain = malloc(sizeof(data_buffer));
+	else
+		*file_chain = realloc(*file_chain, sizeof(data_buffer) * (*count));
 	(*file_chain)[index].desc = desc;
 	(*file_chain)[index].length = -1;
 	(*file_chain)[index].position = 0;
@@ -41,15 +44,12 @@ int get_file_index(data_buffer **file_chain, int *count, int desc)
 void extract_file_data(data_buffer **file)
 {
 	data_buffer *handle = *file;
-	char *file_data, *data_chunk;
+	char *data_chunk;
 	int read_length = 0;
 
-	file_data = malloc(sizeof(char));
 	data_chunk = malloc(sizeof(char) * READ_SIZE);
-	if (!file_data || !data_chunk)
+	if (!data_chunk)
 	{
-		free(file_data);
-		free(data_chunk);
 		handle->position = -1;
 		return;
 	}
@@ -120,12 +120,12 @@ char *_getline(const int desc)
 		extract_file_data(&file);
 
 	line.position = file->position;
+	if (line.position >= file->length)
+		return (NULL);
+
 	do {
 		symbol = file->data[line.position++];
 	} while (symbol != '\n' && symbol != '\0');
-
-	if (line.position > file->length)
-		return (NULL);
 
 	line.length = line.position - file->position;
 	line.data = malloc(sizeof(char) * (line.length + 1));

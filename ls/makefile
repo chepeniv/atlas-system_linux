@@ -2,8 +2,8 @@ CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
 GDB_FLAGS= -g -ggdb3
 GCC_CMD = $(CC) $(CFLAGS) $(GDB_FLAGS)
-TASK0 = null.c 
-EXERCISE = ls-exercise.c exercise.main.c
+HLS = null.c 
+EXR = prototypes/ls-exr.c prototypes/ls-exr.main.c
 
 .DELETE_ON_ERROR:
 
@@ -12,11 +12,11 @@ EXERCISE = ls-exercise.c exercise.main.c
 all:
 	@echo "-------- specify a task# to compile --------"
 
-task0: $(TASK0)
-	$(CC) $(CFLAGS) $(TASK0) $(TASK0:%.c=test-0_%.c) -o task0.exec
+hls: $(HLS)
+	$(GCC_CMD) $(TASK0) -o hls.exec
 
-exercise: $(EXERCISE)
-	$(GCC_CMD) $(EXERCISE) -o ls-exer.exec
+exr: $(EXR)
+	$(GCC_CMD) $(EXR) -o exr-ls.exec
 
 force: oclean all
 

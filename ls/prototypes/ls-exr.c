@@ -35,4 +35,36 @@ int main(int argc, char **argv)
 	 *
 	 * fills statbuf with info about the file given
 	 */
+
+	/*
+	 * VARIABLES:
+	 *
+	 * char **passed_opts, **realdirs, **fakedirs
+	 * char *opts
+	 *
+	 * PSEUDO CODE:
+	 *
+	 * collect passed_opts
+	 *
+	 * for opt in passed_opts
+	 * 		if opt is invalid
+	 * 			print error msg along with offending opt
+	 * 			return (don't process any further opts)
+	 *
+	 * if no directory given then
+	 * 		dirs = current directory
+	 * else
+	 *		dirs = collect directory names
+	 *		move fake directories from dirs into fakedirs
+	 *
+	 * for fake in fakedirs
+	 * 		print error message
+	 *
+	 * for dir in dirs
+	 * 		get content
+	 * 		print content
+	 *
+	 * return the last error code (errno ?)
+	 *
+	 */
 }

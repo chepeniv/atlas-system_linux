@@ -22,12 +22,14 @@ int get_file_index(data_buffer **file_chain, int *count, int desc)
 		if ((*file_chain)[i].desc == desc)
 			return (i);
 
-	/* file desc not found, append new index */
+	/* file desc not found, append new data_buffer */
 	*count = *count + 1;
 	if (*count == 1)
 		*file_chain = malloc(sizeof(data_buffer));
 	else
 		*file_chain = realloc(*file_chain, sizeof(data_buffer) * (*count));
+
+	/* initialise new data_buffer values */
 	(*file_chain)[index].desc = desc;
 	(*file_chain)[index].length = -1;
 	(*file_chain)[index].position = 0;
@@ -83,9 +85,11 @@ void extract_file_data(data_buffer **file)
  */
 void *free_buffers(int *count, data_buffer **buffers)
 {
+	/* free all file strings */
 	for (int i = 0; i < *count; i++)
 		free((*buffers)[i].data);
 
+	/* free data_buffer array */
 	free(*buffers);
 	*count = 0;
 
@@ -93,10 +97,10 @@ void *free_buffers(int *count, data_buffer **buffers)
 }
 
 /**
- * extract_line -
- * @file:
+ * extract_line - finds and returns the next line in data_buffer
+ * @file: the data_buffer to analyze and update
  *
- * Return:
+ * Return: another data_buffer containing either the line found or NULL
  */
 data_buffer extract_line(data_buffer **file)
 {
@@ -104,27 +108,33 @@ data_buffer extract_line(data_buffer **file)
 	data_buffer *handle = *file;
 	char symbol;
 
-	line.position = handle->position;
-	if (line.position >= handle->length)
+	/* check if eof has been reached */
+	if (handle->position >= handle->length)
 		return (line);
 
+	/* get line start and end */
+	line.position = handle->position;
 	do {
 		symbol = handle->data[line.position++];
 	} while (symbol != '\n' && symbol != '\0');
 
+	/* initialize memory space for line */
 	line.length = line.position - handle->position;
 	line.data = malloc(sizeof(char) * (line.length + 1));
 	if (!line.data)
 		return (line);
 
 	memset(line.data, '\0', line.length + 1);
-	strncpy(line.data, &handle->data[handle->position], line.length);
 
-	handle->position = line.position;
+	/* copy line into new memory space */
+	strncpy(line.data, &handle->data[handle->position], line.length);
 
 	/* replace newline with zero-terminator */
 	if (line.data[line.length - 1] == '\n')
 		line.data[line.length - 1] = '\0';
+
+	/* update file position */
+	handle->position = line.position;
 
 	return (line);
 }
@@ -143,9 +153,11 @@ char *_getline(const int desc)
 	data_buffer line;
 	int index = 0;
 
+	/* special instruction value */
 	if (desc < 0)
 		return (free_buffers(&count, &file_chain));
 
+	/* access and read file data */
 	index = get_file_index(&file_chain, &count, desc);
 	file = &file_chain[index];
 	if (file->length < 0)

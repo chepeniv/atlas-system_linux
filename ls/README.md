@@ -66,7 +66,7 @@ commencing
 #include <pwd.h>
 #include <sys/types.h>
 ```
-	- `struct passwd *getpwuid(uid_t uid)`
+- `struct passwd *getpwuid(uid_t uid)`
 
 ----
 ```c

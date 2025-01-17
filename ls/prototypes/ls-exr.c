@@ -1,8 +1,15 @@
+#include <dirent.h>    /* opendir, readdir, closedir */
+#include <errno.h>
+#include <stdio.h>     /* printf, sprintf, fprintf, perror */
+#include <stdlib.h>    /* exit, free, malloc */
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-
 #include "ls-exr.h"
+
+/* #include <grp.h>       /1* getgrgid *1/ */
+/* #include <pwd.h>       /1* getpwuid *1/ */
+/* #include <sys/stat.h>  /1* (syscall) lstat *1/ */
+/* #include <time.h>      /1* ctime *1/ */
+/* #include <unistd.h>    /1* (syscalls) write, readlink *1/ */
 
 /* take the name of a directory and output its contents
  * handle non-existent folders

@@ -31,7 +31,7 @@ commencing
 ```c
 #include <dirent.h>
 #include <sys/types.h>
-````
+```
 	- `DIR *opendir(const char *name)`
 	- `struct dirent *readdir(DIR *dirp)`
 	- `int closedir(DIR *dirp)`
@@ -79,6 +79,7 @@ commencing
 		const char *restrict pathname,
 		char *restrict buf,
 		size_t bufsize)`
+
 ```c
 #include <sys/stat.h>
 ```

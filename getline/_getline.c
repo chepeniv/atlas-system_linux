@@ -153,7 +153,7 @@ char *_getline(const int desc)
 	data_buffer line;
 	int index = 0;
 
-	/* special instruction value */
+	/* special reset instruction value */
 	if (desc < 0)
 		return (free_buffers(&count, &file_chain));
 

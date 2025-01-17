@@ -32,60 +32,59 @@ commencing
 #include <dirent.h>
 #include <sys/types.h>
 ````
-- `DIR *opendir(const char *name)`
-- `struct dirent *readdir(DIR *dirp)`
-- `int closedir(DIR *dirp)`
+	- `DIR *opendir(const char *name)`
+	- `struct dirent *readdir(DIR *dirp)`
+	- `int closedir(DIR *dirp)`
 
 ```c
 #include <stdlib.h>
 ```
-- `void exit(int status)`
-- `free()`
-- `malloc()`
+	- `void exit(int status)`
+	- `free()`
+	- `malloc()`
 
 ```c
 #include <stdio.h>
 #include <errno.h> /* defines errno (set by sys calls) used by perror */
 ```
-- `void perror(const char *s)`
-- `printf()`
-- `sprintf()`
-- `fprintf()`
+	- `void perror(const char *s)`
+	- `printf()`
+	- `sprintf()`
+	- `fprintf()`
 
 ```c
 #include <time.h>
 ```
-- `char *ctime(const time_t *timep)`
+	- `char *ctime(const time_t *timep)`
 
 ```c
 #include <pwd.h>
 #include <sys/types.h>
 ```
-- `struct passwd *getpwuid(uid_t uid)`
+	- `struct passwd *getpwuid(uid_t uid)`
 
 ```c
 #include <grp.h>
 #include <sys/types.h>
 ```
-- `struct group *getgrgid(gid_t gid)`
+	- `struct group *getgrgid(gid_t gid)`
 
 #### system calls (man 2)
 
 ```c
 #include <unistd.h>
 ```
-- `write()`
-- `ssize_t readlink(
-	const char *restrict pathname,
-	char *restrict buf,
-	size_t bufsize)`
-
+	- `write()`
+	- `ssize_t readlink(
+		const char *restrict pathname,
+		char *restrict buf,
+		size_t bufsize)`
 ```c
 #include <sys/stat.h>
 ```
-- `int lstat(
-	const char *restrict pathname,
-	structstat *restrict statbuf)`
+	- `int lstat(
+		const char *restrict pathname,
+		structstat *restrict statbuf)`
 
 ### compilation
 

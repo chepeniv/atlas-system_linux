@@ -5,7 +5,7 @@ its content (the names of all files and folders within)
 
 handle folders that don't exist
 
-check the return values of `opendir` `readdir``closedir`
+check the return values of `opendir`, `readdir`, and `closedir`
 
 # exercise 2
 

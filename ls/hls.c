@@ -11,7 +11,6 @@
 /* #include <time.h>      /1* ctime *1/ */
 /* #include <unistd.h>    /1* (syscalls) write, readlink *1/ */
 
-
 /****************
  * struct dirent readdir(DIR *dirp)
  *
@@ -30,17 +29,19 @@
  * fills statbuf with info about the file given
  */
 
+/*
+ * fprintf writes to the arbitrary output string given
+ * sprintf writes to a string
+ * can be used to append one string to another if their memory spaces
+ * don't overlap
+ */
+
 int main(int argc, char **argv)
 {
-	/* handle the return values of opendir, readdir, and closedir */
 	DIR **dir_refs;
 	char **opt_args, **dir_args, **valid_dirs, **invalid_dirs;
+	int opts = 0, num_opts = 0, num_dirs = 0, num_valid = 0, num_invalid = 0;
 	const int _1 = 1, _A = 2, _a = 4, _l = 8;
-	int opts = 0,
-		opt_count = 0,
-		dir_count = 0,
-		valid_count = 0,
-		invalid_count = 0;
 
 	opt_args = malloc(sizeof(void *) * argc);
 	dir_args = malloc(sizeof(void *) * argc);
@@ -50,18 +51,18 @@ int main(int argc, char **argv)
 	{
 		if (argv[i][0] == '-')
 		{
-			opt_args[opt_count] = &argv[i][1]; /* skip the '-' character */
-			opt_count++;
+			opt_args[num_opts] = &argv[i][1]; /* skip the '-' character */
+			num_opts++;
 		}
 		else
 		{
-			dir_args[dir_count] = argv[i];
-			dir_count++;
+			dir_args[num_dirs] = argv[i];
+			num_dirs++;
 		}
 	}
 
 	/* validate options */
-	for (int i = 0; i < opt_count; i++)
+	for (int i = 0; i < num_opts; i++)
 	{
 		for (int j = 0; opt_args[i][j] != '\0'; j++)
 		{
@@ -91,48 +92,48 @@ int main(int argc, char **argv)
 	}
 
 	/* validate directories */
-	if (!dir_count)
+	if (!num_dirs)
 	{
 		dir_refs = malloc(sizeof(DIR *));
 		valid_dirs = malloc(sizeof(char *));
 
 
-		valid_dirs[valid_count++] = ".";
-		dir_refs[dir_count++] = opendir(".");
+		valid_dirs[num_valid++] = ".";
+		dir_refs[num_dirs++] = opendir(".");
 	}
 	else
 	{
-		dir_refs = malloc(sizeof(DIR *) * dir_count);
-		valid_dirs = malloc(sizeof(char *) * dir_count);
-		invalid_dirs = malloc(sizeof(char *) * dir_count);
+		dir_refs = malloc(sizeof(DIR *) * num_dirs);
+		valid_dirs = malloc(sizeof(char *) * num_dirs);
+		invalid_dirs = malloc(sizeof(char *) * num_dirs);
 
-		for (int d = 0; d < dir_count; d++)
+		for (int d = 0; d < num_dirs; d++)
 		{
 			DIR *dir = opendir(dir_args[d]);
 
 			if (!dir)
-				invalid_dirs[invalid_count++] = dir_args[d];
+				invalid_dirs[num_invalid++] = dir_args[d];
 			else
 			{
-				valid_dirs[valid_count] = dir_args[d];
-				dir_refs[valid_count] = dir;
-				valid_count++;
+				valid_dirs[num_valid] = dir_args[d];
+				dir_refs[num_valid] = dir;
+				num_valid++;
 			}
 		}
 	}
 
 	/* output invalid directory error messages */
-	for (int d = 0; d < invalid_count; d++)
+	for (int d = 0; d < num_invalid; d++)
 		printf("%s: cannot access '%s': No such file or directory \n",
 				argv[0],
 				invalid_dirs[d]);
 
 	/* output valid directories contents */
-	for (int d = 0; d < valid_count; d++)
+	for (int d = 0; d < num_valid; d++)
 	{
 		struct dirent *dir_item;
 
-		if (valid_count > 1)
+		if (num_valid > 1)
 			printf("%s:\n", valid_dirs[d]);
 		while ((dir_item = readdir(dir_refs[d])))
 		{
@@ -150,25 +151,15 @@ int main(int argc, char **argv)
 	/*		printf("option 'A' given\n"); */
 
 	/* close opened directories and free allocated memory*/
-	for (int d = 0; d < valid_count; d++)
+	for (int d = 0; d < num_valid; d++)
 		closedir(dir_refs[d]);
 
 	free(dir_refs);
 	free(opt_args);
 	free(dir_args);
 	free(valid_dirs);
-	if (invalid_count)
+	if (num_invalid)
 		free(invalid_dirs);
 
-	/*
-	 * fprintf writes to the arbitrary output string given
-	 * sprintf writes to a string
-	 * can be used to append one string to another if their memory spaces
-	 * don't overlap
-	 */
-
-	/*
-	 * return the last error code (errno ?)
-	 */
 	return (errno);
 }

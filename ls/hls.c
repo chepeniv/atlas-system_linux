@@ -11,25 +11,14 @@
 /* #include <time.h>      /1* ctime *1/ */
 /* #include <unistd.h>    /1* (syscalls) write, readlink *1/ */
 
-/* take the name of a directory and output its contents
- * handle non-existent folders
- * handle the return values of opendir, readdir, and closedir
- */
 
 /****************
- * DIR *opendir(const char *name)
+ * struct dirent readdir(DIR *dirp)
  *
  ****************
- * struct dirent opendir(DIR *dirp)
- *
- * analyses each item of a directory
- * consecutively
- *
- * example:
- *
  * struct dirent *read;
  *
- * while (!(read = readdir(dir))
+ * while ((read = readdir(dir)))
  * 		printf("%s\n", read->d_name);
  *
  ****************
@@ -40,8 +29,10 @@
  *
  * fills statbuf with info about the file given
  */
+
 int main(int argc, char **argv)
 {
+	/* handle the return values of opendir, readdir, and closedir */
 	DIR **dir_refs;
 	char **opt_args, **dir_args, **valid_dirs, **invalid_dirs;
 	const int _1 = 1, _A = 2, _a = 4, _l = 8;
@@ -125,26 +116,32 @@ int main(int argc, char **argv)
 		}
 	}
 
-	/* verify invalid directories */
+	/* output invalid directory error messages */
 	for (int d = 0; d < invalid_count; d++)
 		printf("%s: cannot access '%s': No such file or directory \n",
 				argv[0],
 				invalid_dirs[d]);
 
-	/* verify valid directories */
-	printf("\nVALID DIRECTORY PATHS\n");
+	/* output valid directories contents */
 	for (int d = 0; d < valid_count; d++)
-		printf("%s\n", valid_dirs[d]);
+	{
+		struct dirent *dir_item;
+
+		printf("%s:\n", valid_dirs[d]);
+		while ((dir_item = readdir(dir_refs[d])))
+		{
+			char *d_name = dir_item->d_name;
+
+			if (d_name[0] != '.')
+				printf("%s\t", d_name);
+		}
+
+		printf("\n");
+	}
 
 	/* verify options */
-	if (opts & _A)
-		printf("option 'A' given\n");
-	if (opts & _a)
-		printf("option 'a' given\n");
-	if (opts & _l)
-		printf("option 'l' given\n");
-	if (opts & _1)
-		printf("option '1' given\n");
+	/* if (opts & _A) */
+	/* 	printf("option 'A' given\n"); */
 
 	/* close opened directories and free allocated memory*/
 	for (int d = 0; d < valid_count; d++)
@@ -164,10 +161,6 @@ int main(int argc, char **argv)
 	 */
 
 	/*
-	 * for dir in dirs
-	 * 		get content
-	 * 		print content
-	 *
 	 * return the last error code (errno ?)
 	 */
 	return 0;

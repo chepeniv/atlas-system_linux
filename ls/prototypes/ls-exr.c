@@ -43,29 +43,34 @@
 
 int main(int argc, char **argv)
 {
-	char **opt_args, **valid_dirs, **invalid_dirs;
+	char **opt_args, **dir_args, **valid_dirs, **invalid_dirs;
 	int opts = 0;
-	int opt_count = 0;
+	int opt_count = 0, dir_count = 0;
 	const int _1 = 1, _A = 2, _a = 4, _l = 8;
 
 	(void) valid_dirs;
 	(void) invalid_dirs;
 
-	/* collect options passed */
 	opt_args = malloc(sizeof(void *) * argc);
-	for (int arg = 1; arg < argc; arg++)
+	dir_args = malloc(sizeof(void *) * argc);
+
+	/* collect options and pathnames*/
+	for (int i = 1; i < argc; i++)
 	{
-		if (argv[arg][0] == '-') /* && argv[arg][1] != '-' */
+		if (argv[i][0] == '-')
 		{
-			opt_args[opt_count] = argv[arg];
+			opt_args[opt_count] = &argv[i][1]; /* skip '-' character */
 			opt_count++;
+		} else {
+			dir_args[dir_count] = argv[i];
+			dir_count++;
 		}
 	}
 
-	/* validate options passed */
+	/* validate options */
 	for (int i = 0; i < opt_count; i++)
 	{
-		for (int j = 1; opt_args[i][j] != '\0'; j++)
+		for (int j = 0; opt_args[i][j] != '\0'; j++)
 		{
 			char c = opt_args[i][j];
 			switch (c)
@@ -85,12 +90,14 @@ int main(int argc, char **argv)
 				default:
 					printf("%s: invalid option -- '%c'\n", argv[0], c);
 					free(opt_args);
+					free(dir_args);
 					/* for 'ls' this is a  "directory not found" error */
 					exit(2);
 			}
 		}
 	}
 
+	/* analyze valid options */
 	if (opts & _A)
 		printf("option 'A' given\n");
 	if (opts & _a)
@@ -100,7 +107,13 @@ int main(int argc, char **argv)
 	if (opts & _1)
 		printf("option '1' given\n");
 
+	/* analyze pathnames arguments */
+	printf("\ndirectories given\n");
+	for (int d = 0; d < dir_count; d++)
+		printf("pathname: %s\n", dir_args[d]);
+
 	free(opt_args);
+	free(dir_args);
 
 	/* fprintf writes to the arbitrary output string given */
 	/* sprintf writes to a string */
@@ -108,11 +121,6 @@ int main(int argc, char **argv)
 	 * don't overlap */
 
 	/*
-	 * for opt in opts
-	 * 		if opt is invalid
-	 * 			print error msg along with offending opt
-	 * 			return (don't process any further)
-	 *
 	 * if no directory given then
 	 * 		dirs = current directory
 	 * else

@@ -41,30 +41,13 @@
  * fills statbuf with info about the file given
  */
 
-int str_len(char *string)
-{
-	int len = 0;
-
-	while (string[len] != '\0')
-		len++;
-	return (len);
-}
-
 int main(int argc, char **argv)
 {
-	char *opts;
-	char **opt_args,
-		 **valid_dirs,
-		 **invalid_dirs;
+	char **opt_args, **valid_dirs, **invalid_dirs;
+	int opts = 0;
 	int opt_count = 0;
-	/* int _A = 0b1000, */
-	/* 	_a = 0b0100, */
-	/* 	_l = 0b0010, */
-	/* 	_1 = 0b0001; */
-	/* int valid_opts[4] = { _A, _a, _l, _1}; */
+	const int _1 = 1, _A = 2, _a = 4, _l = 8;
 
-	(void) opts;
-	/* (void) valid_opts; */
 	(void) valid_dirs;
 	(void) invalid_dirs;
 
@@ -82,32 +65,42 @@ int main(int argc, char **argv)
 	/* validate options passed */
 	for (int i = 0; i < opt_count; i++)
 	{
-		printf("----\n");
 		for (int j = 1; opt_args[i][j] != '\0'; j++)
 		{
 			char c = opt_args[i][j];
 			switch (c)
 			{
 				case 'A':
-					printf("%c is valid\n", c);
+					opts |= _A;
 					break;
 				case 'a':
-					printf("%c is valid\n", c);
+					opts |= _a;
 					break;
 				case 'l':
-					printf("%c is valid\n", c);
+					opts |= _l;
 					break;
 				case '1':
-					printf("%c is valid\n", c);
+					opts |= _1;
 					break;
 				default:
-					printf("%c is NOT valid\n", c);
+					printf("%s: invalid option -- '%c'\n", argv[0], c);
+					free(opt_args);
+					/* for 'ls' this is a  "directory not found" error */
+					exit(2);
 			}
 		}
 	}
 
-	free(opt_args);
+	if (opts & _A)
+		printf("option 'A' given\n");
+	if (opts & _a)
+		printf("option 'a' given\n");
+	if (opts & _l)
+		printf("option 'l' given\n");
+	if (opts & _1)
+		printf("option '1' given\n");
 
+	free(opt_args);
 
 	/* fprintf writes to the arbitrary output string given */
 	/* sprintf writes to a string */

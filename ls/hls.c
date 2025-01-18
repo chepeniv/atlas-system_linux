@@ -19,7 +19,7 @@
  * struct dirent *read;
  *
  * while ((read = readdir(dir)))
- * 		printf("%s\n", read->d_name);
+ *		printf("%s\n", read->d_name);
  *
  ****************
  * int closedir(DIR *dirp)
@@ -52,7 +52,9 @@ int main(int argc, char **argv)
 		{
 			opt_args[opt_count] = &argv[i][1]; /* skip the '-' character */
 			opt_count++;
-		} else {
+		}
+		else
+		{
 			dir_args[dir_count] = argv[i];
 			dir_count++;
 		}
@@ -64,6 +66,7 @@ int main(int argc, char **argv)
 		for (int j = 0; opt_args[i][j] != '\0'; j++)
 		{
 			char c = opt_args[i][j];
+
 			switch (c)
 			{
 				case 'A':
@@ -106,6 +109,7 @@ int main(int argc, char **argv)
 		for (int d = 0; d < dir_count; d++)
 		{
 			DIR *dir = opendir(dir_args[d]);
+
 			if (!dir)
 				invalid_dirs[invalid_count++] = dir_args[d];
 			else
@@ -143,7 +147,7 @@ int main(int argc, char **argv)
 
 	/* verify options */
 	/* if (opts & _A) */
-	/* 	printf("option 'A' given\n"); */
+	/*		printf("option 'A' given\n"); */
 
 	/* close opened directories and free allocated memory*/
 	for (int d = 0; d < valid_count; d++)

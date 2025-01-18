@@ -1,15 +1,6 @@
-#include <dirent.h>    /* opendir, readdir, closedir */
-#include <errno.h>
-#include <stdio.h>     /* printf, sprintf, fprintf, perror */
-#include <stdlib.h>    /* exit, free, malloc */
-#include <sys/types.h>
 #include "hls.h"
 
-/* #include <grp.h>       /1* getgrgid *1/ */
-/* #include <pwd.h>       /1* getpwuid *1/ */
-/* #include <sys/stat.h>  /1* (syscall) lstat *1/ */
-/* #include <time.h>      /1* ctime *1/ */
-/* #include <unistd.h>    /1* (syscalls) write, readlink *1/ */
+const int _1 = 1, _A = 2, _a = 4, _l = 8;
 
 /****************
  * struct dirent readdir(DIR *dirp)
@@ -36,32 +27,30 @@
  * don't overlap
  */
 
-int main(int argc, char **argv)
+void sort_opts_dirs(
+	char **argv, int argc,
+	char **opts, int *num_opts,
+	char **dirs, int *num_dirs)
 {
-	DIR **dir_refs;
-	char **opt_args, **dir_args, **valid_dirs, **invalid_dirs;
-	int opts = 0, num_opts = 0, num_dirs = 0, num_valid = 0, num_invalid = 0;
-	const int _1 = 1, _A = 2, _a = 4, _l = 8;
-
-	opt_args = malloc(sizeof(void *) * argc);
-	dir_args = malloc(sizeof(void *) * argc);
-
-	/* collect options and directory paths */
 	for (int i = 1; i < argc; i++)
 	{
 		if (argv[i][0] == '-')
 		{
-			opt_args[num_opts] = &argv[i][1]; /* skip the '-' character */
-			num_opts++;
+			opts[*num_opts] = &argv[i][1]; /* skip the '-' character */
+			(*num_opts)++;
 		}
 		else
 		{
-			dir_args[num_dirs] = argv[i];
-			num_dirs++;
+			dirs[*num_dirs] = argv[i];
+			(*num_dirs)++;
 		}
 	}
+}
 
-	/* validate options */
+int set_opt_flags(char **opt_args, int num_opts, char *prog)
+{
+	int opt_flags = 0;
+
 	for (int i = 0; i < num_opts; i++)
 	{
 		for (int j = 0; opt_args[i][j] != '\0'; j++)
@@ -71,24 +60,48 @@ int main(int argc, char **argv)
 			switch (c)
 			{
 				case 'A':
-					opts |= _A;
+					opt_flags |= _A;
 					break;
 				case 'a':
-					opts |= _a;
+					opt_flags |= _a;
 					break;
 				case 'l':
-					opts |= _l;
+					opt_flags |= _l;
 					break;
 				case '1':
-					opts |= _1;
+					opt_flags |= _1;
 					break;
 				default:
-					printf("%s: invalid option -- '%c'\n", argv[0], c);
-					free(opt_args);
-					free(dir_args);
-					exit(errno);
+					printf("%s: invalid option -- '%c'\n", prog, c);
+					return (-1);
 			}
 		}
+	}
+	return (opt_flags);
+}
+
+int main(int argc, char **argv)
+{
+	DIR **dir_refs;
+	char **opt_args, **dir_args, **valid_dirs, **invalid_dirs;
+	int num_opts = 0, num_dirs = 0, num_valid = 0, num_invalid = 0;
+	int opt_flags = 0;
+
+	opt_args = malloc(sizeof(void *) * argc);
+	dir_args = malloc(sizeof(void *) * argc);
+
+	sort_opts_dirs(
+		argv, argc,
+		opt_args, &num_opts,
+		dir_args, &num_dirs);
+
+	opt_flags = set_opt_flags(opt_args, num_opts, argv[0]);
+
+	if (opt_flags < 0)
+	{
+		free(opt_args);
+		free(dir_args);
+		exit(errno);
 	}
 
 	/* validate directories */
@@ -96,6 +109,7 @@ int main(int argc, char **argv)
 	{
 		dir_refs = malloc(sizeof(DIR *));
 		valid_dirs = malloc(sizeof(char *));
+		invalid_dirs = malloc(sizeof(char *)); /* init for free */
 
 
 		valid_dirs[num_valid++] = ".";
@@ -147,7 +161,7 @@ int main(int argc, char **argv)
 	}
 
 	/* verify options */
-	/* if (opts & _A) */
+	/* if (opt_flags & _A) */
 	/*		printf("option 'A' given\n"); */
 
 	/* close opened directories and free allocated memory*/
@@ -158,8 +172,7 @@ int main(int argc, char **argv)
 	free(opt_args);
 	free(dir_args);
 	free(valid_dirs);
-	if (num_invalid)
-		free(invalid_dirs);
+	free(invalid_dirs);
 
 	return (errno);
 }

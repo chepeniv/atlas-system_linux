@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 					printf("%s: invalid option -- '%c'\n", argv[0], c);
 					free(opt_args);
 					free(dir_args);
-					exit(2);
+					exit(errno);
 			}
 		}
 	}
@@ -92,6 +92,7 @@ int main(int argc, char **argv)
 	{
 		dir_refs = malloc(sizeof(DIR *));
 		valid_dirs = malloc(sizeof(char *));
+
 
 		valid_dirs[valid_count++] = ".";
 		dir_refs[dir_count++] = opendir(".");
@@ -127,13 +128,14 @@ int main(int argc, char **argv)
 	{
 		struct dirent *dir_item;
 
-		printf("%s:\n", valid_dirs[d]);
+		if (valid_count > 1)
+			printf("%s:\n", valid_dirs[d]);
 		while ((dir_item = readdir(dir_refs[d])))
 		{
 			char *d_name = dir_item->d_name;
 
 			if (d_name[0] != '.')
-				printf("%s\t", d_name);
+				printf("%s  ", d_name);
 		}
 
 		printf("\n");
@@ -151,7 +153,8 @@ int main(int argc, char **argv)
 	free(opt_args);
 	free(dir_args);
 	free(valid_dirs);
-	free(invalid_dirs);
+	if (invalid_count)
+		free(invalid_dirs);
 
 	/*
 	 * fprintf writes to the arbitrary output string given
@@ -163,5 +166,5 @@ int main(int argc, char **argv)
 	/*
 	 * return the last error code (errno ?)
 	 */
-	return 0;
+	return (errno);
 }

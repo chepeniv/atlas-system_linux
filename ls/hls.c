@@ -3,7 +3,7 @@
 #include <stdio.h>     /* printf, sprintf, fprintf, perror */
 #include <stdlib.h>    /* exit, free, malloc */
 #include <sys/types.h>
-#include "ls-exr.h"
+#include "hls.h"
 
 /* #include <grp.h>       /1* getgrgid *1/ */
 /* #include <pwd.h>       /1* getpwuid *1/ */
@@ -40,26 +40,26 @@
  *
  * fills statbuf with info about the file given
  */
-
 int main(int argc, char **argv)
 {
+	DIR **dir_refs;
 	char **opt_args, **dir_args, **valid_dirs, **invalid_dirs;
-	int opts = 0;
-	int opt_count = 0, dir_count = 0;
 	const int _1 = 1, _A = 2, _a = 4, _l = 8;
-
-	(void) valid_dirs;
-	(void) invalid_dirs;
+	int opts = 0,
+		opt_count = 0,
+		dir_count = 0,
+		valid_count = 0,
+		invalid_count = 0;
 
 	opt_args = malloc(sizeof(void *) * argc);
 	dir_args = malloc(sizeof(void *) * argc);
 
-	/* collect options and pathnames*/
+	/* collect options and directory paths */
 	for (int i = 1; i < argc; i++)
 	{
 		if (argv[i][0] == '-')
 		{
-			opt_args[opt_count] = &argv[i][1]; /* skip '-' character */
+			opt_args[opt_count] = &argv[i][1]; /* skip the '-' character */
 			opt_count++;
 		} else {
 			dir_args[dir_count] = argv[i];
@@ -91,13 +91,52 @@ int main(int argc, char **argv)
 					printf("%s: invalid option -- '%c'\n", argv[0], c);
 					free(opt_args);
 					free(dir_args);
-					/* for 'ls' this is a  "directory not found" error */
 					exit(2);
 			}
 		}
 	}
 
-	/* analyze valid options */
+	/* validate directories */
+	if (!dir_count)
+	{
+		dir_refs = malloc(sizeof(DIR *));
+		valid_dirs = malloc(sizeof(char *));
+
+		valid_dirs[valid_count++] = ".";
+		dir_refs[dir_count++] = opendir(".");
+	}
+	else
+	{
+		dir_refs = malloc(sizeof(DIR *) * dir_count);
+		valid_dirs = malloc(sizeof(char *) * dir_count);
+		invalid_dirs = malloc(sizeof(char *) * dir_count);
+
+		for (int d = 0; d < dir_count; d++)
+		{
+			DIR *dir = opendir(dir_args[d]);
+			if (!dir)
+				invalid_dirs[invalid_count++] = dir_args[d];
+			else
+			{
+				valid_dirs[valid_count] = dir_args[d];
+				dir_refs[valid_count] = dir;
+				valid_count++;
+			}
+		}
+	}
+
+	/* verify invalid directories */
+	for (int d = 0; d < invalid_count; d++)
+		printf("%s: cannot access '%s': No such file or directory \n",
+				argv[0],
+				invalid_dirs[d]);
+
+	/* verify valid directories */
+	printf("\nVALID DIRECTORY PATHS\n");
+	for (int d = 0; d < valid_count; d++)
+		printf("%s\n", valid_dirs[d]);
+
+	/* verify options */
 	if (opts & _A)
 		printf("option 'A' given\n");
 	if (opts & _a)
@@ -107,29 +146,24 @@ int main(int argc, char **argv)
 	if (opts & _1)
 		printf("option '1' given\n");
 
-	/* analyze pathnames arguments */
-	printf("\ndirectories given\n");
-	for (int d = 0; d < dir_count; d++)
-		printf("pathname: %s\n", dir_args[d]);
+	/* close opened directories and free allocated memory*/
+	for (int d = 0; d < valid_count; d++)
+		closedir(dir_refs[d]);
 
+	free(dir_refs);
 	free(opt_args);
 	free(dir_args);
-
-	/* fprintf writes to the arbitrary output string given */
-	/* sprintf writes to a string */
-	/* can be used to append one string to another if their memory spaces
-	 * don't overlap */
+	free(valid_dirs);
+	free(invalid_dirs);
 
 	/*
-	 * if no directory given then
-	 * 		dirs = current directory
-	 * else
-	 *		dirs = collect directory names
-	 *		move fake directories from dirs into fakedirs
-	 *
-	 * for fake in fakedirs
-	 * 		print error message
-	 *
+	 * fprintf writes to the arbitrary output string given
+	 * sprintf writes to a string
+	 * can be used to append one string to another if their memory spaces
+	 * don't overlap
+	 */
+
+	/*
 	 * for dir in dirs
 	 * 		get content
 	 * 		print content

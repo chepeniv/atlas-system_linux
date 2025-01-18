@@ -27,10 +27,10 @@ const int _1 = 1, _A = 2, _a = 4, _l = 8;
  * don't overlap
  */
 
-void sort_opts_dirs(
-	char **argv, int argc,
-	char **opts, int *num_opts,
-	char **dirs, int *num_dirs)
+void sort_args(
+char **argv, int argc,
+char **opts, int *num_opts,
+char **dirs, int *num_dirs)
 {
 	for (int i = 1; i < argc; i++)
 	{
@@ -80,17 +80,64 @@ int set_opt_flags(char **opt_args, int num_opts, char *prog)
 	return (opt_flags);
 }
 
+DIR **validate_dirs(
+char **dir_args, int *num_dirs,
+char ***valid_dirs, int *num_valid,
+char ***invalid_dirs, int *num_invalid)
+{
+	DIR **dir_refs;
+	DIR *dir;
+
+	if (!(*num_dirs))
+	{
+		dir_refs = malloc(sizeof(DIR *));
+		*valid_dirs = malloc(sizeof(char *));
+		*invalid_dirs = malloc(sizeof(char *)); /* init for free */
+
+
+		*valid_dirs[*num_valid] = ".";
+		dir_refs[*num_valid] = opendir(".");
+		(*num_valid)++;
+		(*num_dirs)++;
+	}
+	else
+	{
+		dir_refs = malloc(sizeof(DIR *) * *num_dirs);
+		*valid_dirs = malloc(sizeof(char *) * *num_dirs);
+		*invalid_dirs = malloc(sizeof(char *) * *num_dirs);
+
+		for (int d = 0; d < *num_dirs; d++)
+		{
+			dir = opendir(dir_args[d]);
+
+			if (!dir)
+				(*invalid_dirs)[(*num_invalid)++] = dir_args[d];
+			else
+			{
+				(*valid_dirs)[*num_valid] = dir_args[d];
+				dir_refs[*num_valid] = dir;
+				(*num_valid)++;
+			}
+		}
+	}
+
+	return (dir_refs);
+}
+
 int main(int argc, char **argv)
 {
 	DIR **dir_refs;
-	char **opt_args, **dir_args, **valid_dirs, **invalid_dirs;
+	char **opt_args = NULL,
+		 **dir_args = NULL,
+		 **valid_dirs = NULL,
+		 **invalid_dirs = NULL;
 	int num_opts = 0, num_dirs = 0, num_valid = 0, num_invalid = 0;
 	int opt_flags = 0;
 
 	opt_args = malloc(sizeof(void *) * argc);
 	dir_args = malloc(sizeof(void *) * argc);
 
-	sort_opts_dirs(
+	sort_args(
 		argv, argc,
 		opt_args, &num_opts,
 		dir_args, &num_dirs);
@@ -104,37 +151,10 @@ int main(int argc, char **argv)
 		exit(errno);
 	}
 
-	/* validate directories */
-	if (!num_dirs)
-	{
-		dir_refs = malloc(sizeof(DIR *));
-		valid_dirs = malloc(sizeof(char *));
-		invalid_dirs = malloc(sizeof(char *)); /* init for free */
-
-
-		valid_dirs[num_valid++] = ".";
-		dir_refs[num_dirs++] = opendir(".");
-	}
-	else
-	{
-		dir_refs = malloc(sizeof(DIR *) * num_dirs);
-		valid_dirs = malloc(sizeof(char *) * num_dirs);
-		invalid_dirs = malloc(sizeof(char *) * num_dirs);
-
-		for (int d = 0; d < num_dirs; d++)
-		{
-			DIR *dir = opendir(dir_args[d]);
-
-			if (!dir)
-				invalid_dirs[num_invalid++] = dir_args[d];
-			else
-			{
-				valid_dirs[num_valid] = dir_args[d];
-				dir_refs[num_valid] = dir;
-				num_valid++;
-			}
-		}
-	}
+	dir_refs = validate_dirs(
+		dir_args, &num_dirs,
+		&valid_dirs, &num_valid,
+		&invalid_dirs, &num_invalid);
 
 	/* output invalid directory error messages */
 	for (int d = 0; d < num_invalid; d++)
@@ -169,8 +189,8 @@ int main(int argc, char **argv)
 		closedir(dir_refs[d]);
 
 	free(dir_refs);
-	free(opt_args);
 	free(dir_args);
+	free(opt_args);
 	free(valid_dirs);
 	free(invalid_dirs);
 

@@ -124,6 +124,34 @@ char ***invalid_dirs, int *num_invalid)
 	return (dir_refs);
 }
 
+void output_invalid(char **invalid_dirs, int num_invalid, char *prog_name)
+{
+	for (int d = 0; d < num_invalid; d++)
+		printf("%s: cannot access '%s': No such file or directory \n",
+				prog_name,
+				invalid_dirs[d]);
+}
+
+void output_valid(DIR **dir_refs, char **valid_dirs, int num_valid)
+{
+	for (int d = 0; d < num_valid; d++)
+	{
+		struct dirent *dir_item;
+
+		if (num_valid > 1)
+			printf("%s:\n", valid_dirs[d]);
+		while ((dir_item = readdir(dir_refs[d])))
+		{
+			char *d_name = dir_item->d_name;
+
+			if (d_name[0] != '.')
+				printf("%s  ", d_name);
+		}
+
+		printf("\n");
+	}
+}
+
 int main(int argc, char **argv)
 {
 	DIR **dir_refs;
@@ -156,29 +184,8 @@ int main(int argc, char **argv)
 		&valid_dirs, &num_valid,
 		&invalid_dirs, &num_invalid);
 
-	/* output invalid directory error messages */
-	for (int d = 0; d < num_invalid; d++)
-		printf("%s: cannot access '%s': No such file or directory \n",
-				argv[0],
-				invalid_dirs[d]);
-
-	/* output valid directories contents */
-	for (int d = 0; d < num_valid; d++)
-	{
-		struct dirent *dir_item;
-
-		if (num_valid > 1)
-			printf("%s:\n", valid_dirs[d]);
-		while ((dir_item = readdir(dir_refs[d])))
-		{
-			char *d_name = dir_item->d_name;
-
-			if (d_name[0] != '.')
-				printf("%s  ", d_name);
-		}
-
-		printf("\n");
-	}
+	output_invalid(invalid_dirs, num_invalid, argv[0]);
+	output_valid(dir_refs, valid_dirs, num_valid);
 
 	/* verify options */
 	/* if (opt_flags & _A) */

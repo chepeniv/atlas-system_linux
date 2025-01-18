@@ -3,7 +3,7 @@ CFLAGS = -Wall -Werror -Wextra -pedantic
 GDB_FLAGS= -g -ggdb3
 GCC_CMD = $(CC) $(CFLAGS) $(GDB_FLAGS)
 HLS = null.c 
-EXR = prototypes/ls-exr.c prototypes/ls-exr.main.c
+EXR = prototypes/ls-exr.c # prototypes/ls-exr.main.c
 
 .DELETE_ON_ERROR:
 

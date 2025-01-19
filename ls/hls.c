@@ -1,28 +1,22 @@
 #include "hls.h"
 
 /*
- * fprintf writes to the arbitrary output string given
  * sprintf writes to a string
  * can be used to append one string to another if their memory spaces
  * don't overlap
  */
 
-/* verify options */
-/* if (opt_flags & _A) */
-/*		printf("option 'A' given\n"); */
-
 /**
  * sort_args - separates and collects all the arguments passed into flags and
  * paths
- * @argv:
- * @argc:
- * @opts:
- * @num_opts:
- * @dirs:
- * @num_dirs:
+ * @argv: all the string arguments passed to the program
+ * @argc: the total of arguments passed to the program
+ * @opts: where to store the options strings found
+ * @num_opts: variable to store the number of options found
+ * @dirs: where to store the path strings found
+ * @num_dirs: variable to store the number of paths found
  *
- *
- * Return:
+ * Return: void
  */
 void sort_args(
 char **argv, int argc,
@@ -45,13 +39,14 @@ char **dirs, int *num_dirs)
 }
 
 /**
- * set_opt_flags - takes all the flag parameters given and set the according
- * bit
- * @opt_args:
- * @num_opts:
- * @prog:
+ * set_opt_flags - takes all the flag parameters given, validates them, and
+ * sets the corresponding bit in a flags variable
+ * @opt_args: all the options strings found
+ * @num_opts: the number of options strings found
+ * @prog: the name of the compiled program, used for outputting proper error
+ * messages
  *
- * Return: integer
+ * Return: the integer represented bit the resultant bit flags
  */
 int set_opt_flags(char **opt_args, int num_opts, char *prog)
 {
@@ -89,12 +84,12 @@ int set_opt_flags(char **opt_args, int num_opts, char *prog)
 /**
  * validate_dirs - separates and collects all the directories given into
  * either valid or invalid containers
- * @dir_args:
- * @num_dirs:
- * @valid_dirs:
- * @num_valid:
- * @invalid_dirs:
- * @num_invalid:
+ * @dir_args: all of the directory paths given to this program
+ * @num_dirs: the number of directory paths given
+ * @valid_dirs: where to store the valid directory paths strings found
+ * @num_valid: where to store the number of total valid directories
+ * @invalid_dirs: where to store the invalid directory paths strings found
+ * @num_invalid: where to store the number of total invalid directories
  *
  * Return: array of DIR pointers
  */

@@ -6,6 +6,7 @@
 #include <stdio.h>     /* printf, sprintf, fprintf, perror */
 #include <stdlib.h>    /* exit, free, malloc */
 #include <sys/types.h>
+#include <sys/stat.h>
 
 /* #include <grp.h>       /1* getgrgid *1/ */
 /* #include <pwd.h>       /1* getpwuid *1/ */

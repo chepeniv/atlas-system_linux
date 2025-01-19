@@ -1,16 +1,16 @@
-*.doc
-*.doc.*
+# *.doc
+# *.doc.*
+# *.man
+# *.ref
+# *.ref.*
 *.err
 *.error
 *.exec
 *.ignore
 *.ignore.*
 *.log
-*.man
 *.o
 *.out
-*.ref
-*.ref.*
 *.test
 *.test.*
 *~

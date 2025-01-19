@@ -1,7 +1,5 @@
 #include "hls.h"
 
-const int _1 = 1, _A = 2, _a = 4, _l = 8;
-
 /****************
  * struct dirent readdir(DIR *dirp)
  *
@@ -26,6 +24,10 @@ const int _1 = 1, _A = 2, _a = 4, _l = 8;
  * can be used to append one string to another if their memory spaces
  * don't overlap
  */
+
+/* verify options */
+/* if (opt_flags & _A) */
+/*		printf("option 'A' given\n"); */
 
 void sort_args(
 char **argv, int argc,
@@ -152,12 +154,16 @@ void output_valid(DIR **dir_refs, char **valid_dirs, int num_valid)
 	}
 }
 
+void free_all(void **allocations, int count)
+{
+	for (int i = 0; i < count; i++)
+		free(allocations[i]);
+}
+
 int main(int argc, char **argv)
 {
 	DIR **dir_refs;
-	char **opt_args = NULL,
-		 **dir_args = NULL,
-		 **valid_dirs = NULL,
+	char **opt_args = NULL, **dir_args = NULL, **valid_dirs = NULL,
 		 **invalid_dirs = NULL;
 	int num_opts = 0, num_dirs = 0, num_valid = 0, num_invalid = 0;
 	int opt_flags = 0;
@@ -187,19 +193,12 @@ int main(int argc, char **argv)
 	output_invalid(invalid_dirs, num_invalid, argv[0]);
 	output_valid(dir_refs, valid_dirs, num_valid);
 
-	/* verify options */
-	/* if (opt_flags & _A) */
-	/*		printf("option 'A' given\n"); */
-
-	/* close opened directories and free allocated memory*/
 	for (int d = 0; d < num_valid; d++)
 		closedir(dir_refs[d]);
 
-	free(dir_refs);
-	free(dir_args);
-	free(opt_args);
-	free(valid_dirs);
-	free(invalid_dirs);
+	void *allocs[5] = {dir_refs, dir_args, opt_args, valid_dirs, invalid_dirs};
+
+	free_all(allocs, 5);
 
 	return (errno);
 }

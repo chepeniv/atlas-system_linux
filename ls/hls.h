@@ -13,4 +13,9 @@
 /* #include <time.h>      /1* ctime *1/ */
 /* #include <unistd.h>    /1* (syscalls) write, readlink *1/ */
 
+#define _1 1
+#define _A 2
+#define _a 4
+#define _l 8
+
 #endif /* _LS_H_ */

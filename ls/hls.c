@@ -10,6 +10,26 @@
  * Return: 0 or an errno
  */
 
+void output_reg_files(char **reg_paths, int num_reg)
+{
+	if (num_reg)
+	{
+		for (int r = 0; r < num_reg; r++)
+			printf("%s  ", reg_paths[r]);
+		printf("\n");
+	}
+}
+
+/**
+ * main - entry point to the program takes an array of strings containing
+ * desired directory paths to explore as well as '-' options
+ * @argc: the total number of parameters passed to an invocation of this
+ * program
+ * @argv: an array of pointers to the strings passed to this program
+ *
+ * Return: 0 or an errno
+ */
+
 void output_valid_paths(
 struct stat **file_stats,
 char **valid_paths,
@@ -33,9 +53,7 @@ int num_valid)
 			reg_paths[num_reg++] = valid_paths[p];
 	}
 
-	for (int r = 0; r < num_reg; r++)
-		printf("%s  ", reg_paths[r]);
-	printf("\n");
+	output_reg_files(reg_paths, num_reg);
 
 	dir_streams = malloc(sizeof(DIR *) * num_dir);
 	for (int d = 0; d < num_dir; d++)
@@ -67,42 +85,29 @@ char ***invalid_paths, int *num_invalid)
 	int validity;
 
 	if (!(*num_paths))
-	{
-		file_stats = malloc(sizeof(struct stat *));
-		f_stat = malloc(sizeof(struct stat));
-		*valid_paths = malloc(sizeof(char *));
-		*invalid_paths = malloc(sizeof(char *)); /* init for free */
+		path_args[(*num_paths)++] = ".";
 
-		*valid_paths[*num_valid] = ".";
-		validity = lstat(".", f_stat);
+	file_stats = malloc(sizeof(struct stat *) * *num_paths);
+	*valid_paths = malloc(sizeof(char *) * *num_paths);
+	*invalid_paths = malloc(sizeof(char *) * *num_paths);
+
+	for (int p = 0; p < *num_paths; p++)
+	{
+		f_stat = malloc(sizeof(struct stat));
+		validity = lstat(path_args[p], f_stat);
 		if (!validity)
 		{
-			file_stats[(*num_valid)++] = f_stat;
-			(*num_paths)++;
+			(*valid_paths)[*num_valid] = path_args[p];
+			file_stats[*num_valid] = f_stat;
+			(*num_valid)++;
 		}
-	} else
-	{
-		file_stats = malloc(sizeof(struct stat *) * *num_paths);
-		*valid_paths = malloc(sizeof(char *) * *num_paths);
-		*invalid_paths = malloc(sizeof(char *) * *num_paths);
-
-		for (int p = 0; p < *num_paths; p++)
+		else
 		{
-			f_stat = malloc(sizeof(struct stat));
-			validity = lstat(path_args[p], f_stat);
-			if (!validity)
-			{
-				(*valid_paths)[*num_valid] = path_args[p];
-				file_stats[*num_valid] = f_stat;
-				(*num_valid)++;
-			}
-			else
-			{
-				(*invalid_paths)[(*num_invalid)++] = path_args[p];
-				free(f_stat);
-			}
+			(*invalid_paths)[(*num_invalid)++] = path_args[p];
+			free(f_stat);
 		}
 	}
+
 	return (file_stats);
 }
 

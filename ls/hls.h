@@ -37,6 +37,8 @@ struct stat **validate_paths(
 	char ***valid_paths, int *num_valid,
 	char ***invalid_paths, int *num_invalid);
 
+void output_reg_files(char **reg_paths, int num_reg);
+
 void output_valid_paths(
 	struct stat **file_stats,
 	char **valid_paths,

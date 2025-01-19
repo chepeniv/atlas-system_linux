@@ -77,7 +77,7 @@ void output_invalid(char **invalid_dirs, int num_invalid, char *prog_name)
 	char *error_msg = malloc(sizeof(char) * 128);
 	for (int d = 0; d < num_invalid; d++)
 	{
-		sprintf(error_msg, "%s: cannot access '%s'",
+		sprintf(error_msg, "%s: cannot access \'%s\'",
 				prog_name,
 				invalid_dirs[d]);
 		perror(error_msg);

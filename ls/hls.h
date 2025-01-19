@@ -34,7 +34,7 @@ DIR **validate_dirs(
 	char ***valid_dirs, int *num_valid,
 	char ***invalid_dirs, int *num_invalid);
 
-void output_valid(
+void output_valid_dirs(
 	DIR **dir_refs,
 	char **valid_dirs,
 	int num_valid);

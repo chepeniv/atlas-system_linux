@@ -1,10 +1,56 @@
 #include "hls.h"
+#include <sys/stat.h>
 
-/*
- * sprintf writes to a string
- * can be used to append one string to another if their memory spaces
- * don't overlap
- */
+void output_valid(struct stat **file_paths, char **valid_paths, int num_valid);
+
+struct stat **validate_paths(
+char **path_args, int *num_paths,
+char ***valid_paths, int *num_valid,
+char ***invalid_paths, int *num_invalid)
+{
+	struct stat **file_paths, f_stat;
+	int validity;
+	char *pwd = ".";
+
+	/* if no paths given select current directory */
+	if (!(*num_paths))
+	{
+		file_paths = malloc(sizeof(struct stat *));
+		*valid_paths = malloc(sizeof(char *));
+		*invalid_paths = malloc(sizeof(char *)); /* init for free */
+
+		*valid_paths[*num_valid] = pwd;
+		validity = lstat(pwd, &f_stat);
+		if (!validity)
+		{
+			file_paths[*num_valid] = &f_stat;
+			(*num_valid)++;
+			(*num_paths)++;
+		}
+	}
+	else
+	{
+		file_paths = malloc(sizeof(struct stat *) * *num_paths);
+		*valid_paths = malloc(sizeof(char *) * *num_paths);
+		*invalid_paths = malloc(sizeof(char *) * *num_paths);
+
+		/* separate valid from invalid paths */
+		for (int p = 0; p < *num_paths; p++)
+		{
+			validity = lstat(path_args[p], &f_stat);
+
+			if (!validity)
+			{
+				(*valid_paths)[*num_valid] = path_args[p];
+				file_paths[*num_valid] = &f_stat;
+				(*num_valid)++;
+			}
+			else
+				(*invalid_paths)[(*num_invalid)++] = path_args[p];
+		}
+	}
+	return (file_paths);
+}
 
 /**
  * sort_args - separates and collects all the arguments passed into flags and
@@ -148,41 +194,52 @@ char ***invalid_dirs, int *num_invalid)
  */
 int main(int argc, char **argv)
 {
-	DIR **dir_refs;
-	char **opt_args = NULL, **dir_args = NULL, **valid_dirs = NULL,
-		 **invalid_dirs = NULL;
-	int num_opts = 0, num_dirs = 0, num_valid = 0, num_invalid = 0;
+	struct stat **file_paths;
+	/* DIR **dir_refs; */
+	char **opt_args = NULL, **path_args = NULL, **valid_paths = NULL,
+		 **invalid_paths = NULL;
+	int num_opts = 0, num_paths = 0, num_valid = 0, num_invalid = 0;
 	int opt_flags = 0;
 
 	opt_args = malloc(sizeof(void *) * argc);
-	dir_args = malloc(sizeof(void *) * argc);
+	path_args = malloc(sizeof(void *) * argc);
 
 	sort_args(
 		argv, argc,
 		opt_args, &num_opts,
-		dir_args, &num_dirs);
+		path_args, &num_paths);
 
 	opt_flags = set_opt_flags(opt_args, num_opts, argv[0]);
 
 	if (opt_flags < 0)
 	{
 		free(opt_args);
-		free(dir_args);
+		free(path_args);
 		exit(errno);
 	}
 
-	dir_refs = validate_dirs(
-		dir_args, &num_dirs,
-		&valid_dirs, &num_valid,
-		&invalid_dirs, &num_invalid);
+	file_paths = validate_paths(
+		path_args, &num_paths,
+		&valid_paths, &num_valid,
+		&invalid_paths, &num_invalid);
 
-	output_invalid(invalid_dirs, num_invalid, argv[0]);
-	output_valid(dir_refs, valid_dirs, num_valid);
+	/* dir_refs = validate_dirs( */
+	/* 	path_args, &num_paths, */
+	/* 	&valid_paths, &num_valid, */
+	/* 	&invalid_paths, &num_invalid); */
 
-	for (int d = 0; d < num_valid; d++)
-		closedir(dir_refs[d]);
+	output_invalid(invalid_paths, num_invalid, argv[0]);
+	/* output_valid_dirs(dir_refs, valid_paths, num_valid); */
 
-	void *allocs[5] = {dir_refs, dir_args, opt_args, valid_dirs, invalid_dirs};
+	/* for (int d = 0; d < num_valid; d++) */
+	/* 	closedir(dir_refs[d]); */
+
+	void *allocs[5] = {
+		/* dir_refs, */
+		path_args,
+		opt_args,
+		valid_paths,
+		invalid_paths};
 
 	free_all(allocs, 5);
 

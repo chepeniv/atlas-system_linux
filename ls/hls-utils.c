@@ -1,7 +1,7 @@
 #include "hls.h"
 
 /**
- * output_valid - printout the contents of each valid directory path found
+ * output_valid_dirs - printout the contents of each valid directory path found
  * @dir_refs: an array of pointers to structs used to examine directory
  * contents
  * @valid_dirs: an array of strings containing the names of the valid directory
@@ -10,7 +10,7 @@
  *
  * Return: void
  */
-void output_valid(DIR **dir_refs, char **valid_dirs, int num_valid)
+void output_valid_dirs(DIR **dir_refs, char **valid_dirs, int num_valid)
 {
 	for (int d = 0; d < num_valid; d++)
 	{

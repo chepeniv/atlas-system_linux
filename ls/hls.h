@@ -18,4 +18,33 @@
 #define _a 4
 #define _l 8
 
+void sort_args(
+	char **argv, int argc,
+	char **opts, int *num_opts,
+	char **dirs, int *num_dirs);
+
+int set_opt_flags(
+	char **opt_args,
+	int num_opts,
+	char *prog);
+
+DIR **validate_dirs(
+	char **dir_args, int *num_dirs,
+	char ***valid_dirs, int *num_valid,
+	char ***invalid_dirs, int *num_invalid);
+
+void output_valid(
+	DIR **dir_refs,
+	char **valid_dirs,
+	int num_valid);
+
+void output_invalid(
+	char **invalid_dirs,
+	int num_invalid,
+	char *prog_name);
+
+void free_all(
+	void **allocations,
+	int count);
+
 #endif /* _LS_H_ */

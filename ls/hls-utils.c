@@ -55,7 +55,9 @@ void output_valid_dirs(DIR **dir_streams, char **dir_paths, int num_dir)
 			if (d_name[0] != '.')
 				printf("%s  ", d_name);
 		}
-		printf("\n\n");
+		printf("\n");
+		if ((d + 1) != num_dir)
+			printf("\n");
 	}
 
 	for (int d = 0; d < num_dir; d++)
@@ -72,10 +74,15 @@ void output_valid_dirs(DIR **dir_streams, char **dir_paths, int num_dir)
 
 void output_invalid(char **invalid_dirs, int num_invalid, char *prog_name)
 {
+	char *error_msg = malloc(sizeof(char) * 128);
 	for (int d = 0; d < num_invalid; d++)
-		printf("%s: cannot access '%s': No such file or directory \n",
+	{
+		sprintf(error_msg, "%s: cannot access '%s'",
 				prog_name,
 				invalid_dirs[d]);
+		perror(error_msg);
+	}
+	free(error_msg);
 }
 
 /**

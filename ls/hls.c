@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 		&valid_paths, &num_valid,
 		&invalid_paths, &num_invalid);
 
-	/* output_invalid(invalid_paths, num_invalid, argv[0]); */
+	output_invalid(invalid_paths, num_invalid, argv[0]);
 	output_valid_paths(file_stats, valid_paths, num_valid);
 
 	if (num_valid)

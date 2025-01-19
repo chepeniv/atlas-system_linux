@@ -11,6 +11,19 @@
 /* if (opt_flags & _A) */
 /*		printf("option 'A' given\n"); */
 
+/**
+ * sort_args - separates and collects all the arguments passed into flags and
+ * paths
+ * @argv:
+ * @argc:
+ * @opts:
+ * @num_opts:
+ * @dirs:
+ * @num_dirs:
+ *
+ *
+ * Return:
+ */
 void sort_args(
 char **argv, int argc,
 char **opts, int *num_opts,
@@ -31,6 +44,15 @@ char **dirs, int *num_dirs)
 	}
 }
 
+/**
+ * set_opt_flags - takes all the flag parameters given and set the according
+ * bit
+ * @opt_args:
+ * @num_opts:
+ * @prog:
+ *
+ * Return: integer
+ */
 int set_opt_flags(char **opt_args, int num_opts, char *prog)
 {
 	int opt_flags = 0;
@@ -64,6 +86,18 @@ int set_opt_flags(char **opt_args, int num_opts, char *prog)
 	return (opt_flags);
 }
 
+/**
+ * validate_dirs - separates and collects all the directories given into
+ * either valid or invalid containers
+ * @dir_args:
+ * @num_dirs:
+ * @valid_dirs:
+ * @num_valid:
+ * @invalid_dirs:
+ * @num_invalid:
+ *
+ * Return: array of DIR pointers
+ */
 DIR **validate_dirs(
 char **dir_args, int *num_dirs,
 char ***valid_dirs, int *num_valid,
@@ -108,6 +142,15 @@ char ***invalid_dirs, int *num_invalid)
 	return (dir_refs);
 }
 
+/**
+ * main - entry point to the program takes an array of strings containing
+ * desired directory paths to explore as well as '-' options
+ * @argc: the total number of parameters passed to an invocation of this
+ * program
+ * @argv: an array of pointers to the strings passed to this program
+ *
+ * Return: 0 or an errno
+ */
 int main(int argc, char **argv)
 {
 	DIR **dir_refs;

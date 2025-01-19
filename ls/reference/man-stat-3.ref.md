@@ -32,61 +32,59 @@ Describes information about a file.
 
 `st_dev`
 
-- This  field  describes  the device on which this file resides.
-  (The major(3) and minor(3) macros may be useful to decompose the device ID
-  in this field.)
+- describes  the device on which this file resides. (The major(3) and minor(3)
+  macros may be useful to decompose the device ID in this field.)
 
 `st_ino`
 
-- This field contains the file's inode number.
+- the file's inode number.
 
 `st_mode`
 
-- This field contains the file type and mode.  See inode(7) for further
-information.
+- the file type and mode. See inode(7) for further information.
 
 `st_nlink`
 
-- This field contains the number of hard links to the file.
+- the number of hard links to the file.
 
 `st_uid`
 
-- This field contains the user ID of the owner of the file.
+- the user ID of the owner of the file.
 
 `st_gid`
 
-- This field contains the ID of the group owner of the file.
+- the ID of the group owner of the file.
 
 `st_rdev`
 
-- This field describes the device that this file (inode) represents.
+- describes the device that this file (inode) represents.
 
 `st_size`
 
-- This  field gives the size of the file (if it is a regular file or a symbolic
-link) in bytes.  The size of a symbolic link is the length of the pathname it
-contains, without a terminating null byte.
+- gives the size of the file (if it is a regular file or a symbolic link) in
+  bytes.  The size of a symbolic link is the length of the pathname it
+  contains, without a terminating null byte.
 
 `st_blksize`
-	  This field gives the "preferred" block size for efficient filesystem I/O.
+
+- gives the "preferred" block size for efficient filesystem I/O.
 
 `st_blocks`
 
-- This field indicates the number of blocks allocated to the file, in  512-byte
-units.  (This may be smaller than st_size/512 when the file has holes.)
+- indicates the number of blocks allocated to the file, in  512-byte units.
+  (This may be smaller than st_size/512 when the file has holes.)
 
 `st_atime`
 
-- This is the time of the last access of file data.
+- the time of the last access of file data.
 
 `st_mtime`
 
-- This is the time of last modification of file data.
+- the time of last modification of file data.
 
 `st_ctime`
 
-- This  is  the file's last status change timestamp (time of last change to the
-inode).
+- the file's last status change timestamp (time of last change to the inode).
 
 For further information on the above fields, see inode(7).
 

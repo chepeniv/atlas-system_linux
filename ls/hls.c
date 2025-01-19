@@ -1,55 +1,98 @@
 #include "hls.h"
 #include <sys/stat.h>
 
-void output_valid(struct stat **file_paths, char **valid_paths, int num_valid);
+void output_valid_paths(
+struct stat **file_stats,
+char **valid_paths,
+int num_valid)
+{
+	/* struct stat *handler = *file_stats; */
+	char **reg_paths, **dir_paths;
+	int num_reg = 0, num_dir = 0;
+	DIR **dir_streams;
+
+	reg_paths = malloc(sizeof(char *) * num_valid);
+	dir_paths = malloc(sizeof(char *) * num_valid);
+
+	for (int p = 0; p < num_valid; p++)
+	{
+		mode_t mode = file_stats[p]->st_mode;
+
+		if (S_ISDIR(mode))
+			dir_paths[num_dir++] = valid_paths[p];
+		else
+			reg_paths[num_reg++] = valid_paths[p];
+	}
+
+	for (int r = 0; r < num_reg; r++)
+		printf("%s  ", reg_paths[r]);
+	printf("\n");
+
+	dir_streams = malloc(sizeof(DIR *) * num_dir);
+	for (int d = 0; d < num_dir; d++)
+		dir_streams[d] = opendir(dir_paths[d]);
+
+	output_valid_dirs(dir_streams, dir_paths, num_dir);
+
+	free(reg_paths);
+	free(dir_paths);
+	free(dir_streams);
+}
 
 struct stat **validate_paths(
 char **path_args, int *num_paths,
 char ***valid_paths, int *num_valid,
 char ***invalid_paths, int *num_invalid)
 {
-	struct stat **file_paths, f_stat;
+	struct stat **file_stats, *f_stat;
 	int validity;
 	char *pwd = ".";
 
 	/* if no paths given select current directory */
 	if (!(*num_paths))
 	{
-		file_paths = malloc(sizeof(struct stat *));
+		file_stats = malloc(sizeof(struct stat *));
+		f_stat = malloc(sizeof(struct stat));
+
 		*valid_paths = malloc(sizeof(char *));
 		*invalid_paths = malloc(sizeof(char *)); /* init for free */
 
 		*valid_paths[*num_valid] = pwd;
-		validity = lstat(pwd, &f_stat);
+		validity = lstat(pwd, f_stat);
 		if (!validity)
 		{
-			file_paths[*num_valid] = &f_stat;
+			file_stats[*num_valid] = f_stat;
 			(*num_valid)++;
 			(*num_paths)++;
 		}
 	}
 	else
 	{
-		file_paths = malloc(sizeof(struct stat *) * *num_paths);
+		file_stats = malloc(sizeof(struct stat *) * *num_paths);
 		*valid_paths = malloc(sizeof(char *) * *num_paths);
 		*invalid_paths = malloc(sizeof(char *) * *num_paths);
 
 		/* separate valid from invalid paths */
 		for (int p = 0; p < *num_paths; p++)
 		{
-			validity = lstat(path_args[p], &f_stat);
+			f_stat = malloc(sizeof(struct stat));
+
+			validity = lstat(path_args[p], f_stat);
 
 			if (!validity)
 			{
 				(*valid_paths)[*num_valid] = path_args[p];
-				file_paths[*num_valid] = &f_stat;
+				file_stats[*num_valid] = f_stat;
 				(*num_valid)++;
 			}
 			else
+			{
 				(*invalid_paths)[(*num_invalid)++] = path_args[p];
+				free(f_stat);
+			}
 		}
 	}
-	return (file_paths);
+	return (file_stats);
 }
 
 /**
@@ -61,9 +104,8 @@ char ***invalid_paths, int *num_invalid)
  * @num_opts: variable to store the number of options found
  * @dirs: where to store the path strings found
  * @num_dirs: variable to store the number of paths found
- *
- * Return: void
  */
+
 void sort_args(
 char **argv, int argc,
 char **opts, int *num_opts,
@@ -94,6 +136,7 @@ char **dirs, int *num_dirs)
  *
  * Return: the integer represented bit the resultant bit flags
  */
+
 int set_opt_flags(char **opt_args, int num_opts, char *prog)
 {
 	int opt_flags = 0;
@@ -139,6 +182,7 @@ int set_opt_flags(char **opt_args, int num_opts, char *prog)
  *
  * Return: array of DIR pointers
  */
+
 DIR **validate_dirs(
 char **dir_args, int *num_dirs,
 char ***valid_dirs, int *num_valid,
@@ -179,7 +223,6 @@ char ***invalid_dirs, int *num_invalid)
 			}
 		}
 	}
-
 	return (dir_refs);
 }
 
@@ -192,9 +235,10 @@ char ***invalid_dirs, int *num_invalid)
  *
  * Return: 0 or an errno
  */
+
 int main(int argc, char **argv)
 {
-	struct stat **file_paths;
+	struct stat **file_stats;
 	/* DIR **dir_refs; */
 	char **opt_args = NULL, **path_args = NULL, **valid_paths = NULL,
 		 **invalid_paths = NULL;
@@ -218,7 +262,7 @@ int main(int argc, char **argv)
 		exit(errno);
 	}
 
-	file_paths = validate_paths(
+	file_stats = validate_paths(
 		path_args, &num_paths,
 		&valid_paths, &num_valid,
 		&invalid_paths, &num_invalid);
@@ -229,13 +273,14 @@ int main(int argc, char **argv)
 	/* 	&invalid_paths, &num_invalid); */
 
 	output_invalid(invalid_paths, num_invalid, argv[0]);
-	/* output_valid_dirs(dir_refs, valid_paths, num_valid); */
+	output_valid_paths(file_stats, valid_paths, num_valid);
 
 	/* for (int d = 0; d < num_valid; d++) */
 	/* 	closedir(dir_refs[d]); */
 
 	void *allocs[5] = {
 		/* dir_refs, */
+		file_stats,
 		path_args,
 		opt_args,
 		valid_paths,

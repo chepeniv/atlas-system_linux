@@ -1,5 +1,14 @@
 #include "hls.h"
-#include <sys/stat.h>
+
+/**
+ * main - entry point to the program takes an array of strings containing
+ * desired directory paths to explore as well as '-' options
+ * @argc: the total number of parameters passed to an invocation of this
+ * program
+ * @argv: an array of pointers to the strings passed to this program
+ *
+ * Return: 0 or an errno
+ */
 
 void output_valid_paths(
 struct stat **file_stats,
@@ -39,6 +48,16 @@ int num_valid)
 	free(dir_streams);
 }
 
+/**
+ * main - entry point to the program takes an array of strings containing
+ * desired directory paths to explore as well as '-' options
+ * @argc: the total number of parameters passed to an invocation of this
+ * program
+ * @argv: an array of pointers to the strings passed to this program
+ *
+ * Return: 0 or an errno
+ */
+
 struct stat **validate_paths(
 char **path_args, int *num_paths,
 char ***valid_paths, int *num_valid,
@@ -46,39 +65,30 @@ char ***invalid_paths, int *num_invalid)
 {
 	struct stat **file_stats, *f_stat;
 	int validity;
-	char *pwd = ".";
 
-	/* if no paths given select current directory */
 	if (!(*num_paths))
 	{
 		file_stats = malloc(sizeof(struct stat *));
 		f_stat = malloc(sizeof(struct stat));
-
 		*valid_paths = malloc(sizeof(char *));
 		*invalid_paths = malloc(sizeof(char *)); /* init for free */
 
-		*valid_paths[*num_valid] = pwd;
-		validity = lstat(pwd, f_stat);
+		*valid_paths[*num_valid] = ".";
+		validity = lstat(".", f_stat);
 		if (!validity)
 		{
-			file_stats[*num_valid] = f_stat;
-			(*num_valid)++;
+			file_stats[(*num_valid)++] = f_stat;
 			(*num_paths)++;
 		}
-	}
-	else
-	{
+	} else {
 		file_stats = malloc(sizeof(struct stat *) * *num_paths);
 		*valid_paths = malloc(sizeof(char *) * *num_paths);
 		*invalid_paths = malloc(sizeof(char *) * *num_paths);
 
-		/* separate valid from invalid paths */
 		for (int p = 0; p < *num_paths; p++)
 		{
 			f_stat = malloc(sizeof(struct stat));
-
 			validity = lstat(path_args[p], f_stat);
-
 			if (!validity)
 			{
 				(*valid_paths)[*num_valid] = path_args[p];
@@ -93,137 +103,6 @@ char ***invalid_paths, int *num_invalid)
 		}
 	}
 	return (file_stats);
-}
-
-/**
- * sort_args - separates and collects all the arguments passed into flags and
- * paths
- * @argv: all the string arguments passed to the program
- * @argc: the total of arguments passed to the program
- * @opts: where to store the options strings found
- * @num_opts: variable to store the number of options found
- * @dirs: where to store the path strings found
- * @num_dirs: variable to store the number of paths found
- */
-
-void sort_args(
-char **argv, int argc,
-char **opts, int *num_opts,
-char **dirs, int *num_dirs)
-{
-	for (int i = 1; i < argc; i++)
-	{
-		if (argv[i][0] == '-')
-		{
-			opts[*num_opts] = &argv[i][1]; /* skip the '-' character */
-			(*num_opts)++;
-		}
-		else
-		{
-			dirs[*num_dirs] = argv[i];
-			(*num_dirs)++;
-		}
-	}
-}
-
-/**
- * set_opt_flags - takes all the flag parameters given, validates them, and
- * sets the corresponding bit in a flags variable
- * @opt_args: all the options strings found
- * @num_opts: the number of options strings found
- * @prog: the name of the compiled program, used for outputting proper error
- * messages
- *
- * Return: the integer represented bit the resultant bit flags
- */
-
-int set_opt_flags(char **opt_args, int num_opts, char *prog)
-{
-	int opt_flags = 0;
-
-	for (int i = 0; i < num_opts; i++)
-	{
-		for (int j = 0; opt_args[i][j] != '\0'; j++)
-		{
-			char c = opt_args[i][j];
-
-			switch (c)
-			{
-				case 'A':
-					opt_flags |= _A;
-					break;
-				case 'a':
-					opt_flags |= _a;
-					break;
-				case 'l':
-					opt_flags |= _l;
-					break;
-				case '1':
-					opt_flags |= _1;
-					break;
-				default:
-					printf("%s: invalid option -- '%c'\n", prog, c);
-					return (-1);
-			}
-		}
-	}
-	return (opt_flags);
-}
-
-/**
- * validate_dirs - separates and collects all the directories given into
- * either valid or invalid containers
- * @dir_args: all of the directory paths given to this program
- * @num_dirs: the number of directory paths given
- * @valid_dirs: where to store the valid directory paths strings found
- * @num_valid: where to store the number of total valid directories
- * @invalid_dirs: where to store the invalid directory paths strings found
- * @num_invalid: where to store the number of total invalid directories
- *
- * Return: array of DIR pointers
- */
-
-DIR **validate_dirs(
-char **dir_args, int *num_dirs,
-char ***valid_dirs, int *num_valid,
-char ***invalid_dirs, int *num_invalid)
-{
-	DIR **dir_refs;
-	DIR *dir;
-
-	if (!(*num_dirs))
-	{
-		dir_refs = malloc(sizeof(DIR *));
-		*valid_dirs = malloc(sizeof(char *));
-		*invalid_dirs = malloc(sizeof(char *)); /* init for free */
-
-
-		*valid_dirs[*num_valid] = ".";
-		dir_refs[*num_valid] = opendir(".");
-		(*num_valid)++;
-		(*num_dirs)++;
-	}
-	else
-	{
-		dir_refs = malloc(sizeof(DIR *) * *num_dirs);
-		*valid_dirs = malloc(sizeof(char *) * *num_dirs);
-		*invalid_dirs = malloc(sizeof(char *) * *num_dirs);
-
-		for (int d = 0; d < *num_dirs; d++)
-		{
-			dir = opendir(dir_args[d]);
-
-			if (!dir)
-				(*invalid_dirs)[(*num_invalid)++] = dir_args[d];
-			else
-			{
-				(*valid_dirs)[*num_valid] = dir_args[d];
-				dir_refs[*num_valid] = dir;
-				(*num_valid)++;
-			}
-		}
-	}
-	return (dir_refs);
 }
 
 /**

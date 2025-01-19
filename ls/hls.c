@@ -1,13 +1,9 @@
 #include "hls.h"
 
 /**
- * main - entry point to the program takes an array of strings containing
- * desired directory paths to explore as well as '-' options
- * @argc: the total number of parameters passed to an invocation of this
- * program
- * @argv: an array of pointers to the strings passed to this program
- *
- * Return: 0 or an errno
+ * output_reg_files - printout to stdout every file found
+ * @reg_paths: array containing the file names
+ * @num_reg: number of files found
  */
 
 void output_reg_files(char **reg_paths, int num_reg)
@@ -21,21 +17,18 @@ void output_reg_files(char **reg_paths, int num_reg)
 }
 
 /**
- * main - entry point to the program takes an array of strings containing
- * desired directory paths to explore as well as '-' options
- * @argc: the total number of parameters passed to an invocation of this
- * program
- * @argv: an array of pointers to the strings passed to this program
- *
- * Return: 0 or an errno
+ * output_valid_paths - printout all valid files and directories
+ * @file_stats: array of data structures containing metadata for each valid
+ * path found
+ * @valid_paths: array of pathnames
+ * @num_valid: total number of valid items
  */
 
 void output_valid_paths(
-struct stat **file_stats,
+_stat_struct **file_stats,
 char **valid_paths,
 int num_valid)
 {
-	/* struct stat *handler = *file_stats; */
 	char **reg_paths, **dir_paths;
 	int num_reg = 0, num_dir = 0;
 	DIR **dir_streams;
@@ -67,16 +60,20 @@ int num_valid)
 }
 
 /**
- * main - entry point to the program takes an array of strings containing
- * desired directory paths to explore as well as '-' options
- * @argc: the total number of parameters passed to an invocation of this
- * program
- * @argv: an array of pointers to the strings passed to this program
+ * validate_paths - analyze all paths given and determine whether they're valid
+ * or not
+ * @path_args: an array of all paths passed to the program
+ * @num_paths: total number of paths passed
+ * @valid_paths: where to store valid path names
+ * @num_valid: total number of valid paths found
+ * @invalid_paths: where to store invalid path names
+ * @num_invalid: total number of invalid paths found
  *
- * Return: 0 or an errno
+ * Return: a struct stat * array referencing metadata objects for each valid
+ * item found
  */
 
-struct stat **validate_paths(
+_stat_struct **validate_paths(
 char **path_args, int *num_paths,
 char ***valid_paths, int *num_valid,
 char ***invalid_paths, int *num_invalid)

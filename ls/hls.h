@@ -17,6 +17,8 @@
 #define _a 4
 #define _l 8
 
+typedef struct stat _stat_struct;
+
 void sort_args(
 	char **argv, int argc,
 	char **opts, int *num_opts,
@@ -27,12 +29,7 @@ int set_opt_flags(
 	int num_opts,
 	char *prog);
 
-/* DIR **validate_dirs( */
-/* char **dir_args, int *num_dirs, */
-/* char ***valid_dirs, int *num_valid, */
-/* char ***invalid_dirs, int *num_invalid); */
-
-struct stat **validate_paths(
+_stat_struct **validate_paths(
 	char **path_args, int *num_paths,
 	char ***valid_paths, int *num_valid,
 	char ***invalid_paths, int *num_invalid);
@@ -40,7 +37,7 @@ struct stat **validate_paths(
 void output_reg_files(char **reg_paths, int num_reg);
 
 void output_valid_paths(
-	struct stat **file_stats,
+	_stat_struct **file_stats,
 	char **valid_paths,
 	int num_valid);
 

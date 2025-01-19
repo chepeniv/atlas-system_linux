@@ -33,11 +33,11 @@ char **dirs, int *num_dirs)
 
 /**
  * output_valid_dirs - printout the contents of each valid directory path found
- * @dir_refs: an array of pointers to structs used to examine directory
+ * @dir_streams: an array of pointers to structs used to examine directory
  * contents
  * @dir_paths: an array of strings containing the names of the valid directory
  * paths
- * @num_valid: total number of valid paths given to the program
+ * @num_dir: total number of valid paths given to the program
  */
 
 void output_valid_dirs(DIR **dir_streams, char **dir_paths, int num_dir)

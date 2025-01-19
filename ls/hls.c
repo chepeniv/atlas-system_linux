@@ -239,7 +239,6 @@ char ***invalid_dirs, int *num_invalid)
 int main(int argc, char **argv)
 {
 	struct stat **file_stats;
-	/* DIR **dir_refs; */
 	char **opt_args = NULL, **path_args = NULL, **valid_paths = NULL,
 		 **invalid_paths = NULL;
 	int num_opts = 0, num_paths = 0, num_valid = 0, num_invalid = 0;
@@ -267,25 +266,13 @@ int main(int argc, char **argv)
 		&valid_paths, &num_valid,
 		&invalid_paths, &num_invalid);
 
-	/* dir_refs = validate_dirs( */
-	/* 	path_args, &num_paths, */
-	/* 	&valid_paths, &num_valid, */
-	/* 	&invalid_paths, &num_invalid); */
-
 	output_invalid(invalid_paths, num_invalid, argv[0]);
 	output_valid_paths(file_stats, valid_paths, num_valid);
 
-	/* for (int d = 0; d < num_valid; d++) */
-	/* 	closedir(dir_refs[d]); */
-
-	void *allocs[5] = {
-		/* dir_refs, */
-		file_stats,
-		path_args,
-		opt_args,
-		valid_paths,
+	for(int s = 0; s < num_paths; s++)
+		free(file_stats[s]);
+	void *allocs[5] = { file_stats, path_args, opt_args, valid_paths,
 		invalid_paths};
-
 	free_all(allocs, 5);
 
 	return (errno);

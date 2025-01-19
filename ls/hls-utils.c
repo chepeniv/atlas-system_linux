@@ -4,20 +4,20 @@
  * output_valid_dirs - printout the contents of each valid directory path found
  * @dir_refs: an array of pointers to structs used to examine directory
  * contents
- * @valid_dirs: an array of strings containing the names of the valid directory
+ * @dir_paths: an array of strings containing the names of the valid directory
  * paths
  * @num_valid: total number of valid paths given to the program
  */
 
-void output_valid_dirs(DIR **dir_refs, char **valid_dirs, int num_valid)
+void output_valid_dirs(DIR **dir_streams, char **dir_paths, int num_dir)
 {
-	for (int d = 0; d < num_valid; d++)
+	for (int d = 0; d < num_dir; d++)
 	{
 		struct dirent *dir_item;
 
-		if (num_valid > 1)
-			printf("%s:\n", valid_dirs[d]);
-		while ((dir_item = readdir(dir_refs[d])))
+		if (num_dir > 1)
+			printf("%s:\n", dir_paths[d]);
+		while ((dir_item = readdir(dir_streams[d])))
 		{
 			char *d_name = dir_item->d_name;
 
@@ -26,6 +26,9 @@ void output_valid_dirs(DIR **dir_refs, char **valid_dirs, int num_valid)
 		}
 		printf("\n");
 	}
+
+	for (int d = 0; d < num_dir; d++)
+		closedir(dir_streams[d]);
 }
 
 /**

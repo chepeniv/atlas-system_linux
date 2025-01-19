@@ -38,15 +38,20 @@ char **dirs, int *num_dirs)
  * @dir_paths: an array of strings containing the names of the valid directory
  * paths
  * @num_dir: total number of valid paths given to the program
+ * @num_invalid: used to determine how to format output
  */
 
-void output_valid_dirs(DIR **dir_streams, char **dir_paths, int num_dir)
+void output_valid_dirs(
+DIR **dir_streams,
+char **dir_paths,
+int num_dir,
+int num_invalid)
 {
 	for (int d = 0; d < num_dir; d++)
 	{
 		struct dirent *dir_item;
 
-		if (num_dir > 1)
+		if (num_dir > 1 || num_invalid)
 			printf("%s:\n", dir_paths[d]);
 		while ((dir_item = readdir(dir_streams[d])))
 		{
@@ -75,6 +80,7 @@ void output_valid_dirs(DIR **dir_streams, char **dir_paths, int num_dir)
 void output_invalid(char **invalid_dirs, int num_invalid, char *prog_name)
 {
 	char *error_msg = malloc(sizeof(char) * 128);
+
 	for (int d = 0; d < num_invalid; d++)
 	{
 		sprintf(error_msg, "%s: cannot access %s",

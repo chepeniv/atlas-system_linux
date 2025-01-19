@@ -22,12 +22,14 @@ void output_reg_files(char **reg_paths, int num_reg)
  * path found
  * @valid_paths: array of pathnames
  * @num_valid: total number of valid items
+ * @num_invalid: used to decide how to format output
  */
 
 void output_valid_paths(
 _stat_struct **file_stats,
 char **valid_paths,
-int num_valid)
+int num_valid,
+int num_invalid)
 {
 	char **reg_paths, **dir_paths;
 	int num_reg = 0, num_dir = 0;
@@ -52,7 +54,7 @@ int num_valid)
 	for (int d = 0; d < num_dir; d++)
 		dir_streams[d] = opendir(dir_paths[d]);
 
-	output_valid_dirs(dir_streams, dir_paths, num_dir);
+	output_valid_dirs(dir_streams, dir_paths, num_dir, num_invalid);
 
 	free(reg_paths);
 	free(dir_paths);
@@ -149,7 +151,7 @@ int main(int argc, char **argv)
 		&invalid_paths, &num_invalid);
 
 	output_invalid(invalid_paths, num_invalid, argv[0]);
-	output_valid_paths(file_stats, valid_paths, num_valid);
+	output_valid_paths(file_stats, valid_paths, num_valid, num_invalid);
 
 	if (num_valid)
 		for (int s = 0; s < num_valid; s++)

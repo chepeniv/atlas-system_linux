@@ -39,9 +39,12 @@ void output_reg_files(char **reg_paths, int num_reg);
 void output_valid_paths(
 	_stat_struct **file_stats,
 	char **valid_paths,
-	int num_valid);
+	int num_valid,
+	int num_invalid);
 
-void output_valid_dirs(DIR **dir_refs, char **valid_dirs, int num_valid);
+void output_valid_dirs(DIR **dir_refs, char **valid_dirs,
+	int num_valid,
+	int num_invalid);
 
 void output_invalid(
 	char **invalid_dirs,

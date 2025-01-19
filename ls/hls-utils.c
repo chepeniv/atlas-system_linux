@@ -55,7 +55,7 @@ void output_valid_dirs(DIR **dir_streams, char **dir_paths, int num_dir)
 			if (d_name[0] != '.')
 				printf("%s  ", d_name);
 		}
-		printf("\n");
+		printf("\n\n");
 	}
 
 	for (int d = 0; d < num_dir; d++)

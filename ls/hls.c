@@ -80,7 +80,8 @@ char ***invalid_paths, int *num_invalid)
 			file_stats[(*num_valid)++] = f_stat;
 			(*num_paths)++;
 		}
-	} else {
+	} else
+	{
 		file_stats = malloc(sizeof(struct stat *) * *num_paths);
 		*valid_paths = malloc(sizeof(char *) * *num_paths);
 		*invalid_paths = malloc(sizeof(char *) * *num_paths);
@@ -148,7 +149,7 @@ int main(int argc, char **argv)
 	output_invalid(invalid_paths, num_invalid, argv[0]);
 	output_valid_paths(file_stats, valid_paths, num_valid);
 
-	for(int s = 0; s < num_paths; s++)
+	for (int s = 0; s < num_paths; s++)
 		free(file_stats[s]);
 	void *allocs[5] = { file_stats, path_args, opt_args, valid_paths,
 		invalid_paths};

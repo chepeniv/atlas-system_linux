@@ -28,9 +28,9 @@ int set_opt_flags(
 	char *prog);
 
 /* DIR **validate_dirs( */
-/* 	char **dir_args, int *num_dirs, */
-/* 	char ***valid_dirs, int *num_valid, */
-/* 	char ***invalid_dirs, int *num_invalid); */
+/* char **dir_args, int *num_dirs, */
+/* char ***valid_dirs, int *num_valid, */
+/* char ***invalid_dirs, int *num_invalid); */
 
 struct stat **validate_paths(
 	char **path_args, int *num_paths,
@@ -42,10 +42,7 @@ void output_valid_paths(
 	char **valid_paths,
 	int num_valid);
 
-void output_valid_dirs(
-	DIR **dir_refs,
-	char **valid_dirs,
-	int num_valid);
+void output_valid_dirs(DIR **dir_refs, char **valid_dirs, int num_valid);
 
 void output_invalid(
 	char **invalid_dirs,

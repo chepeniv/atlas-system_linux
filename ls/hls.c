@@ -152,14 +152,12 @@ int main(int argc, char **argv)
 	output_valid_paths(file_stats, valid_paths, num_valid);
 
 	if (num_valid)
-	{
 		for (int s = 0; s < num_valid; s++)
 			free(file_stats[s]);
-		free(file_stats);
-	}
 
-	void *allocs[4] = { path_args, opt_args, valid_paths, invalid_paths};
-	free_all(allocs, 4);
+	void *allocs[5] = { file_stats, path_args, opt_args, valid_paths,
+		invalid_paths};
+	free_all(allocs, 5);
 
 	return (errno);
 }

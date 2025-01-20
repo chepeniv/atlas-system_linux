@@ -25,14 +25,15 @@ typedef struct stat _stat_struct;
  * @name: the string name the path
  * @stream: a handle on a read stream of a given directory or file
  * @stat: a structure containing metadata about the path
- * @errno: any error code encountered when dealing with the path
+ * @errcode: any error code encountered when dealing with the path
  */
 
-typedef struct _path_data {
+typedef struct _path_data
+{
 	char *name;
 	DIR *stream;
 	struct stat *stat;
-	int errno;
+	int errcode;
 } path_data;
 
 void sort_args(

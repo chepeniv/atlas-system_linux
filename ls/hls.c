@@ -1,6 +1,38 @@
 #include "hls.h"
 
 /**
+ * init_path_data_chain - analyze and collect all stat metadata for each path
+ * given
+ * @path_args: names of all the paths
+ * @num_paths: total number of paths given
+ *
+ * Return: an array of structs containing the extracted info for each path
+ */
+
+path_data *init_path_data_chain(char **path_args, int *num_paths)
+{
+	path_data *path_data_chain = malloc(sizeof(path_data) * *num_paths);
+	struct stat *f_stat;
+	int errcode;
+
+	if (!(*num_paths))
+		path_args[(*num_paths)++] = ".";
+
+	for (int p = 0; p < *num_paths; p++)
+	{
+		f_stat = malloc(sizeof(struct stat));
+		errcode = lstat(path_args[p], f_stat);
+
+		path_data_chain[p].name = NULL;       /* char * */
+		path_data_chain[p].stream = NULL;     /* DIR * */
+		path_data_chain[p].stat = f_stat;     /* struct stat * */
+		path_data_chain[p].errcode = errcode; /* int */
+	}
+
+	return (path_data_chain);
+}
+
+/**
  * output_reg_files - printout to stdout every file found
  * @reg_paths: array containing the file names
  * @num_reg: number of files found

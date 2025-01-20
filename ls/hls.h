@@ -36,12 +36,6 @@ typedef struct _path_data
 	int errcode;
 } path_data;
 
-path_data **init_path_data_chain(char **path_args, int *num_paths);
-
-void print_path_data(char *program, path_data **data_chain, int num_paths);
-
-void free_data_chain(path_data **data_chain, int num_paths);
-
 void sort_args(
 	char **argv, int argc,
 	char **opts, int *num_opts,
@@ -52,30 +46,17 @@ int set_opt_flags(
 	int num_opts,
 	char *prog);
 
-_stat_struct **validate_paths(
-	char **path_args, int *num_paths,
-	char ***valid_paths, int *num_valid,
-	char ***invalid_paths, int *num_invalid);
+path_data **init_path_data_chain(
+	char **path_args,
+	int *num_paths);
 
-void output_reg_files(char **reg_paths, int num_reg);
+void print_paths(
+	char *program,
+	path_data **data_chain,
+	int num_paths);
 
-void output_valid_paths(
-	_stat_struct **file_stats,
-	char **valid_paths,
-	int num_valid,
-	int num_invalid);
-
-void output_valid_dirs(DIR **dir_refs, char **valid_dirs,
-	int num_valid,
-	int num_invalid);
-
-void output_invalid(
-	char **invalid_dirs,
-	int num_invalid,
-	char *prog_name);
-
-void free_all(
-	void **allocations,
-	int count);
+void free_data_chain(
+	path_data **data_chain,
+	int num_paths);
 
 #endif /* _LS_H_ */

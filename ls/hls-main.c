@@ -1,13 +1,12 @@
 #include "hls.h"
 
-void print_paths(char *program, path_data **data_chain, int num_paths)
-{
-	/* int indx_reg[num_paths], indx_dir[num_paths], indx_err[num_paths]; */
-	print_errors(program, data_chain, num_paths);
-	print_reg_paths(data_chain, num_paths);
-	print_dir_paths(data_chain, num_paths);
-
-}
+/* void print_paths(char *program, path_data **data_chain, int num_paths) */
+/* { */
+/* int indx_reg[num_paths], indx_dir[num_paths], indx_err[num_paths]; */
+/* print_errors(program, data_chain, num_paths); */
+/* print_reg_paths(data_chain, num_paths); */
+/* print_dir_paths(data_chain, num_paths); */
+/* } */
 
 /**
  * main - entry point to the program takes an array of strings containing
@@ -41,7 +40,10 @@ int main(int argc, char **argv)
 	/* } */
 
 	path_data_chain = init_path_data_chain(path_args, &num_paths);
-	print_paths(argv[0], path_data_chain, num_paths);
+
+	print_errors(argv[0], path_data_chain, num_paths);
+	print_reg_paths(path_data_chain, num_paths);
+	print_dir_paths(path_data_chain, num_paths);
 
 	free_data_chain(path_data_chain, num_paths);
 	free(opt_args);

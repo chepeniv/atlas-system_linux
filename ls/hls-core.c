@@ -52,6 +52,14 @@ path_data **init_path_data_chain(char **path_args, int *num_paths)
 	return (path_data_chain);
 }
 
+/**
+ * print_errors - analyses the path_data array given for errors outputs the
+ * appropriate error message
+ * @program: name of the invocation of this program
+ * @data_chain: pointer to the path_data array
+ * @num_paths: length of the path_data array
+ */
+
 void print_errors(char *program, path_data **data_chain, int num_paths)
 {
 	path_data *path;
@@ -86,6 +94,13 @@ void print_errors(char *program, path_data **data_chain, int num_paths)
 	free(msg_buf);
 }
 
+/**
+ * print_reg_paths - extracts and prints the names of all valid regular files
+ * in the path_data array given
+ * @data_chain: pointer to the path_data array
+ * @num_paths: length of the path_data array
+ */
+
 void print_reg_paths(path_data **data_chain, int num_paths)
 {
 	path_data *path;
@@ -107,6 +122,13 @@ void print_reg_paths(path_data **data_chain, int num_paths)
 	}
 	printf("\n\n");
 }
+
+/**
+ * print_dir_paths - extracts and prints the contents of all valid directories
+ * in the path_data array given
+ * @data_chain: pointer to the path_data array
+ * @num_paths: length of the path_data array
+ */
 
 void print_dir_paths(path_data **data_chain, int num_paths)
 {

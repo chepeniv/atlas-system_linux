@@ -50,10 +50,10 @@ path_data **init_path_data_chain(
 	char **path_args,
 	int *num_paths);
 
-void print_paths(
-	char *program,
-	path_data **data_chain,
-	int num_paths);
+/* void print_paths( */
+/* char *program, */
+/* path_data **data_chain, */
+/* int num_paths); */
 
 void print_errors(
 	char *program,

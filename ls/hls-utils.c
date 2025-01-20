@@ -75,6 +75,13 @@ int set_opt_flags(char **opt_args, int num_opts, char *prog)
 	return (opt_flags);
 }
 
+/**
+ * free_data_chain - frees all nested allocations in the given path_data array
+ * as well as the array itself
+ * @data_chain: the array to process
+ * @num_paths: the length of the array
+ */
+
 void free_data_chain(path_data **data_chain, int num_paths)
 {
 	path_data *path;

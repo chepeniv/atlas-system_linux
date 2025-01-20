@@ -28,16 +28,59 @@ path_data *init_path_data_chain(char **path_args, int *num_paths)
 		path_stream = NULL;
 
 		if (!errcode)
+		{
 			if (S_ISDIR(path_stat->st_mode))
+			{
 				path_stream = opendir(path_name);
+				if (!path_stream)
+					errcode = errno;
+			}
+		}
+		else
+		{
+			errcode = errno;
+			free(path_stat);
+			path_stat = NULL;
+		}
 
 		path_data_chain[p].name = path_name;
 		path_data_chain[p].stream = path_stream;
 		path_data_chain[p].stat = path_stat;
-		path_data_chain[p].errcode = errno;
+		path_data_chain[p].errcode = errcode;
 	}
 
 	return (path_data_chain);
+}
+
+void print_path_data(char *program, path_data *data_chain, int num_paths)
+{
+	char *msg_buf = malloc(sizeof(char) * 128);
+	/* output invalid paths */
+	for (int p = 0; p < num_paths; p++)
+	{
+		char *err_msg;
+		char *dirname = data_chain[p].name;
+
+		switch (data_chain[p].errcode)
+		{
+			case ENOTDIR:
+				err_msg = "cannot access";
+				break;
+			case EACCES:
+				err_msg = "cannot open directory";
+				break;
+		}
+
+		sprintf(msg_buf, "%s: %s %s", program, err_msg, dirname);
+		perror(msg_buf);
+	}
+	free(msg_buf);
+	/* output valid paths */
+		/* output reg files*/
+		/* output each dir contents*/
+}
+
+void free_data_chain(path_data *data_chain){
 }
 
 /**

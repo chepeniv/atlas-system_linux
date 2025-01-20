@@ -74,3 +74,17 @@ int set_opt_flags(char **opt_args, int num_opts, char *prog)
 	}
 	return (opt_flags);
 }
+
+void free_data_chain(path_data **data_chain, int num_paths)
+{
+	path_data *path;
+
+	for (int p = 0; p < num_paths; p++)
+	{
+		path = data_chain[p];
+		free(path->stat);
+		closedir(path->stream);
+		free(path);
+	}
+	free(data_chain);
+}

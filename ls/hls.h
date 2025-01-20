@@ -55,6 +55,19 @@ void print_paths(
 	path_data **data_chain,
 	int num_paths);
 
+void print_errors(
+	char *program,
+	path_data **data_chain,
+	int num_paths);
+
+void print_reg_paths(
+	path_data **data_chain,
+	int num_paths);
+
+void print_dir_paths(
+	path_data **data_chain,
+	int num_paths);
+
 void free_data_chain(
 	path_data **data_chain,
 	int num_paths);

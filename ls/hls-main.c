@@ -1,5 +1,14 @@
 #include "hls.h"
 
+void print_paths(char *program, path_data **data_chain, int num_paths)
+{
+	/* int indx_reg[num_paths], indx_dir[num_paths], indx_err[num_paths]; */
+	print_errors(program, data_chain, num_paths);
+	print_reg_paths(data_chain, num_paths);
+	print_dir_paths(data_chain, num_paths);
+
+}
+
 /**
  * main - entry point to the program takes an array of strings containing
  * desired directory paths to explore as well as '-' options
@@ -26,9 +35,9 @@ int main(int argc, char **argv)
 
 	/* if (!(opt_flags = set_opt_flags(opt_args, num_opts, argv[0]))) */
 	/* { */
-	/* 	free(opt_args); */
-	/* 	free(path_args); */
-	/* 	exit(errno); */
+	/* free(opt_args); */
+	/* free(path_args); */
+	/* exit(errno); */
 	/* } */
 
 	path_data_chain = init_path_data_chain(path_args, &num_paths);

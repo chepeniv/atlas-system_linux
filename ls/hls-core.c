@@ -52,15 +52,11 @@ path_data **init_path_data_chain(char **path_args, int *num_paths)
 	return (path_data_chain);
 }
 
-void print_paths(char *program, path_data **data_chain, int num_paths)
+void print_errors(char *program, path_data **data_chain, int num_paths)
 {
-	char *path_name, *err_msg, *msg_buf = malloc(sizeof(char) * 128);
 	path_data *path;
-	struct dirent *dir_item;
-	DIR *path_stream;
+	char *path_name, *err_msg, *msg_buf = malloc(sizeof(char) * 128);
 	int path_err;
-	/* int indx_reg[num_paths], indx_dir[num_paths], indx_err[num_paths]; */
-	mode_t path_mode;
 
 	/* output invalid paths */
 	for (int p = 0; p < num_paths; p++)
@@ -87,7 +83,15 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 		perror(msg_buf);
 	}
 
-	/* output valid reg files*/
+	free(msg_buf);
+}
+
+void print_reg_paths(path_data **data_chain, int num_paths)
+{
+	path_data *path;
+	char *path_name;
+	mode_t path_mode;
+
 	for (int p = 0; p < num_paths; p++)
 	{
 		path = data_chain[p];
@@ -102,8 +106,14 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 		}
 	}
 	printf("\n\n");
+}
 
-	/* output each valid directory's contents*/
+void print_dir_paths(path_data **data_chain, int num_paths)
+{
+	path_data *path;
+	DIR *path_stream;
+	struct dirent *dir_item;
+
 	for (int p = 0; p < num_paths; p++)
 	{
 		path = data_chain[p];
@@ -122,18 +132,4 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 			printf("\n\n");
 		}
 	}
-
-	free(msg_buf);
-}
-
-void free_data_chain(path_data **data_chain, int num_paths){
-	path_data *path;
-	for (int p = 0; p < num_paths; p++)
-	{
-		path = data_chain[p];
-		free(path->stat);
-		closedir(path->stream);
-		free(path);
-	}
-	free(data_chain);
 }

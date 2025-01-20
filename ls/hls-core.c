@@ -68,6 +68,7 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 		path = data_chain[p];
 		path_name = path->name;
 		path_err = path->errcode;
+		errno = path_err;
 
 		if (!path_err)
 			continue;
@@ -75,11 +76,9 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 		switch (path_err)
 		{
 			case ENOENT:
-				errno = ENOENT;
 				err_msg = "cannot access";
 				break;
 			case EACCES:
-				errno = EACCES;
 				err_msg = "cannot open directory";
 				break;
 		}

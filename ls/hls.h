@@ -36,6 +36,8 @@ typedef struct _path_data
 	int errcode;
 } path_data;
 
+path_data *init_path_data_chain(char **path_args, int *num_paths);
+
 void sort_args(
 	char **argv, int argc,
 	char **opts, int *num_opts,

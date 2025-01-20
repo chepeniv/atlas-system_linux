@@ -12,7 +12,9 @@
 path_data *init_path_data_chain(char **path_args, int *num_paths)
 {
 	path_data *path_data_chain = malloc(sizeof(path_data) * *num_paths);
-	struct stat *f_stat;
+	char *path_name;
+	struct stat *path_stat;
+	DIR *path_stream;
 	int errcode;
 
 	if (!(*num_paths))
@@ -20,13 +22,19 @@ path_data *init_path_data_chain(char **path_args, int *num_paths)
 
 	for (int p = 0; p < *num_paths; p++)
 	{
-		f_stat = malloc(sizeof(struct stat));
-		errcode = lstat(path_args[p], f_stat);
+		path_name = path_args[p];
+		path_stat = malloc(sizeof(struct stat));
+		errcode = lstat(path_name, path_stat);
+		path_stream = NULL;
 
-		path_data_chain[p].name = NULL;       /* char * */
-		path_data_chain[p].stream = NULL;     /* DIR * */
-		path_data_chain[p].stat = f_stat;     /* struct stat * */
-		path_data_chain[p].errcode = errcode; /* int */
+		if (!errcode)
+			if (S_ISDIR(path_stat->st_mode))
+				path_stream = opendir(path_name);
+
+		path_data_chain[p].name = path_name;
+		path_data_chain[p].stream = path_stream;
+		path_data_chain[p].stat = path_stat;
+		path_data_chain[p].errcode = errno;
 	}
 
 	return (path_data_chain);
@@ -142,56 +150,56 @@ char ***invalid_paths, int *num_invalid)
 	return (file_stats);
 }
 
-/**
- * main - entry point to the program takes an array of strings containing
- * desired directory paths to explore as well as '-' options
- * @argc: the total number of parameters passed to an invocation of this
- * program
- * @argv: an array of pointers to the strings passed to this program
- *
- * Return: 0 or an errno
- */
+/*/1** */
+/* * main - entry point to the program takes an array of strings containing */
+/* * desired directory paths to explore as well as '-' options */
+/* * @argc: the total number of parameters passed to an invocation of this */
+/* * program */
+/* * @argv: an array of pointers to the strings passed to this program */
+/* * */
+/* * Return: 0 or an errno */
+/* *1/ */
 
-int main(int argc, char **argv)
-{
-	struct stat **file_stats;
-	char **opt_args = NULL, **path_args = NULL, **valid_paths = NULL,
-		 **invalid_paths = NULL;
-	int num_opts = 0, num_paths = 0, num_valid = 0, num_invalid = 0;
-	int opt_flags = 0;
+/*int main(int argc, char **argv) */
+/*{ */
+/*	struct stat **file_stats; */
+/*	char **opt_args = NULL, **path_args = NULL, **valid_paths = NULL, */
+/*		 **invalid_paths = NULL; */
+/*	int num_opts = 0, num_paths = 0, num_valid = 0, num_invalid = 0; */
+/*	int opt_flags = 0; */
 
-	opt_args = malloc(sizeof(void *) * argc);
-	path_args = malloc(sizeof(void *) * argc);
+/*	opt_args = malloc(sizeof(void *) * argc); */
+/*	path_args = malloc(sizeof(void *) * argc); */
 
-	sort_args(
-		argv, argc,
-		opt_args, &num_opts,
-		path_args, &num_paths);
+/*	sort_args( */
+/*		argv, argc, */
+/*		opt_args, &num_opts, */
+/*		path_args, &num_paths); */
 
-	opt_flags = set_opt_flags(opt_args, num_opts, argv[0]);
+/*	opt_flags = set_opt_flags(opt_args, num_opts, argv[0]); */
 
-	if (opt_flags < 0)
-	{
-		free(opt_args);
-		free(path_args);
-		exit(errno);
-	}
+/*	if (opt_flags < 0) */
+/*	{ */
+/*		free(opt_args); */
+/*		free(path_args); */
+/*		exit(errno); */
+/*	} */
 
-	file_stats = validate_paths(
-		path_args, &num_paths,
-		&valid_paths, &num_valid,
-		&invalid_paths, &num_invalid);
+/*	file_stats = validate_paths( */
+/*		path_args, &num_paths, */
+/*		&valid_paths, &num_valid, */
+/*		&invalid_paths, &num_invalid); */
 
-	output_invalid(invalid_paths, num_invalid, argv[0]);
-	output_valid_paths(file_stats, valid_paths, num_valid, num_invalid);
+/*	output_invalid(invalid_paths, num_invalid, argv[0]); */
+/*	output_valid_paths(file_stats, valid_paths, num_valid, num_invalid); */
 
-	if (num_valid)
-		for (int s = 0; s < num_valid; s++)
-			free(file_stats[s]);
+/*	if (num_valid) */
+/*		for (int s = 0; s < num_valid; s++) */
+/*			free(file_stats[s]); */
 
-	void *allocs[5] = { file_stats, path_args, opt_args, valid_paths,
-		invalid_paths};
-	free_all(allocs, 5);
+/*	void *allocs[5] = { file_stats, path_args, opt_args, valid_paths, */
+/*		invalid_paths}; */
+/*	free_all(allocs, 5); */
 
-	return (errno);
-}
+/*	return (errno); */
+/*} */

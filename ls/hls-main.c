@@ -12,20 +12,13 @@
 
 int main(int argc, char **argv)
 {
-	path_data *path_data_chain;
-
-	struct stat **file_stats;
-
-	char **opt_args = NULL, **path_args = NULL, **valid_paths = NULL,
-		 **invalid_paths = NULL;
-
-	int num_opts = 0, num_paths = 0, num_valid = 0, num_invalid = 0;
-
-	int opt_flags = 0;
+	path_data **path_data_chain;
+	char **opt_args = NULL, **path_args = NULL;
+	int num_opts = 0, num_paths = 0;
+	/* int opt_flags = 0; */
 
 	opt_args = malloc(sizeof(void *) * argc);
 	path_args = malloc(sizeof(void *) * argc);
-
 	sort_args(
 		argv, argc,
 		opt_args, &num_opts,
@@ -40,16 +33,11 @@ int main(int argc, char **argv)
 
 	path_data_chain = init_path_data_chain(path_args, &num_paths);
 
-	output_invalid(invalid_paths, num_invalid, argv[0]);
-	output_valid_paths(file_stats, valid_paths, num_valid, num_invalid);
+	print_path_data(argv[0], path_data_chain, num_paths);
 
-	if (num_valid)
-		for (int s = 0; s < num_valid; s++)
-			free(file_stats[s]);
-
-	void *allocs[5] = { file_stats, path_args, opt_args, valid_paths,
-		invalid_paths};
-	free_all(allocs, 5);
+	free_data_chain(path_data_chain, num_paths);
+	free(opt_args);
+	free(path_args);
 
 	return (errno);
 }

@@ -52,7 +52,7 @@ int set_opt_flags(char **opt_args, int num_opts, char *prog)
 		{
 			char c = opt_args[i][j];
 
-			switch (c)
+			switch (c) /* precedence: l > 1 ; A > a */
 			{
 				case 'A':
 					opt_flags |= _A;

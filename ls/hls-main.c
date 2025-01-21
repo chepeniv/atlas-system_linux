@@ -15,8 +15,6 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 		indx_dir[num_paths], num_dir = 0,
 		indx_err[num_paths], num_err = 0;
 
-	(void) program;
-
 	for (int p = 0; p < num_paths; p++)
 	{
 		path = data_chain[p];
@@ -72,9 +70,9 @@ int main(int argc, char **argv)
 
 	/* if (!(opt_flags = set_opt_flags(opt_args, num_opts, argv[0]))) */
 	/* { */
-	/* free(opt_args); */
-	/* free(path_args); */
-	/* exit(errno); */
+	/* 	free(opt_args); */
+	/* 	free(path_args); */
+	/* 	exit(errno); */
 	/* } */
 
 	path_data_chain = init_path_data_chain(path_args, &num_paths);

@@ -112,21 +112,12 @@ int num_err)
 void print_reg_paths(path_data **data_chain, int *indices, int num_reg)
 {
 	path_data *path;
-	char *path_name;
-	mode_t path_mode;
 
 	for (int r = 0; r < num_reg; r++)
 	{
 		path = data_chain[indices[r]];
 
-		if (path->stat)
-		{
-			path_name = path->name;
-			path_mode = path->stat->st_mode;
-
-			if (S_ISREG(path_mode))
-				printf("%s  ", path_name);
-		}
+		printf("%s  ", path->name); /*USE FUNCTION POINTER */
 	}
 	printf("\n");
 }
@@ -145,7 +136,7 @@ void print_dir_contents(DIR *dir_stream)
 		char *dir_name = dir_item->d_name;
 
 		if (dir_name[0] != '.')
-			printf("%s  ", dir_name);
+			printf("%s  ", dir_name); /*USE FUNCTION POINTER */
 	}
 
 	printf("\n");

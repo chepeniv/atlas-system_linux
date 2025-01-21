@@ -1,12 +1,42 @@
 #include "hls.h"
 
-/* void print_paths(char *program, path_data **data_chain, int num_paths) */
-/* { */
-/* int indx_reg[num_paths], indx_dir[num_paths], indx_err[num_paths]; */
-/* print_errors(program, data_chain, num_paths); */
-/* print_reg_paths(data_chain, num_paths); */
-/* print_dir_paths(data_chain, num_paths); */
-/* } */
+void print_paths(char *program, path_data **data_chain, int num_paths)
+{
+	path_data *path;
+	struct stat *path_stat;
+	int indx_reg[num_paths], num_reg = 0,
+		indx_dir[num_paths], num_dir = 0,
+		indx_err[num_paths], num_err = 0;
+
+	(void) program;
+
+	for (int p = 0; p < num_paths; p++)
+	{
+		path = data_chain[p];
+		path_stat = path->stat;
+
+		if (!path_stat)
+			indx_err[num_err++] = p;
+		else if (S_ISREG(path_stat->st_mode))
+			indx_reg[num_reg++] = p;
+		else if (S_ISDIR(path_stat->st_mode))
+			indx_dir[num_dir++] = p;
+	}
+
+	for (int i = 0; i < num_err; i++)
+		printf("err: %d; ", indx_err[i]);
+	printf("\n");
+	for (int i = 0; i < num_reg; i++)
+		printf("reg: %d; ", indx_reg[i]);
+	printf("\n");
+	for (int i = 0; i < num_dir; i++)
+		printf("dir: %d; ", indx_dir[i]);
+	printf("\n");
+
+	/* print_errors(program, data_chain, num_paths); */
+	/* print_reg_paths(data_chain, num_paths); */
+	/* print_dir_paths(data_chain, num_paths); */
+}
 
 /**
  * main - entry point to the program takes an array of strings containing
@@ -40,10 +70,7 @@ int main(int argc, char **argv)
 	/* } */
 
 	path_data_chain = init_path_data_chain(path_args, &num_paths);
-
-	print_errors(argv[0], path_data_chain, num_paths);
-	print_reg_paths(path_data_chain, num_paths);
-	print_dir_paths(path_data_chain, num_paths);
+	print_paths(argv[0], path_data_chain, num_paths);
 
 	free_data_chain(path_data_chain, num_paths);
 	free(opt_args);

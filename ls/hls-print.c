@@ -9,12 +9,15 @@
 
 void print_paths(char *program, path_data **data_chain, int num_paths)
 {
+	/* WORK: TAKE AN opt_print() AND AN opt_filter() FUNCTION */
+
 	path_data *path;
 	struct stat *path_stat;
 	int indx_reg[num_paths], num_reg = 0,
 		indx_dir[num_paths], num_dir = 0,
 		indx_err[num_paths], num_err = 0;
 
+	/* sort-out the regular, directory, and error paths */
 	for (int p = 0; p < num_paths; p++)
 	{
 		path = data_chain[p];
@@ -28,10 +31,12 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 			indx_dir[num_dir++] = p;
 	}
 
+	/* traffic control the call of the print functions */
 	if (num_err > 0)
 		print_errors(program, data_chain, indx_err, num_err);
 	if (num_reg > 0)
 	{
+		/* only pass along opt_print() */
 		print_reg_paths(data_chain, indx_reg, num_reg);
 		if (num_dir > 0)
 			printf("\n");
@@ -40,6 +45,7 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 	{
 		if ((num_err || num_reg) && (num_dir == 1))
 			printf("%s:\n", data_chain[indx_dir[0]]->name);
+		/* pass along opt_print() and opt_filter() */
 		print_dir_paths(data_chain, indx_dir, num_dir);
 	}
 }
@@ -102,13 +108,16 @@ int num_err)
 
 void print_reg_paths(path_data **data_chain, int *indices, int num_reg)
 {
+	/* WORK: take in opt_print func pointer */
+
 	path_data *path;
 
 	for (int r = 0; r < num_reg; r++)
 	{
 		path = data_chain[indices[r]];
 
-		printf("%s  ", path->name); /*USE FUNCTION POINTER */
+		/* WORK: CALL FUNCTION POINTER */
+		printf("%s  ", path->name);
 	}
 	printf("\n");
 }
@@ -122,6 +131,8 @@ void print_dir_contents(DIR *dir_stream)
 {
 	struct dirent *dir_item;
 
+	/* take on a filter() and a printer() and then pass the printer to filter
+	 */
 	while ((dir_item = readdir(dir_stream)))
 	{
 		char *dir_name = dir_item->d_name;
@@ -144,6 +155,9 @@ void print_dir_contents(DIR *dir_stream)
 
 void print_dir_paths(path_data **data_chain, int *indices, int num_dir)
 {
+	/* take on an opt_filter() and an opt_print() function
+	 * then pass them on to print_dir_contents() */
+
 	path_data *path;
 	DIR *path_stream;
 
@@ -152,8 +166,9 @@ void print_dir_paths(path_data **data_chain, int *indices, int num_dir)
 		path = data_chain[indices[d]];
 		path_stream = path->stream;
 
-		if (path->errcode)
+		if (path->errcode) /* probable legacy checks */
 			continue;
+		/* only needed check */
 		else if ((num_dir == 1) && S_ISDIR(path->stat->st_mode))
 			print_dir_contents(path_stream);
 		else if (S_ISDIR(path->stat->st_mode))

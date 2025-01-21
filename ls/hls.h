@@ -75,4 +75,10 @@ void free_data_chain(
 	path_data **data_chain,
 	int num_paths);
 
+/* void opt_none_print(); */
+/* void opt_column_print(); */
+/* void opt_long_print(); */
+/* void opt_all_print(); */
+/* void opt_almost_all_print(); */
+
 #endif /* _LS_H_ */

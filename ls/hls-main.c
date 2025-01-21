@@ -31,6 +31,10 @@ int main(int argc, char **argv)
 	/* 	exit(errno); */
 	/* } */
 
+	/* get filter() and printer() functions based on options and pass both on
+	 * to print_paths()
+	 */
+
 	path_data_chain = init_path_data_chain(path_args, &num_paths);
 	print_paths(argv[0], path_data_chain, num_paths);
 

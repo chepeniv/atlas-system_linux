@@ -1,50 +1,6 @@
 #include "hls.h"
 
 /**
- * print_paths - traffic control logic for the various print_ calls
- * @program: name the current invocation of this program
- * @data_chain: the path_data array to analyse and extract data from
- * @num_paths: the total number of arguments passed to the current invocation
- */
-
-void print_paths(char *program, path_data **data_chain, int num_paths)
-{
-	path_data *path;
-	struct stat *path_stat;
-	int indx_reg[num_paths], num_reg = 0,
-		indx_dir[num_paths], num_dir = 0,
-		indx_err[num_paths], num_err = 0;
-
-	for (int p = 0; p < num_paths; p++)
-	{
-		path = data_chain[p];
-		path_stat = path->stat;
-
-		if (!path_stat)
-			indx_err[num_err++] = p;
-		else if (S_ISREG(path_stat->st_mode))
-			indx_reg[num_reg++] = p;
-		else if (S_ISDIR(path_stat->st_mode))
-			indx_dir[num_dir++] = p;
-	}
-
-	if (num_err > 0)
-		print_errors(program, data_chain, indx_err, num_err);
-	if (num_reg > 0)
-	{
-		print_reg_paths(data_chain, indx_reg, num_reg);
-		if (num_dir > 0)
-			printf("\n");
-	}
-	if (num_dir > 0)
-	{
-		if ((num_err || num_reg) && (num_dir == 1))
-			printf("%s:\n", data_chain[indx_dir[0]]->name);
-		print_dir_paths(data_chain, indx_dir, num_dir);
-	}
-}
-
-/**
  * main - entry point to the program takes an array of strings containing
  * desired directory paths to explore as well as '-' options
  * @argc: the total number of parameters passed to an invocation of this

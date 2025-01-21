@@ -39,7 +39,11 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 			printf("\n");
 	}
 	if (num_dir > 0)
+	{
+		if ((num_err || num_reg) && (num_dir == 1))
+			printf("%s:\n", data_chain[indx_dir[0]]->name);
 		print_dir_paths(data_chain, indx_dir, num_dir);
+	}
 }
 
 /**

@@ -1,5 +1,12 @@
 #include "hls.h"
 
+/**
+ * print_paths - traffic control logic for the various print_ calls
+ * @program: name the current invocation of this program
+ * @data_chain: the path_data array to analyse and extract data from
+ * @num_paths: the total number of arguments passed to the current invocation
+ */
+
 void print_paths(char *program, path_data **data_chain, int num_paths)
 {
 	path_data *path;
@@ -23,19 +30,16 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 			indx_dir[num_dir++] = p;
 	}
 
-	for (int i = 0; i < num_err; i++)
-		printf("err: %d; ", indx_err[i]);
-	printf("\n");
-	for (int i = 0; i < num_reg; i++)
-		printf("reg: %d; ", indx_reg[i]);
-	printf("\n");
-	for (int i = 0; i < num_dir; i++)
-		printf("dir: %d; ", indx_dir[i]);
-	printf("\n");
-
-	/* print_errors(program, data_chain, num_paths); */
-	/* print_reg_paths(data_chain, num_paths); */
-	/* print_dir_paths(data_chain, num_paths); */
+	if (num_err > 0)
+		print_errors(program, data_chain, indx_err, num_err);
+	if (num_reg > 0)
+	{
+		print_reg_paths(data_chain, indx_reg, num_reg);
+		if (num_dir > 0)
+			printf("\n");
+	}
+	if (num_dir > 0)
+		print_dir_paths(data_chain, indx_dir, num_dir);
 }
 
 /**

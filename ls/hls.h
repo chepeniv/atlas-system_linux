@@ -58,15 +58,18 @@ path_data **init_path_data_chain(
 void print_errors(
 	char *program,
 	path_data **data_chain,
-	int num_paths);
+	int *indeces,
+	int num_err);
 
 void print_reg_paths(
 	path_data **data_chain,
-	int num_paths);
+	int *indeces,
+	int num_reg);
 
 void print_dir_paths(
 	path_data **data_chain,
-	int num_paths);
+	int *indeces,
+	int num_dir);
 
 void free_data_chain(
 	path_data **data_chain,

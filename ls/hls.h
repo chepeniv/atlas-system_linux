@@ -61,6 +61,11 @@ int set_opt_flags(
 	int num_opts,
 	char *prog);
 
+int (*get_filter(int opt_flags))(char *);
+
+
+void (*get_printer(int opt_flags))(path_data *);
+
 /******** PRINTERS ********/
 
 void print_paths(

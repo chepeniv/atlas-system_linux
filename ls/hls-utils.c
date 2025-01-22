@@ -59,6 +59,26 @@ path_data **init_path_data_chain(char **path_args, int *num_paths)
 	return (path_data_chain);
 }
 
+int (*get_filter(int opt_flags))(char *)
+{
+	if (opt_flags & _A)
+		return (opt_almost_all_filter);
+	else if (opt_flags & _a)
+		return (opt_all_filter);
+	else
+		return (opt_standard_filter);
+}
+
+void (*get_printer(int opt_flags))(path_data *)
+{
+	if (opt_flags & _l)
+		return (opt_long_print);
+	else if (opt_flags & _1)
+		return (opt_column_print);
+	else
+		return (opt_standard_print);
+}
+
 /**
  * sort_args - separates and collects all the arguments passed into flags and
  * paths

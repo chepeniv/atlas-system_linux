@@ -15,7 +15,8 @@ int main(int argc, char **argv)
 	path_data **path_data_chain;
 	char **opt_args = NULL, **path_args = NULL;
 	int num_opts = 0, num_paths = 0;
-	/* int opt_flags = 0; */
+	int opt_flags = 0;
+	int (*filter)(char *);
 
 	opt_args = malloc(sizeof(void *) * argc);
 	path_args = malloc(sizeof(void *) * argc);
@@ -24,12 +25,16 @@ int main(int argc, char **argv)
 		opt_args, &num_opts,
 		path_args, &num_paths);
 
-	/* if (!(opt_flags = set_opt_flags(opt_args, num_opts, argv[0]))) */
-	/* { */
-	/* 	free(opt_args); */
-	/* 	free(path_args); */
-	/* 	exit(errno); */
-	/* } */
+	opt_flags = set_opt_flags(opt_args, num_opts, argv[0]);
+
+	if (opt_flags < 0)
+	{
+		free(opt_args);
+		free(path_args);
+		exit(errno);
+	}
+
+	filter = get_filter(opt_flags);
 
 	/* get filter() and printer() functions based on options and pass both on
 	 * to print_paths()
@@ -37,7 +42,7 @@ int main(int argc, char **argv)
 
 	path_data_chain = init_path_data_chain(path_args, &num_paths);
 	print_paths(
-		opt_standard_filter,
+		filter,
 		opt_standard_print,
 		argv[0],
 		path_data_chain,

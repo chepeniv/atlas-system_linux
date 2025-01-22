@@ -1,6 +1,12 @@
 #include "hls.h"
 
-/* validate all none . files */
+/**
+ * opt_standard_filter - the default filter function
+ * @path_name: the path name to analyze
+ *
+ * Return: 0 to reject the path, 1 to accept it
+ */
+
 int opt_standard_filter(char *path_name)
 {
 	if (path_name[0] != '.')
@@ -8,6 +14,11 @@ int opt_standard_filter(char *path_name)
 
 	return (0);
 }
+
+/**
+ * opt_standard_print - the default output formatting
+ * @path: the path to printout information from
+ */
 
 void opt_standard_print(path_data *path)
 {

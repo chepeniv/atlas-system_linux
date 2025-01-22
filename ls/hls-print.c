@@ -2,6 +2,8 @@
 
 /**
  * print_paths - traffic control logic for the various print_ calls
+ * @filter: the filtering method to use
+ * @printer: the printing formatting function to use
  * @program: name the current invocation of this program
  * @data_chain: the path_data array to analyse and extract data from
  * @num_paths: the total number of arguments passed to the current invocation
@@ -105,6 +107,7 @@ int num_err)
 /**
  * print_reg_paths - extracts and prints the names of all valid regular files
  * in the path_data array given
+ * @printer: the printing formatting function to use
  * @data_chain: pointer to the path_data array
  * @indices: an integer array holding the positions of data_chain which are
  * regular paths
@@ -114,7 +117,8 @@ int num_err)
 void print_reg_paths(
 void (*printer)(path_data *),
 path_data **data_chain,
-int *indices, int num_reg)
+int *indices,
+int num_reg)
 {
 	/* WORK: take in opt_print func pointer */
 
@@ -130,7 +134,9 @@ int *indices, int num_reg)
 
 /**
  * print_dir_contents - given a directory stream, print out all of its contents
- * @dir_stream: directory stream to probe
+ * @filter: the filtering method to use
+ * @printer: the printing formatting function to use
+ * @path: the path_data struct to process
  */
 
 void print_dir_contents(
@@ -159,6 +165,8 @@ path_data *path)
 /**
  * print_dir_paths - extracts and prints the contents of all valid directories
  * in the path_data array given
+ * @filter: the filtering method to use
+ * @printer: the printing formatting function to use
  * @data_chain: pointer to the path_data array
  * @indices: length of the path_data array
  * @num_dir: length of the path_data array

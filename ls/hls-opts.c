@@ -5,14 +5,26 @@
 
 /******** OPTION FILTERS ********/
 
-/* validate all files including .-hidden files */
+/**
+ * opt_all_filter - doesn't filter out any path
+ * @path_name: (ignored)
+ *
+ * Return: always returns 1 to accept
+ */
+
 int opt_all_filter(char *path_name)
 {
 	(void) path_name;
 	return (1);
 }
 
-/* validate every file except ./ ../ */
+/**
+ * opt_almost_all_filter - filters out only the implied . and .. directories
+ * @path_name: the name of the path to analyze
+ *
+ * Return: 0 to reject, 1 to accept
+ */
+
 int opt_almost_all_filter(char *path_name)
 {
 	if (path_name[0] == '.')
@@ -25,6 +37,11 @@ int opt_almost_all_filter(char *path_name)
 }
 
 /******** OPTION PRINTERS ********/
+
+/**
+ * opt_column_print - option for outputting all items into a single column
+ * @path: the struct to process for output
+ */
 
 void opt_column_print(path_data *path)
 {
@@ -53,7 +70,11 @@ void opt_column_print(path_data *path)
  *            st_mtim  -> time of last modification
  */
 
-/* move to it's own file with its own functions */
+/**
+ * opt_long_print - the most detailed output formatting option
+ * @path: the struct to analyze and extract data from for output
+ */
+
 void opt_long_print(path_data *path)
 {
 

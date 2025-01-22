@@ -1,5 +1,13 @@
 #include "hls.h"
 
+/**
+ * get_filter - determines which filter to use based on the opt_flags code
+ * @opt_flags: the binary integer to analyze
+ *
+ * Return: a function of the form 'int (*filter)(char *)' used to filter out
+ * strings
+ */
+
 int (*get_filter(int opt_flags))(char *)
 {
 	if (opt_flags & _A)
@@ -9,6 +17,15 @@ int (*get_filter(int opt_flags))(char *)
 	else
 		return (opt_standard_filter);
 }
+
+/**
+ * get_printer - determines which print method to use based on an opt_flags
+ * code given
+ * @opt_flags: the binary integer to analyze
+ *
+ * Return: a function of the form 'void (*printer)(path_data *)' used to
+ * format the output of a path given
+ */
 
 void (*get_printer(int opt_flags))(path_data *)
 {

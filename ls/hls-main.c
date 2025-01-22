@@ -36,7 +36,12 @@ int main(int argc, char **argv)
 	 */
 
 	path_data_chain = init_path_data_chain(path_args, &num_paths);
-	print_paths(argv[0], path_data_chain, num_paths);
+	print_paths(
+		opt_standard_filter,
+		opt_standard_print,
+		argv[0],
+		path_data_chain,
+		num_paths);
 
 	free_data_chain(path_data_chain, num_paths);
 	free(opt_args);

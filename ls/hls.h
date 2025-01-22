@@ -39,6 +39,8 @@ typedef struct _path_data
 	int errcode;
 } path_data;
 
+path_data *get_path_data(char *path_name);
+
 path_data **init_path_data_chain(
 	char **path_args,
 	int *num_paths);
@@ -62,6 +64,8 @@ int set_opt_flags(
 /******** PRINTERS ********/
 
 void print_paths(
+	int (*filter)(char *),
+	void (*printer)(path_data *),
 	char *program,
 	path_data **data_chain,
 	int num_paths);
@@ -73,11 +77,14 @@ void print_errors(
 	int num_err);
 
 void print_reg_paths(
+	void (*printer)(path_data *),
 	path_data **data_chain,
 	int *indeces,
 	int num_reg);
 
 void print_dir_paths(
+	int (*filter)(char *),
+	void (*printer)(path_data *),
 	path_data **data_chain,
 	int *indeces,
 	int num_dir);

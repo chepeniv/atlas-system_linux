@@ -17,6 +17,7 @@ int opt_standard_filter(char *path_name)
 /* validate all files including .-hidden files */
 int opt_all_filter(char *path_name)
 {
+	(void) path_name;
 	return (1);
 }
 

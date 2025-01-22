@@ -7,7 +7,12 @@
  * @num_paths: the total number of arguments passed to the current invocation
  */
 
-void print_paths(char *program, path_data **data_chain, int num_paths)
+void print_paths(
+int (*filter)(char *),
+void (*printer)(path_data *),
+char *program,
+path_data **data_chain,
+int num_paths)
 {
 	/* WORK: TAKE AN opt_print() AND AN opt_filter() FUNCTION */
 
@@ -37,7 +42,7 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 	if (num_reg > 0)
 	{
 		/* only pass along opt_print() */
-		print_reg_paths(data_chain, indx_reg, num_reg);
+		print_reg_paths(printer, data_chain, indx_reg, num_reg);
 		if (num_dir > 0)
 			printf("\n");
 	}
@@ -46,7 +51,7 @@ void print_paths(char *program, path_data **data_chain, int num_paths)
 		if ((num_err || num_reg) && (num_dir == 1))
 			printf("%s:\n", data_chain[indx_dir[0]]->name);
 		/* pass along opt_print() and opt_filter() */
-		print_dir_paths(data_chain, indx_dir, num_dir);
+		print_dir_paths(filter, printer, data_chain, indx_dir, num_dir);
 	}
 }
 
@@ -106,7 +111,10 @@ int num_err)
  * @num_reg: total number of regular file indices
  */
 
-void print_reg_paths(path_data **data_chain, int *indices, int num_reg)
+void print_reg_paths(
+void (*printer)(path_data *),
+path_data **data_chain,
+int *indices, int num_reg)
 {
 	/* WORK: take in opt_print func pointer */
 
@@ -115,9 +123,7 @@ void print_reg_paths(path_data **data_chain, int *indices, int num_reg)
 	for (int r = 0; r < num_reg; r++)
 	{
 		path = data_chain[indices[r]];
-
-		/* WORK: CALL FUNCTION POINTER */
-		printf("%s  ", path->name);
+		printer(path);
 	}
 	printf("\n");
 }
@@ -127,23 +133,23 @@ void print_reg_paths(path_data **data_chain, int *indices, int num_reg)
  * @dir_stream: directory stream to probe
  */
 
-void print_dir_contents(DIR *dir_stream)
+void print_dir_contents(
+int (*filter)(char *),
+void (*printer)(path_data *),
+path_data *path)
 {
-	struct dirent *dir_item;
+	DIR *dir_stream = path->stream;
+	struct dirent *item;
 
-	/* take on a filter() and a printer() and then pass the printer to filter
-	 * change the pass DIR * to path_data * instead ???
-	 */
-	while ((dir_item = readdir(dir_stream)))
+	while ((item = readdir(dir_stream)))
 	{
-		char *dir_name = dir_item->d_name;
-		/* construct a path_data item for each dir_name ?? */
-
-		/*USE FUNCTION POINTER */
-		if (dir_name[0] != '.')
-			printf("%s  ", dir_name);
+		path_data *sub_path = get_path_data(item->d_name);
+		if (filter(sub_path->name))
+			printer(sub_path);
+		free(sub_path->stat);
+		closedir(sub_path->stream);
+		free(sub_path);
 	}
-
 	printf("\n");
 }
 
@@ -155,25 +161,25 @@ void print_dir_contents(DIR *dir_stream)
  * @num_dir: length of the path_data array
  */
 
-void print_dir_paths(path_data **data_chain, int *indices, int num_dir)
+void print_dir_paths(
+int (*filter)(char *),
+void (*printer)(path_data *),
+path_data **data_chain,
+int *indices,
+int num_dir)
 {
-	/* take on an opt_filter() and an opt_print() function
-	 * then pass them on to print_dir_contents() */
-
 	path_data *path;
-	DIR *path_stream;
 
 	for (int d = 0; d < num_dir; d++)
 	{
 		path = data_chain[indices[d]];
-		path_stream = path->stream;
 
 		if (num_dir == 1)
-			print_dir_contents(path_stream);
+			print_dir_contents(filter, printer, path);
 		else
 		{
 			printf("%s:\n", path->name);
-			print_dir_contents(path_stream);
+			print_dir_contents(filter, printer, path);
 			if ((d + 1) != num_dir)
 				printf("\n");
 		}

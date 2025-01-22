@@ -84,17 +84,11 @@ void print_dir_paths(
 
 /******** FILTER OPTIONS ********/
 
-void opt_standard_filter(
-	void (*print)(path_data *),
-	path_data *path);
+int opt_standard_filter(char *path_name);
 
-void opt_all_filter(
-	void (*print)(path_data *),
-	path_data *path);
+int opt_all_filter(char *path_name);
 
-void opt_almost_all_filter(
-	void (*print)(path_data *),
-	path_data *path);
+int opt_almost_all_filter(char *path_name);
 
 /******** PRINTER OPTIONS ********/
 

@@ -5,41 +5,31 @@
 
 /******** OPTION FILTERS ********/
 
-/* print all none . files */
-void opt_standard_filter(
-void (*print)(path_data *),
-path_data *path)
+/* validate all none . files */
+int opt_standard_filter(char *path_name)
 {
-	char *name = path->name;
+	if (path_name[0] != '.')
+		return (1);
 
-	if (name[0] != '.')
-		print(path);
+	return (0);
 }
 
-/* print all files including .-hidden files */
-void opt_all_filter(
-void (*print)(path_data *),
-path_data *path)
+/* validate all files including .-hidden files */
+int opt_all_filter(char *path_name)
 {
-	print(path);
+	return (1);
 }
 
-/* print every file except ./ ../ */
-void opt_almost_all_filter(
-void (*print)(path_data *),
-path_data *path)
+/* validate every file except ./ ../ */
+int opt_almost_all_filter(char *path_name)
 {
-	char *name = path->name;
-
-	if (name[0] == '.')
+	if (path_name[0] == '.')
 	{
-		if (name[1] != '.' &&
-			name[1] != '\0')
-			print(path);
+		if (path_name[1] != '.' && path_name[1] != '\0')
+			return (1);
+		return (0);
 	}
-	else
-		print(path);
-
+	return (1);
 }
 
 /******** OPTION PRINTERS ********/

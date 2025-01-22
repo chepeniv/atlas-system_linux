@@ -1,5 +1,39 @@
 #include "hls.h"
 
+path_data *get_path_data(char *path_name)
+{
+	path_data *entry = malloc(sizeof(path_data));
+	struct stat *path_stat = malloc(sizeof(struct stat));
+	DIR *path_stream = NULL;
+	int errcode = lstat(path_name, path_stat);
+
+	if (!errcode)
+	{
+		if (S_ISDIR(path_stat->st_mode))
+		{
+			path_stream = opendir(path_name);
+			if (!path_stream)
+			{
+				errcode = errno;
+				free(path_stat);
+				path_stat = NULL;
+			}
+		}
+	}
+	else
+	{
+		errcode = errno;
+		free(path_stat);
+		path_stat = NULL;
+	}
+	entry->name = path_name;
+	entry->stream = path_stream;
+	entry->stat = path_stat;
+	entry->errcode = errcode;
+
+	return (entry);
+}
+
 /**
  * init_path_data_chain - analyze and collect all stat metadata for each path
  * given
@@ -20,35 +54,7 @@ path_data **init_path_data_chain(char **path_args, int *num_paths)
 	for (int p = 0; p < *num_paths; p++)
 	{
 		char *path_name = path_args[p];
-		path_data *entry = malloc(sizeof(path_data));
-		struct stat *path_stat = malloc(sizeof(struct stat));
-		DIR *path_stream = NULL;
-		int errcode = lstat(path_name, path_stat);
-
-		if (!errcode)
-		{
-			if (S_ISDIR(path_stat->st_mode))
-			{
-				path_stream = opendir(path_name);
-				if (!path_stream)
-				{
-					errcode = errno;
-					free(path_stat);
-					path_stat = NULL;
-				}
-			}
-		}
-		else
-		{
-			errcode = errno;
-			free(path_stat);
-			path_stat = NULL;
-		}
-		entry->name = path_name;
-		entry->stream = path_stream;
-		entry->stat = path_stat;
-		entry->errcode = errcode;
-		path_data_chain[p] = entry;
+		path_data_chain[p] = get_path_data(path_name);
 	}
 	return (path_data_chain);
 }

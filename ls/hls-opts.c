@@ -27,13 +27,18 @@ int opt_all_filter(char *path_name)
 
 int opt_almost_all_filter(char *path_name)
 {
-	if (path_name[0] == '.')
+	int i = 0;
+
+	/* i over complicated this for no reason other than i wanted to */
+	while (path_name[i] != '\0')
 	{
-		if (path_name[1] != '.' && path_name[1] != '\0')
+		if (i > 1 || path_name[i] != '.')
 			return (1);
-		return (0);
+		else if (path_name[i] == '.')
+			i++;
 	}
-	return (1);
+
+	return (0);
 }
 
 /******** OPTION PRINTERS ********/

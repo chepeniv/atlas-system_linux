@@ -144,8 +144,10 @@ path_data *path)
 	while ((item = readdir(dir_stream)))
 	{
 		path_data *sub_path = get_path_data(item->d_name);
+
 		if (filter(sub_path->name))
 			printer(sub_path);
+
 		free(sub_path->stat);
 		closedir(sub_path->stream);
 		free(sub_path);

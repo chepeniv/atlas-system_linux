@@ -1,5 +1,19 @@
 #include "hls.h"
 
+/* validate all none . files */
+int opt_standard_filter(char *path_name)
+{
+	if (path_name[0] != '.')
+		return (1);
+
+	return (0);
+}
+
+void opt_standard_print(path_data *path)
+{
+	printf("%s  ", path->name);
+}
+
 /**
  * main - entry point to the program takes an array of strings containing
  * desired directory paths to explore as well as '-' options
@@ -17,6 +31,7 @@ int main(int argc, char **argv)
 	int num_opts = 0, num_paths = 0;
 	int opt_flags = 0;
 	int (*filter)(char *);
+	void (*printer)(path_data *);
 
 	opt_args = malloc(sizeof(void *) * argc);
 	path_args = malloc(sizeof(void *) * argc);
@@ -26,7 +41,6 @@ int main(int argc, char **argv)
 		path_args, &num_paths);
 
 	opt_flags = set_opt_flags(opt_args, num_opts, argv[0]);
-
 	if (opt_flags < 0)
 	{
 		free(opt_args);
@@ -35,18 +49,9 @@ int main(int argc, char **argv)
 	}
 
 	filter = get_filter(opt_flags);
-
-	/* get filter() and printer() functions based on options and pass both on
-	 * to print_paths()
-	 */
-
+	printer = get_printer(opt_flags);
 	path_data_chain = init_path_data_chain(path_args, &num_paths);
-	print_paths(
-		filter,
-		opt_standard_print,
-		argv[0],
-		path_data_chain,
-		num_paths);
+	print_paths(filter, printer, argv[0], path_data_chain, num_paths);
 
 	free_data_chain(path_data_chain, num_paths);
 	free(opt_args);

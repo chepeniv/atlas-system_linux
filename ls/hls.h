@@ -7,9 +7,10 @@
 #include <stdlib.h>    /* exit, free, malloc */
 #include <sys/types.h>
 #include <sys/stat.h>  /* (syscall) lstat */
+
+/* #include <time.h>      /1* ctime *1/ */
 /* #include <grp.h>       /1* getgrgid *1/ */
 /* #include <pwd.h>       /1* getpwuid *1/ */
-/* #include <time.h>      /1* ctime *1/ */
 /* #include <unistd.h>    /1* (syscalls) write, readlink *1/ */
 
 #define _1 1
@@ -18,6 +19,8 @@
 #define _l 8
 
 typedef struct stat _stat_struct;
+
+/******** PATH DATA CHAIN ********/
 
 /**
  * struct _path_data - container for all the relevant items pertinent to a
@@ -36,6 +39,16 @@ typedef struct _path_data
 	int errcode;
 } path_data;
 
+path_data **init_path_data_chain(
+	char **path_args,
+	int *num_paths);
+
+void free_data_chain(
+	path_data **data_chain,
+	int num_paths);
+
+/******** OPTION MANAGEMENT ********/
+
 void sort_args(
 	char **argv, int argc,
 	char **opts, int *num_opts,
@@ -46,9 +59,7 @@ int set_opt_flags(
 	int num_opts,
 	char *prog);
 
-path_data **init_path_data_chain(
-	char **path_args,
-	int *num_paths);
+/******** PRINTERS ********/
 
 void print_paths(
 	char *program,
@@ -71,14 +82,26 @@ void print_dir_paths(
 	int *indeces,
 	int num_dir);
 
-void free_data_chain(
-	path_data **data_chain,
-	int num_paths);
+/******** FILTER OPTIONS ********/
 
-/* void opt_none_print(); */
-/* void opt_column_print(); */
-/* void opt_long_print(); */
-/* void opt_all_print(); */
-/* void opt_almost_all_print(); */
+void opt_standard_filter(
+	void (*print)(path_data *),
+	path_data *path);
+
+void opt_all_filter(
+	void (*print)(path_data *),
+	path_data *path);
+
+void opt_almost_all_filter(
+	void (*print)(path_data *),
+	path_data *path);
+
+/******** PRINTER OPTIONS ********/
+
+void opt_standard_print(path_data *path);
+
+void opt_column_print(path_data *path);
+
+void opt_long_print(path_data *path);
 
 #endif /* _LS_H_ */

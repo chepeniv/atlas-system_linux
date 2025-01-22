@@ -3,24 +3,46 @@
 
 /******** OPTIONS ********/
 
-/******** FILTERS ********/
+/******** OPTION FILTERS ********/
 
 /* print all none . files */
 void opt_standard_filter(
 void (*print)(path_data *),
-path_data *path);
+path_data *path)
+{
+	char *name = path->name;
 
-/* print all . files */
+	if (name[0] != '.')
+		print(path);
+}
+
+/* print all files including .-hidden files */
 void opt_all_filter(
 void (*print)(path_data *),
-path_data *path);
+path_data *path)
+{
+	print(path);
+}
 
-/* print all . files except ./ ../ */
+/* print every file except ./ ../ */
 void opt_almost_all_filter(
 void (*print)(path_data *),
-path_data *path);
+path_data *path)
+{
+	char *name = path->name;
 
-/******** PRINTERS ********/
+	if (name[0] == '.')
+	{
+		if (name[1] != '.' &&
+			name[1] != '\0')
+			print(path);
+	}
+	else
+		print(path);
+
+}
+
+/******** OPTION PRINTERS ********/
 
 void opt_standard_print(path_data *path)
 {
@@ -32,6 +54,7 @@ void opt_column_print(path_data *path)
 	printf("%s\n", path->name);
 }
 
+/* move to it's own file with its own functions */
 void opt_long_print(path_data *path)
 {
 	/* print details in single column
@@ -55,14 +78,15 @@ void opt_long_print(path_data *path)
 	 *            st_mtim  -> time of last modification
 	 */
 
-	char    *name     = path->name;
 	struct stat *path_stat = path->stat;
-	mode_t   mode     = path_stat->st_mode;
-	nlink_t  hlinks   = path_stat->st_nlink;
-	uid_t    user_id  = path_stat->st_uid;
-	gid_t    group_id = path_stat->st_gid;
-	off_t    size     = path_stat->st_size;
-	time_t mtime = path_stat->st_mtime;
+	char    *name     = path->name;
+
+	mode_t   mode     = path_stat->st_mode;   /* int */
+	nlink_t  hlinks   = path_stat->st_nlink;  /* long unsigned int */
+	uid_t    user_id  = path_stat->st_uid;    /* int */
+	gid_t    group_id = path_stat->st_gid;    /* int */
+	off_t    size     = path_stat->st_size;   /* long unsigned int */
+	time_t   mtime    = path_stat->st_mtime;  /* long unsigned int */
 
 	/* process mode */
 	/* process user_id */

@@ -137,6 +137,7 @@ void print_dir_contents(DIR *dir_stream)
 	while ((dir_item = readdir(dir_stream)))
 	{
 		char *dir_name = dir_item->d_name;
+		/* construct a path_data item for each dir_name ?? */
 
 		/*USE FUNCTION POINTER */
 		if (dir_name[0] != '.')

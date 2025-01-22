@@ -129,7 +129,8 @@ int num_reg)
 		path = data_chain[indices[r]];
 		printer(path);
 	}
-	printf("\n");
+	if (printer == opt_standard_print)
+		printf("\n");
 }
 
 /**

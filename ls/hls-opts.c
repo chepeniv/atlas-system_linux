@@ -20,25 +20,18 @@ int opt_all_filter(char *path_name)
 
 /**
  * opt_almost_all_filter - filters out only the implied . and .. directories
- * @path_name: the name of the path to analyze
+ * @name: the name of the path to analyze
  *
  * Return: 0 to reject, 1 to accept
  */
 
-int opt_almost_all_filter(char *path_name)
+int opt_almost_all_filter(char *name)
 {
-	int i = 0;
+	if ((name[0] == '.' && name[1] == '\0') ||
+		(name[0] == '.' && name[1] == '.' && name[2] == '\0'))
+		return (0);
 
-	/* i over complicated this for no reason other than i wanted to */
-	while (path_name[i] != '\0')
-	{
-		if (i > 1 || path_name[i] != '.')
-			return (1);
-		else if (path_name[i] == '.')
-			i++;
-	}
-
-	return (0);
+	return (1);
 }
 
 /******** OPTION PRINTERS ********/

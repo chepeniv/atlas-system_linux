@@ -132,6 +132,7 @@ void print_dir_contents(DIR *dir_stream)
 	struct dirent *dir_item;
 
 	/* take on a filter() and a printer() and then pass the printer to filter
+	 * change the pass DIR * to path_data * instead ???
 	 */
 	while ((dir_item = readdir(dir_stream)))
 	{
@@ -166,12 +167,9 @@ void print_dir_paths(path_data **data_chain, int *indices, int num_dir)
 		path = data_chain[indices[d]];
 		path_stream = path->stream;
 
-		if (path->errcode) /* probable legacy checks */
-			continue;
-		/* only needed check */
-		else if ((num_dir == 1) && S_ISDIR(path->stat->st_mode))
+		if (num_dir == 1)
 			print_dir_contents(path_stream);
-		else if (S_ISDIR(path->stat->st_mode))
+		else
 		{
 			printf("%s:\n", path->name);
 			print_dir_contents(path_stream);

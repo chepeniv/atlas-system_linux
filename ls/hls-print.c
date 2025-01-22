@@ -152,7 +152,8 @@ path_data *path)
 		closedir(sub_path->stream);
 		free(sub_path);
 	}
-	printf("\n");
+	if (printer == opt_standard_print)
+		printf("\n");
 }
 
 /**
@@ -182,8 +183,8 @@ int num_dir)
 		{
 			printf("%s:\n", path->name);
 			print_dir_contents(filter, printer, path);
-			if ((d + 1) != num_dir)
-				printf("\n");
 		}
+		if (d + 1 < num_dir)
+			printf("\n");
 	}
 }

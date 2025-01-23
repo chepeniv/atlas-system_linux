@@ -89,6 +89,8 @@ void opt_long_print(path_data *path)
 	struct passwd *pw_data = getpwuid(u_id);
 	struct group *gr_data = getgrgid(gr_id);
 
+	printf("checker probe -- ");
+
 	printf("%s %lu %s %s %ld %s %s\n",
 		read_mode,
 		hlinks,

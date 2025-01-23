@@ -1,12 +1,28 @@
 #include "hls.h"
 
-char *concat_strings(char *prefix, char *post_fix)
+/**
+ * concat_strings - append one string to the end of another
+ * @prefix: the front of the new string
+ * @postfix: the back of the new string
+ *
+ * Return: a new string that's a combination of the first with the second
+ */
+
+char *concat_strings(char *prefix, char *postfix)
 {
-	/* measure both strings */
-	/* allocate enough memory */
-	/* sprintf the prefix to the new buffer */
-	/* sprintf the postfix to the new buffer at an offset */
-	/* return the buffer*/
+	char *concat;
+	int len_pre = 0, len_post = 0;
+
+	while (prefix[len_pre] != '\0')
+		len_pre++;
+	while (postfix[len_post] != '\0')
+		len_post++;
+
+	concat = malloc(sizeof(char) * (len_pre + len_post));
+	sprintf(concat, "%s", prefix);
+	sprintf(&concat[len_pre], "%s", postfix);
+
+	return (concat);
 }
 
 /**

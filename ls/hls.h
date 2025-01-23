@@ -7,6 +7,11 @@
 #include <stdlib.h>    /* exit, free, malloc */
 #include <sys/types.h>
 #include <sys/stat.h>  /* (syscall) lstat */
+#include <time.h>      /* ctime */
+#include <grp.h>       /* getgrgid */
+#include <pwd.h>       /* getpwuid */
+#include <unistd.h>    /* (syscalls) write, readlink */
+
 
 #define _1 1
 #define _A 2
@@ -110,5 +115,7 @@ void opt_long_print(path_data *path);
 /******** UTILITY ********/
 
 char *concat_strings(char *prefix, char *postfix);
+
+char *process_time(time_t time);
 
 #endif /* _LS_H_ */

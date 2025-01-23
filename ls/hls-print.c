@@ -137,7 +137,7 @@ int num_reg)
  * print_dir_contents - given a directory stream, print out all of its contents
  * @filter: the filtering method to use
  * @printer: the printing formatting function to use
- * @path: the path_data struct to process
+ * @parent: the path_data struct to process
  */
 
 void print_dir_contents(

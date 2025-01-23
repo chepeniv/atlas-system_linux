@@ -1,8 +1,3 @@
-#include <time.h>      /* ctime */
-#include <grp.h>       /* getgrgid */
-#include <pwd.h>       /* getpwuid */
-#include <unistd.h>    /* (syscalls) write, readlink */
-
 #include "hls.h"
 
 /******** OPTIONS ********/
@@ -79,29 +74,28 @@ void opt_column_print(path_data *path)
 
 void opt_long_print(path_data *path)
 {
-
 	struct stat *path_stat = path->stat;
 	char    *name     = path->name;
 
 	mode_t   mode     = path_stat->st_mode;   /* int */
 	nlink_t  hlinks   = path_stat->st_nlink;  /* long unsigned int */
-	uid_t    user_id  = path_stat->st_uid;    /* int */
-	gid_t    group_id = path_stat->st_gid;    /* int */
+	uid_t    u_id     = path_stat->st_uid;    /* int */
+	gid_t    gr_id    = path_stat->st_gid;    /* int */
 	off_t    size     = path_stat->st_size;   /* long unsigned int */
 	time_t   mtime    = path_stat->st_mtime;  /* long unsigned int */
 
-	/* process mode */
-	/* process user_id */
-	/* process group_id */
-	/* process mtime */
+	/* process mode       custom func*/
+	char *read_time = process_time(mtime);
+	struct passwd *pw_data = getpwuid(u_id);
+	struct group *gr_data = getgrgid(gr_id);
 
-	printf("%d %lu %d %d %ld %ld %s\n", /* determined types */
+	printf("%d %lu %s %s %4ld %s %s\n",
 		mode,
 		hlinks,
-		user_id,
-		group_id,
+		pw_data->pw_name,
+		gr_data->gr_name,
 		size,
-		mtime,
+		read_time,
 		name
 	);
 }

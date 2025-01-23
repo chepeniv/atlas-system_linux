@@ -1,5 +1,13 @@
 #include "hls.h"
 
+/**
+ * build_child_path -
+ * @parent:
+ * @child:
+ *
+ * Return:
+ */
+
 path_data *build_child_path(char *parent, char *child)
 {
 	path_data *child_path;
@@ -24,6 +32,13 @@ path_data *build_child_path(char *parent, char *child)
 
 	return (child_path);
 }
+
+/**
+ * get_data_path -
+ * @path_name:
+ *
+ * Return:
+ */
 
 path_data *get_path_data(char *path_name)
 {

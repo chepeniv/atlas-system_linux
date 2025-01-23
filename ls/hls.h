@@ -36,6 +36,8 @@ typedef struct _path_data
 
 path_data *get_path_data(char *path_name);
 
+path_data *build_child_path(char *parent, char *child);
+
 path_data **init_path_data_chain(
 	char **path_args,
 	int *num_paths);
@@ -104,5 +106,9 @@ void opt_standard_print(path_data *path);
 void opt_column_print(path_data *path);
 
 void opt_long_print(path_data *path);
+
+/******** UTILITY ********/
+
+char *concat_strings(char *prefix, char *postfix);
 
 #endif /* _LS_H_ */

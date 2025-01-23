@@ -1,5 +1,30 @@
 #include "hls.h"
 
+path_data *build_child_path(char *parent, char *child)
+{
+	path_data *child_path;
+	char *parent_slash, *full_name;
+	int len = 0;
+
+	while (parent[len] != '\0')
+		len++;
+
+	if (parent[len - 1] != '/')
+		parent_slash = concat_strings(parent, "/");
+	else
+		parent_slash = parent;
+
+	full_name = concat_strings(parent_slash, child);
+	child_path = get_path_data(full_name);
+	child_path->name = child;
+
+	free(full_name);
+	if (parent_slash != parent)
+		free(parent_slash);
+
+	return (child_path);
+}
+
 path_data *get_path_data(char *path_name)
 {
 	path_data *entry = malloc(sizeof(path_data));
@@ -74,8 +99,8 @@ void free_data_chain(path_data **data_chain, int num_paths)
 	for (int p = 0; p < num_paths; p++)
 	{
 		path = data_chain[p];
-		free(path->stat);
 		closedir(path->stream);
+		free(path->stat);
 		free(path);
 	}
 	free(data_chain);

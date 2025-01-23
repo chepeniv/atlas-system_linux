@@ -143,22 +143,22 @@ int num_reg)
 void print_dir_contents(
 int (*filter)(char *),
 void (*printer)(path_data *),
-path_data *path)
+path_data *parent)
 {
-	DIR *dir_stream = path->stream;
-	struct dirent *item;
+	struct dirent *child;
 
-	while ((item = readdir(dir_stream)))
+	while ((child = readdir(parent->stream)))
 	{
-		path_data *sub_path = get_path_data(item->d_name);
+		path_data *child_path = build_child_path(parent->name, child->d_name);
 
-		if (filter(sub_path->name))
-			printer(sub_path);
+		if (filter(child_path->name))
+			printer(child_path);
 
-		free(sub_path->stat);
-		closedir(sub_path->stream);
-		free(sub_path);
+		closedir(child_path->stream);
+		free(child_path->stat);
+		free(child_path);
 	}
+
 	if (printer == opt_standard_print)
 		printf("\n");
 }

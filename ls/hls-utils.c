@@ -18,7 +18,7 @@ char *concat_strings(char *prefix, char *postfix)
 	while (postfix[len_post] != '\0')
 		len_post++;
 
-	concat = malloc(sizeof(char) * (len_pre + len_post));
+	concat = malloc(sizeof(char) * (len_pre + len_post + 1));
 	sprintf(concat, "%s", prefix);
 	sprintf(&concat[len_pre], "%s", postfix);
 

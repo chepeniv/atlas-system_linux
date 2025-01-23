@@ -1,5 +1,9 @@
+#include <time.h>      /* ctime */
+#include <grp.h>       /* getgrgid */
+#include <pwd.h>       /* getpwuid */
+#include <unistd.h>    /* (syscalls) write, readlink */
+
 #include "hls.h"
-#include <time.h>
 
 /******** OPTIONS ********/
 

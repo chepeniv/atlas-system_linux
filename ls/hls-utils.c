@@ -1,5 +1,14 @@
 #include "hls.h"
 
+char *concat_strings(char *prefix, char *post_fix)
+{
+	/* measure both strings */
+	/* allocate enough memory */
+	/* sprintf the prefix to the new buffer */
+	/* sprintf the postfix to the new buffer at an offset */
+	/* return the buffer*/
+}
+
 /**
  * get_filter - determines which filter to use based on the opt_flags code
  * @opt_flags: the binary integer to analyze

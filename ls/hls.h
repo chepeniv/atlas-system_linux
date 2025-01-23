@@ -8,11 +8,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>  /* (syscall) lstat */
 
-/* #include <time.h>      /1* ctime *1/ */
-/* #include <grp.h>       /1* getgrgid *1/ */
-/* #include <pwd.h>       /1* getpwuid *1/ */
-/* #include <unistd.h>    /1* (syscalls) write, readlink *1/ */
-
 #define _1 1
 #define _A 2
 #define _a 4

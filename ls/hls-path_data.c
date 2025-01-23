@@ -1,11 +1,11 @@
 #include "hls.h"
 
 /**
- * build_child_path -
- * @parent:
- * @child:
+ * build_child_path - builds the path_data struct for a relative path item
+ * @parent: the parent directory
+ * @child: the basename target
  *
- * Return:
+ * Return: a path_data pointer
  */
 
 path_data *build_child_path(char *parent, char *child)
@@ -34,10 +34,10 @@ path_data *build_child_path(char *parent, char *child)
 }
 
 /**
- * get_data_path -
- * @path_name:
+ * get_data_path - extracts a path_data struct for a given name
+ * @path_name: the filename to extract data for
  *
- * Return:
+ * Return: a path_data pointer
  */
 
 path_data *get_path_data(char *path_name)

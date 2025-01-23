@@ -84,13 +84,13 @@ void opt_long_print(path_data *path)
 	off_t    size     = path_stat->st_size;   /* long unsigned int */
 	time_t   mtime    = path_stat->st_mtime;  /* long unsigned int */
 
-	/* process mode       custom func*/
+	char *read_mode = process_mode(mode);
 	char *read_time = process_time(mtime);
 	struct passwd *pw_data = getpwuid(u_id);
 	struct group *gr_data = getgrgid(gr_id);
 
-	printf("%d %lu %s %s %4ld %s %s\n",
-		mode,
+	printf("%s %lu %s %s %ld %s %s\n",
+		read_mode,
 		hlinks,
 		pw_data->pw_name,
 		gr_data->gr_name,

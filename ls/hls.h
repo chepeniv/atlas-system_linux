@@ -118,4 +118,10 @@ char *concat_strings(char *prefix, char *postfix);
 
 char *process_time(time_t time);
 
+char *process_mode(mode_t time);
+
+char get_type(mode_t mode);
+
+char *get_perm(mode_t mode);
+
 #endif /* _LS_H_ */

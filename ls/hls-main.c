@@ -1,31 +1,6 @@
 #include "hls.h"
 
 /**
- * opt_standard_filter - the default filter function
- * @path_name: the path name to analyze
- *
- * Return: 0 to reject the path, 1 to accept it
- */
-
-int opt_standard_filter(char *path_name)
-{
-	if (path_name[0] != '.')
-		return (1);
-
-	return (0);
-}
-
-/**
- * opt_standard_print - the default output formatting
- * @path: the path to printout information from
- */
-
-void opt_standard_print(path_data *path)
-{
-	printf("%s  ", path->name);
-}
-
-/**
  * main - entry point to the program takes an array of strings containing
  * desired directory paths to explore as well as '-' options
  * @argc: the total number of parameters passed to an invocation of this

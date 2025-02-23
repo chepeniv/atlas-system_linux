@@ -29,6 +29,11 @@ if (len(argv) < 4):
     print("usage: `read_write_heap.py pid search_data replace_data`")
     exit(1)
 
+search = bytes(argv[2], "ASCII")
+replace = bytes(argv[3], "ASCII")
+search_len = len(search)
+replace_len = len(replace)
+
 pid_dir = f"/proc/{argv[1]}/"
 mapfile = open(pid_dir + "maps")
 
@@ -38,5 +43,17 @@ while (line := mapfile.readline()):
         addr = addr.split("-")
         addr_low = addr[0]
         addr_high = addr[1]
-        print(f"high {addr_high}")
-        print(f"low  {addr_low}")
+        addr_low = int(addr_low, 16)
+        addr_high = int(addr_high, 16)
+
+mapfile.close()
+
+print(f"{addr_low} - {addr_high}")
+
+memfile = open(pid_dir + "mem", "r+b")
+memfile.seek(addr_low)
+heap_data = memfile.read(addr_high - addr_low)
+search_pos = heap_data.find(search)
+print("{}".format(heap_data[search_pos:search_pos+search_len]))
+memfile.write
+memfile.close()

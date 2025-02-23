@@ -6,8 +6,7 @@ REPLACE_STR="goodbye, friend!";
 
 if [[ -v INFECHO_PID ]];
 then
-	echo found $INFECHO_PID;
-	#./read_write_heap.py $INFECHO_PID $SEARCH_STR $REPLACE_STR
+	./read_write_heap.py $INFECHO_PID $SEARCH_STR $REPLACE_STR 2>1
 else
 	echo no such process currently running;
 fi

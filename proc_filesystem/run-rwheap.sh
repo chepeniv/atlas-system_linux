@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
-INFECHO_PID="$(pidof inf_echo)";
-SEARCH_STR="hello, world!";
+INFECHO_PID="$(pidof inf_echo.x)";
+SEARCH_STR= "hello, world!!!!";
 REPLACE_STR="goodbye, friend!";
 
 if [[ -v INFECHO_PID ]];

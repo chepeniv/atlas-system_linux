@@ -1,0 +1,24 @@
+CC = gcc
+MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
+DEFS = def_*.c
+CFLAGS = -Wall -Werror -Wextra -ggdb3
+DB_FLAGS = -ggdb3
+CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS} ${DB_FLAGS}
+# I_FLAGS = $(shell pkg-config --cflags gtk4)
+# L_FLAGS = $(shell pkg-config --libs gtk4)
+
+.DELETE_ON_ERROR:
+
+.PHONY: clean
+
+all: checker
+
+checker:
+	${CC} ${CFLAGS} ${DEFS} shell_v2.c -o hsh
+
+# test:
+# 	${CCMD} ${DEFS} shell_v2.c -o hsh
+# 	${MEMTEST} ./hsh
+
+clean:
+	$(RM) -v *~ *.exec *.o *.out *.x 

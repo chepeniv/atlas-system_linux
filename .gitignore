@@ -1,8 +1,14 @@
+# reference extensions
+
 # *.doc
 # *.doc.*
 # *.man
 # *.ref
 # *.ref.*
+# *.test.*
+
+# common
+
 *.err
 *.error
 *.exec
@@ -12,6 +18,8 @@
 *.o
 *.out
 *.test
-*.test.*
 *~
+*.x
 test-*
+
+# specific files

@@ -1,3 +1,5 @@
+#include "headers/opt_help.h"
+
 /* only system (3) and exec* (2/3) not allowed */
 
 /*
@@ -63,3 +65,9 @@
  * parse header bytes
  * interpret header data
  */
+
+int main(int c, char **argv)
+{
+
+	return (0);
+}

@@ -1,3 +1,5 @@
+/* only system (3) and exec* (2/3) not allowed */
+
 /*
  * emulate: readelf -W -h
  * usage : ./0-hreadelf elf_flie
@@ -5,9 +7,13 @@
  * display information contained in the ELF file header
  * handle various operating systems and architectures
  * stdout, stderr, and status should be exactly the same
+ * handle 32 and 64 bit
+ * handle both LSB and MSB
+ * handle all types of ELF files
  */
 
 /*
+ * File: filename (if more than one filename given)
  * ELF Header:
  *   Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
  *   Class:                             ELF64
@@ -28,12 +34,32 @@
  *   Size of section headers:           64 (bytes)
  *   Number of section headers:         31
  *   Section header string table index: 28
+ * (next filename or error message)
  */
 
 /*
  * errors:
  *
+ * "readelf: Warning: Nothing to do.\n[readelf --help]" (no file given)
  * "readelf: Error: 'doesntexist': No such file"
+ * "readelf: Error: Input file 'noread' is not readable"
  * "readelf: Error: Not an ELF file - it has the wrong magic bytes at the start"
  */
 
+/*
+ * determine if  file is given
+ *     otherwise output warning, followed by help text
+ * determine if  file is exist
+ *     otherwise output error
+ * determine if  file is readable
+ *     otherwise output error
+ * determine if  file is ELF
+ *     otherwise output error
+ * open file
+ * read header bytes
+ * determine 32/64
+ * determine LSB/MSB
+ * determine type of ELF
+ * parse header bytes
+ * interpret header data
+ */

@@ -21,7 +21,8 @@ pid_dir = f"/proc/{argv[1]}/"
 mapfile = open(pid_dir + "maps")
 while (line := mapfile.readline()):
     if (line.find("[heap]") > -1):
-        addr = line.split(" ")[0]
+        addr = line.split(" ")
+        addr = addr[0]
         addr = addr.split("-")
         addr_low = addr[0]
         addr_high = addr[1]
@@ -36,5 +37,5 @@ heap_data = memfile.read(addr_high - addr_low)
 pos = heap_data.index(target)
 
 memfile.seek(addr_low + pos, 0)
-result = memfile.write(source)
+memfile.write(source)
 memfile.close()

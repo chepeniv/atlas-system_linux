@@ -10,13 +10,6 @@ def overwrite_heap(argv):
     the target string within the heap with the source string data
     '''
 
-    # HOLBERTON CHECKER:
-    #
-    # case: normal replace
-    # case: replace by shortest string ??
-    # determine if the given pid is valid
-    # if the string is not found do nothing
-
     if (len(argv) < 4):
         print("usage: `read_write_heap.py <pid> <search> <target>`")
         exit(1)

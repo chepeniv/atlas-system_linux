@@ -1,8 +1,11 @@
 #include "headers/opt_help.h"
+#include <elf.h>
 
 /* only system (3) and exec* (2/3) not allowed */
 
 /*
+ * //// INSTRUCTIONS ////
+ *
  * emulate: readelf -W -h
  * usage : ./0-hreadelf elf_flie
  *
@@ -15,6 +18,8 @@
  */
 
 /*
+ * //// OUTPUT ////
+ *
  * File: filename (if more than one filename given)
  * ELF Header:
  *   Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
@@ -40,7 +45,7 @@
  */
 
 /*
- * errors:
+ * //// ERRORS ////
  *
  * "readelf: Warning: Nothing to do.\n[readelf --help]" (no file given)
  * "readelf: Error: 'doesntexist': No such file"
@@ -49,6 +54,8 @@
  */
 
 /*
+ * //// PSEUDOCODE ////
+ *
  * determine if  file is given
  *     otherwise output warning, followed by help text
  * determine if  file is exist

@@ -68,6 +68,10 @@
 
 int main(int c, char **argv)
 {
+	(void) c;
+	(void) argv;
+
+	print_help();
 
 	return (0);
 }

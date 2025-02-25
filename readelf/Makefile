@@ -1,6 +1,6 @@
 CC = gcc
 MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
-DEFS = def_*.c
+DEFS = defs/*.c
 CFLAGS = -Wall -Werror -Wextra -ggdb3
 DB_FLAGS = -ggdb3
 CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS} ${DB_FLAGS}

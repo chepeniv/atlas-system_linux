@@ -8,10 +8,10 @@
  *
  * Return: 0
  */
-int mem_alloc(char **buff, int size)
+int mem_alloc(void **buff, int size, int len)
 {
-	*buff = malloc(sizeof(char) * size);
-	memset(*buff, 0, size);
+	*buff = malloc(size * len);
+	memset(*buff, 0, len * size);
 
 	return (0);
 }

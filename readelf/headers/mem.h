@@ -1,6 +1,6 @@
 #ifndef _MEM_
 #define _MEM_
 
-int mem_alloc(char **buff, int size);
+int mem_alloc(void **buff, int size, int len);
 
 #endif /* _MEM_ */

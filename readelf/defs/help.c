@@ -20,7 +20,7 @@ int print_help(void)
 	char *text;
 
 	fdesc = open(filename, O_RDONLY);
-	mem_alloc(&text, FILE_BUFF_SIZE);
+	mem_alloc((void **) &text, sizeof(char), FILE_BUFF_SIZE);
 	read(fdesc, text, FILE_BUFF_SIZE);
 	close(fdesc);
 

@@ -10,7 +10,7 @@ CCMD = ${CC} ${I_FLAGS} ${CFLAGS} ${L_FLAGS} ${DB_FLAGS}
 
 .DELETE_ON_ERROR:
 
-.PHONY: clean defs
+.PHONY: clean clean-obj defs
 
 all: 0-hreadelf 1-hreadelf 2-hreadelf
 
@@ -28,3 +28,6 @@ defs:
 
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x  *-hreadelf defs/*.o
+
+clean-obj:
+	$(RM) -v *~ *.o defs/*.o

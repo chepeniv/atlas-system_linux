@@ -13,10 +13,9 @@
  * "readelf: Error: Not an ELF file - it has the wrong magic bytes at the start"
  */
 
-int err_print(int code, char *procname, char *item)
+int err_print(char *procname, char *item)
 {
-	errno = code;
-	switch (code)
+	switch (errno)
 	{
 	case (W_NOARG):
 		dprintf(STDERR_FILENO, "%s: Warning: Nothing to do.\n", procname);
@@ -28,13 +27,13 @@ int err_print(int code, char *procname, char *item)
 "%s: Error: Not an ELF file - it has the wrong magic bytes at the start\n",
 			procname);
 		break;
-	case (E_NFILE):
+	case (ENOENT):
 		dprintf(
 			STDERR_FILENO,
 			"%s: Error: '%s': No such file\n",
 			procname, item);
 		break;
-	case (E_NREAD):
+	case (EACCES):
 		dprintf(
 			STDERR_FILENO,
 			"%s: Error: Input file '%s' is not readable\n",
@@ -44,5 +43,5 @@ int err_print(int code, char *procname, char *item)
 
 	exit(EXIT_FAILURE);
 
-	return (code);
+	return (errno);
 }

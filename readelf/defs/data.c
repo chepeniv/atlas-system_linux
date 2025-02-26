@@ -7,33 +7,6 @@
 #include "../headers/mem.h"
 #include "../headers/magic.h"
 
-/*
- * //// OUTPUT ////
- *
- * File: filename (if more than one filename given)
- * ELF Header:
- *   Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
- *   Class:                             ELF64
- *   Data:                              2's complement, little endian
- *   Version:                           1 (current)
- *   OS/ABI:                            UNIX - System V
- *   ABI Version:                       0
- *   Type:                              EXEC (Executable file)
- *   Machine:                           Advanced Micro Devices X86-64
- *   Version:                           0x1
- *   Entry point address:               0x400600
- *   Start of program headers:          64 (bytes into file)
- *   Start of section headers:          6936 (bytes into file)
- *   Flags:                             0x0
- *   Size of this header:               64 (bytes)
- *   Size of program headers:           56 (bytes)
- *   Number of program headers:         9
- *   Size of section headers:           64 (bytes)
- *   Number of section headers:         31
- *   Section header string table index: 28
- * (next filename or error message)
- */
-
 static int longest_line(char **series)
 {
 	int longest = 0;
@@ -47,6 +20,16 @@ static int longest_line(char **series)
 	}
 
 	return (len);
+}
+
+static int count_fields(char **fields)
+{
+	int num = 0;
+
+	while (fields[num])
+		num++;
+
+	return (num);
 }
 
 char **get_fields(void)
@@ -77,8 +60,6 @@ char **get_fields(void)
 	return (header_fields);
 }
 
-int print_magic(char *magic);
-
 int print_data(char **fields, char **entries)
 {
 	int width = longest_line(fields);
@@ -92,15 +73,31 @@ int print_data(char **fields, char **entries)
 	return (0);
 }
 
-static int count_fields(char **fields)
-{
-	int num = 0;
-
-	while (fields[num])
-		num++;
-
-	return (num);
-}
+/*
+ * //// OUTPUT ////
+ * File: filename (if more than one filename given)
+ * ELF Header:
+ *   Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+ *   Class:                             ELF64
+ *   Data:                              2's complement, little endian
+ *   Version:                           1 (current)
+ *   OS/ABI:                            UNIX - System V
+ *   ABI Version:                       0
+ *   Type:                              EXEC (Executable file)
+ *   Machine:                           Advanced Micro Devices X86-64
+ *   Version:                           0x1
+ *   Entry point address:               0x400600
+ *   Start of program headers:          64 (bytes into file)
+ *   Start of section headers:          6936 (bytes into file)
+ *   Flags:                             0x0
+ *   Size of this header:               64 (bytes)
+ *   Size of program headers:           56 (bytes)
+ *   Number of program headers:         9
+ *   Size of section headers:           64 (bytes)
+ *   Number of section headers:         31
+ *   Section header string table index: 28
+ * (next filename or error message)
+ */
 
 int process_header_data(unsigned char *raw)
 {
@@ -119,6 +116,21 @@ int process_header_data(unsigned char *raw)
 	elf_entries[1] = parse_arch(raw);
 	elf_entries[2] = parse_endianess(raw);
 	elf_entries[3] = parse_elf_version(raw);
+	elf_entries[4] = "hello, world";
+	elf_entries[5] = "hello, world";
+	elf_entries[6] = "hello, world";
+	elf_entries[7] = "hello, world";
+	elf_entries[8] = "hello, world";
+	elf_entries[9] = "hello, world";
+	elf_entries[10] = "hello, world";
+	elf_entries[11] = "hello, world";
+	elf_entries[12] = "hello, world";
+	elf_entries[13] = "hello, world";
+	elf_entries[14] = "hello, world";
+	elf_entries[15] = "hello, world";
+	elf_entries[16] = "hello, world";
+	elf_entries[17] = "hello, world";
+	elf_entries[18] = "hello, world";
 
 	print_data(elf_fields, elf_entries);
 

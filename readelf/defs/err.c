@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "../headers/err.h"
 #include "../headers/help.h"
 
@@ -40,6 +41,8 @@ int err_print(int code, char *procname, char *item)
 			procname, item);
 		break;
 	}
+
+	exit(EXIT_FAILURE);
 
 	return (code);
 }

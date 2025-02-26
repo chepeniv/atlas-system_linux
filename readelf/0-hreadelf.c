@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 
 /* only system (3) and exec* (2/3) not allowed */
 
@@ -52,8 +53,6 @@
 /*
  * //// PSEUDOCODE ////
  *
- * determine if  file is given
- *     otherwise output warning, followed by help text
  * determine if  file is exist
  *     otherwise output error
  * determine if  file is readable
@@ -71,14 +70,16 @@
 
 int main(int c, char **argv)
 {
-	(void) argv;
+	int elfdesc;
+	char *filename;
 
 	if (c == 1)
-	{
 		err_print(W_NOARG, argv[0], NULL);
-		return (EXIT_FAILURE);
-	}
 
+	filename = argv[1];
+	elfdesc = open(filename, 0);
+	if (elfdesc < 0)
+		err_print(E_NFILE, argv[0], filename);
 
 	return (EXIT_SUCCESS);
 }

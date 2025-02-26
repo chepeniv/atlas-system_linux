@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <elf.h>
 #include "../headers/parse.h"
 #include "../headers/data.h"
 #include "../headers/mem.h"
+#include "../headers/magic.h"
 
 /*
  * //// OUTPUT ////
@@ -75,20 +77,22 @@ char **get_fields(void)
 	return (header_fields);
 }
 
+int print_magic(char *magic);
+
 int print_data(char **fields, char **entries)
 {
 	int width = longest_line(fields);
 
-	/* handle index 0 special case independently */
-	for (int i = 0; fields[i]; i++)
+	printf("ELF Header:\n");
+	printf("  %s   %s\n", fields[0], entries[0]);
+	for (int i = 1; fields[i]; i++)
 		if (entries[i])
-			printf("%-*s %s\n", width, fields[i], entries[i]);
+			printf("  %-*s %s\n", width, fields[i], entries[i]);
 
 	return (0);
 }
 
-/* static */
-int count_fields(char **fields)
+static int count_fields(char **fields)
 {
 	int num = 0;
 
@@ -100,19 +104,26 @@ int count_fields(char **fields)
 
 int process_header_data(unsigned char *raw)
 {
-	char **elf_fields, **elf_entries;
-	/* int flen; */
+	char **elf_fields, **elf_entries, *magic_line;
+	int flen;
 
 	elf_fields = get_fields();
-	/* flen = count_fields(elf_fields); */
+	flen = count_fields(elf_fields);
+	/* 19 fields total therefore 4 separate files to comply with betty */
 
-	/* elf_entries = malloc(sizeof(char *) * flen); */
-	/* nullify((void **) elf_entries, flen); */
+	elf_entries = malloc(sizeof(char *) * flen);
+	nullify((void **) elf_entries, flen);
 
-	(void) raw;
-	(void) elf_entries;
+	magic_line = get_magic(raw);
+	elf_entries[0] = magic_line;
+	elf_entries[1] = parse_arch(raw);
+	elf_entries[2] = parse_endianess(raw);
+	elf_entries[3] = parse_elf_version(raw);
 
-	print_data(elf_fields, elf_fields);
+	print_data(elf_fields, elf_entries);
+
+	free(elf_entries);
+	free(magic_line);
 
 	return (0);
 }

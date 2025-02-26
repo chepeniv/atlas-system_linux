@@ -1,11 +1,12 @@
-#include "headers/help.h"
-#include "headers/str.h"
-#include "headers/err.h"
-#include "headers/mem.h"
-#include "headers/print.h"
 #include "headers/const.h"
-#include "headers/parse.h"
 #include "headers/data.h"
+#include "headers/err.h"
+#include "headers/help.h"
+#include "headers/magic.h"
+#include "headers/mem.h"
+#include "headers/parse.h"
+#include "headers/print.h"
+#include "headers/str.h"
 #include <elf.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,7 +56,7 @@ int main(int c, char **argv)
 	}
 
 	if (is_elf(elf_raw))
-		process_header_data(elf_raw); /* print_hex(elf_raw, hlen); */
+		process_header_data(elf_raw);
 	else
 	{
 		free(elf_raw);

@@ -1,5 +1,10 @@
-#include "headers/opt_help.h"
+#include "headers/help.h"
+#include "headers/str.h"
+#include "headers/err.h"
 #include <elf.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* only system (3) and exec* (2/3) not allowed */
 
@@ -45,15 +50,6 @@
  */
 
 /*
- * //// ERRORS ////
- *
- * "readelf: Warning: Nothing to do.\n[readelf --help]" (no file given)
- * "readelf: Error: 'doesntexist': No such file"
- * "readelf: Error: Input file 'noread' is not readable"
- * "readelf: Error: Not an ELF file - it has the wrong magic bytes at the start"
- */
-
-/*
  * //// PSEUDOCODE ////
  *
  * determine if  file is given
@@ -75,10 +71,14 @@
 
 int main(int c, char **argv)
 {
-	(void) c;
 	(void) argv;
 
-	print_help();
+	if (c == 1)
+	{
+		err_print(W_NOARG, argv[0], NULL);
+		return (EXIT_FAILURE);
+	}
 
-	return (0);
+
+	return (EXIT_SUCCESS);
 }

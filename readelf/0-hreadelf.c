@@ -78,22 +78,20 @@ int main(int c, char **argv)
 	readlen = fread(elfdata, BYTES, hlen, elf_file);
 	if (readlen < 0)
 	{
-		printf("errno: %d\n", errno); /* debugging output */
+		free(elfdata);
 		err_print(procname, filename);
 	}
 
 	/*
-	 * determine if  file is ELF
-	 * determine 32/64
-	 * determine LSB/MSB
-	 * determine type of ELF
 	 * parse header bytes
 	 * interpret header data
 	 */
+
 	if (is_elf(elfdata))
 		print_hex(elfdata, hlen);
 	else
 	{
+		free(elfdata);
 		errno = E_NELF;
 		err_print(procname, filename);
 	}

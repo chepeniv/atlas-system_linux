@@ -13,8 +13,10 @@
  * "readelf: Error: Not an ELF file - it has the wrong magic bytes at the start"
  */
 
-int err_print(char *procname, char *item)
+int err_print(int code, char *procname, char *item)
 {
+	errno = code;
+
 	switch (errno)
 	{
 	case (W_NOARG):

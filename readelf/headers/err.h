@@ -10,6 +10,6 @@
 #define E_NFILE ENOENT
 #define E_NREAD EROFS
 
-int err_print(char *procname, char *item);
+int err_print(int code, char *procname, char *item);
 
 #endif /* _ERR_ */

@@ -29,33 +29,6 @@
  * only system (3) and exec* (2/3) not allowed
  */
 
-/*
- * //// OUTPUT ////
- *
- * File: filename (if more than one filename given)
- * ELF Header:
- *   Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
- *   Class:                             ELF64
- *   Data:                              2's complement, little endian
- *   Version:                           1 (current)
- *   OS/ABI:                            UNIX - System V
- *   ABI Version:                       0
- *   Type:                              EXEC (Executable file)
- *   Machine:                           Advanced Micro Devices X86-64
- *   Version:                           0x1
- *   Entry point address:               0x400600
- *   Start of program headers:          64 (bytes into file)
- *   Start of section headers:          6936 (bytes into file)
- *   Flags:                             0x0
- *   Size of this header:               64 (bytes)
- *   Size of program headers:           56 (bytes)
- *   Number of program headers:         9
- *   Size of section headers:           64 (bytes)
- *   Number of section headers:         31
- *   Section header string table index: 28
- * (next filename or error message)
- */
-
 int main(int c, char **argv)
 {
 	int readlen, hlen = 64;
@@ -74,6 +47,7 @@ int main(int c, char **argv)
 
 	mem_alloc((void **) &elf_raw, BYTES, hlen);
 	readlen = fread(elf_raw, BYTES, hlen, elf_file);
+	fclose(elf_file);
 	if (readlen < 0)
 	{
 		free(elf_raw);
@@ -81,10 +55,7 @@ int main(int c, char **argv)
 	}
 
 	if (is_elf(elf_raw))
-	{
-		/* process raw elf data here */
-		print_hex(elf_raw, hlen);
-	}
+		process_header_data(elf_raw); /* print_hex(elf_raw, hlen); */
 	else
 	{
 		free(elf_raw);

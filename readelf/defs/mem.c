@@ -15,3 +15,11 @@ int mem_alloc(void **buff, int size, int len)
 
 	return (0);
 }
+
+int nullify(void **series, int len)
+{
+	for (int i = 0; i < len; i++)
+		series[i] = NULL;
+
+	return (0);
+}

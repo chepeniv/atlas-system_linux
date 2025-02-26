@@ -1,11 +1,16 @@
 #include "headers/help.h"
 #include "headers/str.h"
 #include "headers/err.h"
+#include "headers/mem.h"
+#include "headers/print.h"
+#include "headers/const.h"
 #include <elf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
+
 
 /* only system (3) and exec* (2/3) not allowed */
 
@@ -53,14 +58,8 @@
 /*
  * //// PSEUDOCODE ////
  *
- * determine if  file is exist
- *     otherwise output error
- * determine if  file is readable
- *     otherwise output error
  * determine if  file is ELF
  *     otherwise output error
- * open file
- * read header bytes
  * determine 32/64
  * determine LSB/MSB
  * determine type of ELF
@@ -70,16 +69,33 @@
 
 int main(int c, char **argv)
 {
-	int elfdesc;
+	int readlen, hlen = 64;
+	FILE *elf_file;
 	char *filename;
+	unsigned char *elfdata;
 
 	if (c == 1)
-		err_print(W_NOARG, argv[0], NULL);
+	{
+		errno = W_NOARG;
+		err_print(argv[0], NULL);
+	}
 
 	filename = argv[1];
-	elfdesc = open(filename, 0);
-	if (elfdesc < 0)
-		err_print(E_NFILE, argv[0], filename);
+	elf_file = fopen(filename, "rb");
+	if (!elf_file)
+		err_print(argv[0], filename);
+
+	mem_alloc((void **) &elfdata, BYTES, hlen);
+	readlen = fread(elfdata, BYTES, hlen, elf_file);
+	if (readlen < 0)
+	{
+		printf("errno: %d\n", errno); /* debugging output */
+		err_print(argv[0], filename);
+	}
+
+	print_hex(elfdata, hlen);
+
+	free(elfdata);
 
 	return (EXIT_SUCCESS);
 }

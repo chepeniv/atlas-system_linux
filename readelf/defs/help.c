@@ -1,4 +1,4 @@
-#include "../headers/opt_help.h"
+#include "../headers/help.h"
 #include "../headers/const.h"
 #include "../headers/mem.h"
 

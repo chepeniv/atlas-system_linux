@@ -115,7 +115,7 @@ int process_header_data(unsigned char *raw)
 	elf_entries[0] = magic_line;
 	elf_entries[1] = parse_arch(raw);
 	elf_entries[2] = parse_endianess(raw);
-	elf_entries[3] = parse_elf_version(raw);
+	elf_entries[3] = parse_elf_ver(raw);
 	elf_entries[4] = "hello, world";
 	elf_entries[5] = "hello, world";
 	elf_entries[6] = "hello, world";

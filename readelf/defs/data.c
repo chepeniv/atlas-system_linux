@@ -101,7 +101,8 @@ int print_data(char **fields, char **entries)
 
 int process_header_data(unsigned char *raw)
 {
-	char **elf_fields, **elf_entries, *magic_line;
+	char **elf_fields, **elf_entries;
+	char *ent_magic, *ent_abi_ver;
 	int flen;
 
 	elf_fields = get_fields();
@@ -109,13 +110,14 @@ int process_header_data(unsigned char *raw)
 	elf_entries = malloc(sizeof(char *) * flen);
 	nullify((void **) elf_entries, flen);
 
-	magic_line = get_magic(raw);
-	elf_entries[I_MAGIC]          = magic_line;
+	ent_magic                     = get_magic(raw);
+	elf_entries[I_MAGIC]          = ent_magic;
 	elf_entries[I_ARCH]           = parse_arch(raw);
 	elf_entries[I_ENDIAN]         = parse_endianess(raw);
 	elf_entries[I_ELF_VER]        = parse_elf_ver(raw);
 	elf_entries[I_OS]             = parse_os(raw);
-	elf_entries[I_ABI_VER]        = parse_abi_ver(raw);
+	ent_abi_ver                   = parse_abi_ver(raw);
+	elf_entries[I_ABI_VER]        = ent_abi_ver;
 	elf_entries[I_TYPE]           = parse_type(raw);
 	elf_entries[I_MACH]           = parse_machine(raw);
 	elf_entries[I_VER]            = parse_version(raw);
@@ -132,8 +134,9 @@ int process_header_data(unsigned char *raw)
 
 	print_data(elf_fields, elf_entries);
 
+	free(ent_magic);
+	free(ent_abi_ver);
 	free(elf_entries);
-	free(magic_line);
 
 	return (0);
 }

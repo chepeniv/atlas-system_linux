@@ -107,18 +107,72 @@ char *parse_abi_ver(const unsigned char *data)
 
 char *parse_type(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_type */
 	/* Type:    EXEC (Executable file) */
-	return ("type");
+	uint16_t type;
+
+	type = data[0x10];
+	switch (type)
+	{
+		case (ET_REL):
+			return ("");
+		case (ET_EXEC):
+			return ("EXEC (Executable file)");
+		case (ET_DYN):
+			return ("DYN (Position-Independent Executable file)");
+		case (ET_CORE):
+			return ("");
+		default:
+			return ("Unknown");
+	}
 }
 
 char *parse_machine(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_machine; */
 	/* Machine:    Advanced Micro Devices X86-64 */
-	return ("mach");
+	uint16_t machine;
+
+	machine = data[0x12];
+	switch (machine)
+	{
+		case (EM_M32):
+			return ("AT&T WE 32100");
+		case (EM_SPARC):
+			return ("AT&T WE 32100");
+		case (EM_386):
+			return ("AT&T WE 32100");
+		case (EM_68K):
+			return ("Motorola 68000");
+		case (EM_88K):
+			return ("Motorola 88000");
+		case (EM_860):
+			return ("Intel 80860");
+		case (EM_MIPS):
+			return ("MIPS RS3000 (big-endian only)");
+		case (EM_PARISC):
+			return ("HP/PA");
+		case (EM_SPARC32PLUS):
+			return ("SPARC with enhanced instruction set");
+		case (EM_PPC):
+			return ("PowerPC");
+		case (EM_PPC64):
+			return ("PowerPC 64-bit");
+		case (EM_S390):
+			return ("IBM S/390");
+		case (EM_ARM):
+			return ("Advanced RISC Machines");
+		case (EM_SH):
+			return ("Renesas SuperH");
+		case (EM_SPARCV9):
+			return ("SPARC v9 64-bit");
+		case (EM_IA_64):
+			return ("Intel Itanium");
+		case (EM_X86_64):
+			return ("AMD x86-64");
+		case (EM_VAX):
+			return ("DEC Vax");
+		default:
+			return ("Unknown");
+	}
 }
 
 char *parse_version(const unsigned char *data)

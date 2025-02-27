@@ -1,7 +1,10 @@
 #include <elf.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "../headers/parse.h"
+#include "../headers/mem.h"
+#include "../headers/const.h"
 
 /**
  * is_elf -
@@ -63,21 +66,49 @@ char *parse_elf_ver(const unsigned char *data)
 
 char *parse_os(const unsigned char *data)
 {
-	(void) data;
 	/* OS/ABI:    UNIX - System V */
-	return ("os");
+	switch (data[EI_OSABI])
+	{
+		case (ELFOSABI_SYSV):
+			return ("UNIX System V ABI");
+		case (ELFOSABI_HPUX):
+			return ("HP-UX ABI");
+		case (ELFOSABI_NETBSD):
+			return ("NetBSD ABI");
+		case (ELFOSABI_LINUX):
+			return ("Linux ABI");
+		case (ELFOSABI_SOLARIS):
+			return ("Solaris ABI");
+		case (ELFOSABI_IRIX):
+			return ("IRIX ABI");
+		case (ELFOSABI_FREEBSD):
+			return ("FreeBSD ABI");
+		case (ELFOSABI_TRU64):
+			return ("TRU64 UNIX ABI");
+		case (ELFOSABI_ARM):
+			return ("ARM architecture ABI");
+		case (ELFOSABI_STANDALONE):
+			return ("Stand-alone (embedded) ABI");
+		default:
+			return ("UNIX System V ABI");
+	}
 }
 
 char *parse_abi_ver(const unsigned char *data)
 {
-	(void) data;
 	/* ABI Version:    0 */
-	return ("abi ver");
+	char *mailback;
+
+	mem_alloc((void **) &mailback, BYTES, 4);
+	sprintf(mailback, "%d", data[EI_ABIVERSION]);
+
+	return (mailback);
 }
 
 char *parse_type(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_type */
 	/* Type:    EXEC (Executable file) */
 	return ("type");
 }
@@ -85,6 +116,7 @@ char *parse_type(const unsigned char *data)
 char *parse_machine(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_machine; */
 	/* Machine:    Advanced Micro Devices X86-64 */
 	return ("mach");
 }
@@ -92,6 +124,7 @@ char *parse_machine(const unsigned char *data)
 char *parse_version(const unsigned char *data)
 {
 	(void) data;
+	/* uint32_t e_version; */
 	/* Version:    0x1 */
 	return ("vers");
 }
@@ -99,6 +132,7 @@ char *parse_version(const unsigned char *data)
 char *parse_entry_addr(const unsigned char *data)
 {
 	(void) data;
+	/* ElfN_Addr e_entry; */
 	/* Entry point address:    0x400600 */
 	return ("entry addr");
 }
@@ -106,6 +140,7 @@ char *parse_entry_addr(const unsigned char *data)
 char *parse_prog_hdr_offset(const unsigned char *data)
 {
 	(void) data;
+	/* ElfN_Off e_phoff; */
 	/* Start of program headers:    64 (bytes into file) */
 	return ("start of prog hdrs");
 }
@@ -113,6 +148,7 @@ char *parse_prog_hdr_offset(const unsigned char *data)
 char *parse_sect_hdr_offset(const unsigned char *data)
 {
 	(void) data;
+	/* ElfN_Off e_shoff; */
 	/* Start of section headers:    6936 (bytes into file) */
 	return ("start of sect hdrs");
 }
@@ -120,6 +156,7 @@ char *parse_sect_hdr_offset(const unsigned char *data)
 char *parse_flags(const unsigned char *data)
 {
 	(void) data;
+	/* uint32_t e_flags; */
 	/* Flags:    0x0 */
 	return ("flags");
 }
@@ -127,6 +164,7 @@ char *parse_flags(const unsigned char *data)
 char *parse_elf_hdr_size(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_ehsize; */
 	/* Size of this header:    64 (bytes) */
 	return ("size of this hdr");
 }
@@ -134,6 +172,7 @@ char *parse_elf_hdr_size(const unsigned char *data)
 char *parse_prog_hdr_size(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_phentsize; */
 	/* Size of program headers:    56 (bytes) */
 	return ("size of prog hdrs");
 }
@@ -141,6 +180,7 @@ char *parse_prog_hdr_size(const unsigned char *data)
 char *parse_prog_hdr_count(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_phnum; */
 	/* Number of program headers:    9 */
 	return ("num of prog hdrs");
 }
@@ -148,6 +188,7 @@ char *parse_prog_hdr_count(const unsigned char *data)
 char *parse_sect_hdr_size(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_shentsize; */
 	/* Size of section headers:    64 (bytes) */
 	return ("size of sec hdrs");
 }
@@ -155,6 +196,7 @@ char *parse_sect_hdr_size(const unsigned char *data)
 char *parse_sect_hdr_count(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_shnum; */
 	/* Number of section headers:    31 */
 	return ("num of sec hdrs");
 }
@@ -162,6 +204,7 @@ char *parse_sect_hdr_count(const unsigned char *data)
 char *parse_sect_hdr_strtable_index(const unsigned char *data)
 {
 	(void) data;
+	/* uint16_t e_shstrndx; */
 	/* Section header string table index:    28 */
 	return ("sec hdr str tbl indx");
 }

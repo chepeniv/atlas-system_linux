@@ -106,7 +106,6 @@ int process_header_data(unsigned char *raw)
 
 	elf_fields = get_fields();
 	flen = count_fields(elf_fields);
-
 	elf_entries = malloc(sizeof(char *) * flen);
 	nullify((void **) elf_entries, flen);
 

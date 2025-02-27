@@ -2,16 +2,80 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <limits.h>
 #include "../headers/parse.h"
 #include "../headers/mem.h"
 #include "../headers/const.h"
 
-/**
- * is_elf -
- * @data:
- *
- * Return:
- */
+osabi_item elf_list_osabi[256] = {
+	/* within order */
+	{ELFOSABI_SYSV, "UNIX system V ABI"},
+	{ELFOSABI_HPUX, "HP-UX"},
+	{ELFOSABI_NETBSD, "NetBSD"},
+	{ELFOSABI_GNU, "Object uses GNU ELF extensions"},
+	{ELFOSABI_LINUX, "Compatibility alias"},
+	{ELFOSABI_SOLARIS, "Sun Solaris"},
+	{ELFOSABI_AIX, "IBM AIX"},
+	{ELFOSABI_IRIX, "SGI Irix"},
+	{ELFOSABI_FREEBSD, "FreeBSD"},
+	{ELFOSABI_TRU64, "Compaq TRU64 UNIX"},
+	{ELFOSABI_MODESTO, "Novell Modesto"},
+	{ELFOSABI_OPENBSD, "OpenBSD"},
+	/* without order */
+	{ELFOSABI_ARM_AEABI, " ARM EABI "}, /*64*/
+	{ELFOSABI_ARM, " ARM "}, /*97*/
+	{ELFOSABI_STANDALONE, " Standalone (embedded) application "}, /*255*/
+	{-1, NULL}
+};
+
+long _get_bytes(const unsigned char *data, int pos, int incr)
+{
+	int arch_class = 0x04;
+	long *value;
+
+	if (data[arch_class] == ELFCLASS32)
+		value = (long *) &data[pos];
+	else
+		value = (long *) &data[pos + incr]; /* ELFCLASS64 */
+
+	return (*value);
+}
+
+char *_get_hex_str(const unsigned char *data, int pos, int incr, int bytes)
+{
+	int arch_class = 0x04;
+	char *mailback;
+
+	if (data[arch_class] == ELFCLASS32)
+		incr = 0;
+
+	mem_alloc((void **) &mailback, BYTES, 128);
+	for (int b = 0; b < bytes; b++ )
+		sprintf(&mailback[b * 2], "%02x", data[pos + incr + b]);
+
+	return (mailback);
+}
+
+void print_extracted_hex(const unsigned char *data, int pos, int incr, int bytes)
+{
+	char *test;
+
+	test = _get_hex_str(data, pos, incr, bytes);
+	printf("hex data extracted: %s\n", test);
+	free(test);
+}
+
+static char *create_text__int_str(long value, char *append, int limit)
+{
+	char *mailback;
+
+	mem_alloc((void **) &mailback, BYTES, limit);
+	sprintf(mailback, "%ld", value);
+	if (append)
+		strcat(mailback, append);
+
+	return (mailback);
+}
 
 int is_elf(const unsigned char *data)
 {
@@ -177,7 +241,6 @@ char *get_machine(const unsigned char *data)
 
 char *get_version(const unsigned char *data)
 {
-	/* uint32_t e_version; */
 	uint32_t version;
 
 	/* Version:    0x1 */
@@ -225,8 +288,7 @@ char *make_prog_hdr_offset(const unsigned char *data)
 		offset = (long int *) &data[0x20];
 	}
 
-	mem_alloc((void **) &mailback, BYTES, 64);
-	sprintf(mailback, "%ld (bytes into file)", *offset);
+	mailback = create_text__int_str(*offset, " (bytes into file)", 64);
 
 	return (mailback);
 }
@@ -248,23 +310,17 @@ char *make_sect_hdr_offset(const unsigned char *data)
 		offset = (long int *) &data[pos + 8];
 	}
 
-	mem_alloc((void **) &mailback, BYTES, 64);
-	sprintf(mailback, "%ld (bytes into file)", *offset);
+	mailback = create_text__int_str(*offset, " (bytes into file)", 64);
 
-	/* Start of section headers:    6936 (bytes into file) */
 	return (mailback);
 }
 
 char *make_flags(const unsigned char *data)
 {
-	/* uint32_t e_flags; */
-	int flags, pos = 0x24;
+	uint32_t flags;
 	char *mailback;
 
-	if (data[0x04] == ELFCLASS32)
-		flags = data[pos];
-	else
-		flags = data[pos + 6]; /* ELFCLASS64 */
+	flags = _get_bytes(data, 0x24, 6);
 
 	mem_alloc((void **) &mailback, BYTES, 8);
 	if (flags)
@@ -272,54 +328,71 @@ char *make_flags(const unsigned char *data)
 	else
 		sprintf(mailback, "0x0");
 
-	/* Flags:    0x0 */
 	return (mailback);
 }
 
 char *parse_elf_hdr_size(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_ehsize; */
-	/* Size of this header:    64 (bytes) */
-	return ("size of this hdr");
+	uint16_t size;
+	char *mailback;
+
+	size = _get_bytes(data, 0x28, 12);
+	mailback = create_text__int_str(size, " (bytes)", 32);
+
+	return (mailback);
 }
 
 char *parse_prog_hdr_size(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_phentsize; */
-	/* Size of program headers:    56 (bytes) */
-	return ("size of prog hdrs");
+	uint16_t size;
+	char *mailback;
+
+	size = _get_bytes(data, 0x2a, 12);
+	mailback = create_text__int_str(size, " (bytes)", 32);
+
+	return (mailback);
 }
 
 char *parse_prog_hdr_count(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_phnum; */
-	/* Number of program headers:    9 */
-	return ("num of prog hdrs");
+	uint16_t num;
+	char *mailback;
+
+	num = _get_bytes(data, 0x2c, 12);
+	mailback = create_text__int_str(num, NULL, 16);
+
+	return (mailback);
 }
 
 char *parse_sect_hdr_size(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_shentsize; */
-	/* Size of section headers:    64 (bytes) */
-	return ("size of sec hdrs");
+	uint16_t size;
+	char *mailback;
+
+	size = _get_bytes(data, 0x2e, 12);
+	mailback = create_text__int_str(size, " (bytes)", 16);
+
+	return (mailback);
 }
 
 char *parse_sect_hdr_count(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_shnum; */
-	/* Number of section headers:    31 */
-	return ("num of sec hdrs");
+	uint16_t num;
+	char *mailback;
+
+	num = _get_bytes(data, 0x30, 12);
+	mailback = create_text__int_str(num, NULL, 16);
+
+	return (mailback);
 }
 
 char *parse_sect_hdr_strtable_index(const unsigned char *data)
 {
-	(void) data;
-	/* uint16_t e_shstrndx; */
-	/* Section header string table index:    28 */
-	return ("sec hdr str tbl indx");
+	uint16_t index;
+	char *mailback;
+
+	index = _get_bytes(data, 0x32, 12);
+	mailback = create_text__int_str(index, NULL, 16);
+
+	return (mailback);
 }

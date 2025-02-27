@@ -1,6 +1,9 @@
 #ifndef _PARSE_
 #define _PARSE_
 
+#include <stdio.h>
+#include <elf.h>
+
 #define I_MAGIC          0
 #define I_ARCH           1
 #define I_ENDIAN         2
@@ -40,5 +43,10 @@ char *parse_prog_hdr_count(const unsigned char *data);
 char *parse_sect_hdr_size(const unsigned char *data);
 char *parse_sect_hdr_count(const unsigned char *data);
 char *parse_sect_hdr_strtable_index(const unsigned char *data);
+
+typedef struct _elf_list_osabi_item {
+	int code;
+	char *text;
+} osabi_item;
 
 #endif /* _PARSE_ */

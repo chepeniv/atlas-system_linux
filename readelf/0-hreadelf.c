@@ -46,8 +46,8 @@ int main(int c, char **argv)
 	if (!elf_file)
 		err_print(errno, procname, filename);
 
-	mem_alloc((void **) &elf_raw, BYTES, hlen);
-	readlen = fread(elf_raw, BYTES, hlen, elf_file);
+	mem_alloc((void **) &elf_raw, 1, hlen);
+	readlen = fread(elf_raw, 1, hlen, elf_file);
 	fclose(elf_file);
 	if (readlen < 0)
 	{
@@ -56,7 +56,9 @@ int main(int c, char **argv)
 	}
 
 	if (is_elf(elf_raw))
+	{
 		process_header_data(elf_raw);
+	}
 	else
 	{
 		free(elf_raw);

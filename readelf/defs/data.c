@@ -102,7 +102,8 @@ int print_data(char **fields, char **entries)
 int process_header_data(unsigned char *raw)
 {
 	char **elf_fields, **elf_entries;
-	char *ent_magic, *ent_abi_ver;
+	char *ent_magic, *ent_abi_ver, *ent_entry_addr, *ent_prghdr_offset,
+		 *ent_secthdr_offset, *ent_flags;
 	int flen;
 
 	elf_fields = get_fields();
@@ -112,19 +113,23 @@ int process_header_data(unsigned char *raw)
 
 	ent_magic                     = get_magic(raw);
 	elf_entries[I_MAGIC]          = ent_magic;
-	elf_entries[I_ARCH]           = parse_arch(raw);
-	elf_entries[I_ENDIAN]         = parse_endianess(raw);
-	elf_entries[I_ELF_VER]        = parse_elf_ver(raw);
-	elf_entries[I_OS]             = parse_os(raw);
-	ent_abi_ver                   = parse_abi_ver(raw);
+	elf_entries[I_ARCH]           = get_arch(raw);
+	elf_entries[I_ENDIAN]         = get_endianess(raw);
+	elf_entries[I_ELF_VER]        = get_elf_ver(raw);
+	elf_entries[I_OS]             = get_os(raw);
+	ent_abi_ver                   = make_abi_ver(raw);
 	elf_entries[I_ABI_VER]        = ent_abi_ver;
-	elf_entries[I_TYPE]           = parse_type(raw);
-	elf_entries[I_MACH]           = parse_machine(raw);
-	elf_entries[I_VER]            = parse_version(raw);
-	elf_entries[I_ENTRY_ADDR]     = parse_entry_addr(raw);
-	elf_entries[I_PRG_HDR_OFFSET] = parse_prog_hdr_offset(raw);
-	elf_entries[I_SEC_HDR_OFFSET] = parse_sect_hdr_offset(raw);
-	elf_entries[I_FLAGS]          = parse_flags(raw);
+	elf_entries[I_TYPE]           = get_type(raw);
+	elf_entries[I_MACH]           = get_machine(raw);
+	elf_entries[I_VER]            = get_version(raw);
+	ent_entry_addr                = make_entry_addr(raw);
+	elf_entries[I_ENTRY_ADDR]     = ent_entry_addr;
+	ent_prghdr_offset             = make_prog_hdr_offset(raw);
+	elf_entries[I_PRG_HDR_OFFSET] = ent_prghdr_offset;
+	ent_secthdr_offset            = make_sect_hdr_offset(raw);
+	elf_entries[I_SEC_HDR_OFFSET] = ent_secthdr_offset;
+	ent_flags                     = make_flags(raw);
+	elf_entries[I_FLAGS]          = ent_flags;
 	elf_entries[I_ELF_HDR_SIZE]   = parse_elf_hdr_size(raw);
 	elf_entries[I_PRG_HDR_SIZE]   = parse_prog_hdr_size(raw);
 	elf_entries[I_PRG_HDR_NUM]    = parse_prog_hdr_count(raw);
@@ -136,6 +141,10 @@ int process_header_data(unsigned char *raw)
 
 	free(ent_magic);
 	free(ent_abi_ver);
+	free(ent_entry_addr);
+	free(ent_prghdr_offset);
+	free(ent_secthdr_offset);
+	free(ent_flags);
 	free(elf_entries);
 
 	return (0);

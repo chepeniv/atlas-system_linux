@@ -24,7 +24,7 @@ int is_elf(const unsigned char *data)
 	return (1);
 }
 
-char *parse_arch(const unsigned char *data)
+char *get_arch(const unsigned char *data)
 {
 	/* Class:    ELF64 */
 	switch (data[EI_CLASS]) /* byte index: [4] */
@@ -38,7 +38,7 @@ char *parse_arch(const unsigned char *data)
 	}
 }
 
-char *parse_endianess(const unsigned char *data)
+char *get_endianess(const unsigned char *data)
 {
 	/* Data:    2's complement, little endian */
 	switch (data[EI_DATA]) /* byte index: [5] */
@@ -52,7 +52,7 @@ char *parse_endianess(const unsigned char *data)
 	}
 }
 
-char *parse_elf_ver(const unsigned char *data)
+char *get_elf_ver(const unsigned char *data)
 {
 	/* Version:    1 (current) */
 	switch (data[EI_VERSION]) /* byte index: [6] */
@@ -64,7 +64,7 @@ char *parse_elf_ver(const unsigned char *data)
 	}
 }
 
-char *parse_os(const unsigned char *data)
+char *get_os(const unsigned char *data)
 {
 	/* OS/ABI:    UNIX - System V */
 	switch (data[EI_OSABI])
@@ -94,7 +94,7 @@ char *parse_os(const unsigned char *data)
 	}
 }
 
-char *parse_abi_ver(const unsigned char *data)
+char *make_abi_ver(const unsigned char *data)
 {
 	/* ABI Version:    0 */
 	char *mailback;
@@ -105,7 +105,7 @@ char *parse_abi_ver(const unsigned char *data)
 	return (mailback);
 }
 
-char *parse_type(const unsigned char *data)
+char *get_type(const unsigned char *data)
 {
 	/* Type:    EXEC (Executable file) */
 	uint16_t type;
@@ -126,7 +126,7 @@ char *parse_type(const unsigned char *data)
 	}
 }
 
-char *parse_machine(const unsigned char *data)
+char *get_machine(const unsigned char *data)
 {
 	/* Machine:    Advanced Micro Devices X86-64 */
 	uint16_t machine;
@@ -137,9 +137,9 @@ char *parse_machine(const unsigned char *data)
 		case (EM_M32):
 			return ("AT&T WE 32100");
 		case (EM_SPARC):
-			return ("AT&T WE 32100");
+			return ("Sun Microsystems SPARC");
 		case (EM_386):
-			return ("AT&T WE 32100");
+			return ("Intel 80386");
 		case (EM_68K):
 			return ("Motorola 68000");
 		case (EM_88K):
@@ -175,44 +175,105 @@ char *parse_machine(const unsigned char *data)
 	}
 }
 
-char *parse_version(const unsigned char *data)
+char *get_version(const unsigned char *data)
 {
-	(void) data;
 	/* uint32_t e_version; */
+	uint32_t version;
+
 	/* Version:    0x1 */
-	return ("vers");
+	version = data[0x14];
+	switch (version)
+	{
+		case (EV_CURRENT):
+			return ("0x1");
+		default:
+			return ("Invalid");
+	}
 }
 
-char *parse_entry_addr(const unsigned char *data)
+char *make_entry_addr(const unsigned char *data)
 {
-	(void) data;
 	/* ElfN_Addr e_entry; */
-	/* Entry point address:    0x400600 */
-	return ("entry addr");
+	char *mailback;
+	long int *entry, entry32;
+
+	entry32 = data[0x18];
+	if (data[0x04] == ELFCLASS32)
+		entry = (long int *) &entry32;
+	else
+		entry = (long int *) &data[0x18];
+
+	mem_alloc((void **) &mailback, BYTES, 16);
+	sprintf(mailback, "%#lx", *entry);
+
+	return (mailback);
 }
 
-char *parse_prog_hdr_offset(const unsigned char *data)
+char *make_prog_hdr_offset(const unsigned char *data)
 {
-	(void) data;
 	/* ElfN_Off e_phoff; */
-	/* Start of program headers:    64 (bytes into file) */
-	return ("start of prog hdrs");
+	long int *offset, offset32;
+	char *mailback;
+
+	if (data[0x04] == ELFCLASS32)
+	{
+		offset32 = data[0x1c];
+		offset = (long int *) offset32;
+	}
+	else
+	{   /* ELFCLASS64 */
+		offset = (long int *) &data[0x20];
+	}
+
+	mem_alloc((void **) &mailback, BYTES, 64);
+	sprintf(mailback, "%ld (bytes into file)", *offset);
+
+	return (mailback);
 }
 
-char *parse_sect_hdr_offset(const unsigned char *data)
+char *make_sect_hdr_offset(const unsigned char *data)
 {
-	(void) data;
-	/* ElfN_Off e_shoff; */
+	/* /1* ElfN_Off e_shoff; *1/ */
+	long int *offset, offset32;
+	char *mailback;
+	int pos = 0x20;
+
+	if (data[0x04] == ELFCLASS32)
+	{
+		offset32 = data[pos];
+		offset = (long int *) offset32;
+	}
+	else
+	{   /* ELFCLASS64 */
+		offset = (long int *) &data[pos + 8];
+	}
+
+	mem_alloc((void **) &mailback, BYTES, 64);
+	sprintf(mailback, "%ld (bytes into file)", *offset);
+
 	/* Start of section headers:    6936 (bytes into file) */
-	return ("start of sect hdrs");
+	return (mailback);
 }
 
-char *parse_flags(const unsigned char *data)
+char *make_flags(const unsigned char *data)
 {
-	(void) data;
 	/* uint32_t e_flags; */
+	int flags, pos = 0x24;
+	char *mailback;
+
+	if (data[0x04] == ELFCLASS32)
+		flags = data[pos];
+	else
+		flags = data[pos + 6]; /* ELFCLASS64 */
+
+	mem_alloc((void **) &mailback, BYTES, 8);
+	if (flags)
+		sprintf(mailback, "%#x", flags);
+	else
+		sprintf(mailback, "0x0");
+
 	/* Flags:    0x0 */
-	return ("flags");
+	return (mailback);
 }
 
 char *parse_elf_hdr_size(const unsigned char *data)

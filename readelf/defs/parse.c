@@ -63,90 +63,105 @@ char *parse_elf_ver(const unsigned char *data)
 
 char *parse_os(const unsigned char *data)
 {
+	(void) data;
 	/* OS/ABI:    UNIX - System V */
-	return (NULL);
+	return ("os");
 }
 
 char *parse_abi_ver(const unsigned char *data)
 {
+	(void) data;
 	/* ABI Version:    0 */
-	return (NULL);
+	return ("abi ver");
 }
 
 char *parse_type(const unsigned char *data)
 {
+	(void) data;
 	/* Type:    EXEC (Executable file) */
-	return (NULL);
+	return ("type");
 }
 
 char *parse_machine(const unsigned char *data)
 {
+	(void) data;
 	/* Machine:    Advanced Micro Devices X86-64 */
-	return (NULL);
+	return ("mach");
 }
 
 char *parse_version(const unsigned char *data)
 {
+	(void) data;
 	/* Version:    0x1 */
-	return (NULL);
+	return ("vers");
 }
 
 char *parse_entry_addr(const unsigned char *data)
 {
+	(void) data;
 	/* Entry point address:    0x400600 */
-	return (NULL);
+	return ("entry addr");
 }
 
 char *parse_prog_hdr_offset(const unsigned char *data)
 {
+	(void) data;
 	/* Start of program headers:    64 (bytes into file) */
-	return (NULL);
+	return ("start of prog hdrs");
 }
 
 char *parse_sect_hdr_offset(const unsigned char *data)
 {
+	(void) data;
 	/* Start of section headers:    6936 (bytes into file) */
-	return (NULL);
+	return ("start of sect hdrs");
 }
 
 char *parse_flags(const unsigned char *data)
 {
+	(void) data;
 	/* Flags:    0x0 */
-	return (NULL);
+	return ("flags");
 }
 
 char *parse_elf_hdr_size(const unsigned char *data)
 {
+	(void) data;
 	/* Size of this header:    64 (bytes) */
-	return (NULL);
+	return ("size of this hdr");
 }
 
 char *parse_prog_hdr_size(const unsigned char *data)
 {
+	(void) data;
 	/* Size of program headers:    56 (bytes) */
-	return (NULL);
+	return ("size of prog hdrs");
 }
 
 char *parse_prog_hdr_count(const unsigned char *data)
 {
+	(void) data;
 	/* Number of program headers:    9 */
-	return (NULL);
+	return ("num of prog hdrs");
 }
 
 char *parse_sect_hdr_size(const unsigned char *data)
 {
+	(void) data;
 	/* Size of section headers:    64 (bytes) */
-	return (NULL);
+	return ("size of sec hdrs");
 }
 
 char *parse_sect_hdr_count(const unsigned char *data)
 {
+	(void) data;
 	/* Number of section headers:    31 */
-	return (NULL);
+	return ("num of sec hdrs");
 }
 
 char *parse_sect_hdr_strtable_index(const unsigned char *data)
 {
+	(void) data;
 	/* Section header string table index:    28 */
-	return (NULL);
+	return ("sec hdr str tbl indx");
 }

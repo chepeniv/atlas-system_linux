@@ -106,31 +106,30 @@ int process_header_data(unsigned char *raw)
 
 	elf_fields = get_fields();
 	flen = count_fields(elf_fields);
-	/* 19 fields total therefore 4 separate files to comply with betty */
 
 	elf_entries = malloc(sizeof(char *) * flen);
 	nullify((void **) elf_entries, flen);
 
 	magic_line = get_magic(raw);
-	elf_entries[0] = magic_line;
-	elf_entries[1] = parse_arch(raw);
-	elf_entries[2] = parse_endianess(raw);
-	elf_entries[3] = parse_elf_ver(raw);
-	elf_entries[4] = "hello, world";
-	elf_entries[5] = "hello, world";
-	elf_entries[6] = "hello, world";
-	elf_entries[7] = "hello, world";
-	elf_entries[8] = "hello, world";
-	elf_entries[9] = "hello, world";
-	elf_entries[10] = "hello, world";
-	elf_entries[11] = "hello, world";
-	elf_entries[12] = "hello, world";
-	elf_entries[13] = "hello, world";
-	elf_entries[14] = "hello, world";
-	elf_entries[15] = "hello, world";
-	elf_entries[16] = "hello, world";
-	elf_entries[17] = "hello, world";
-	elf_entries[18] = "hello, world";
+	elf_entries[I_MAGIC]          = magic_line;
+	elf_entries[I_ARCH]           = parse_arch(raw);
+	elf_entries[I_ENDIAN]         = parse_endianess(raw);
+	elf_entries[I_ELF_VER]        = parse_elf_ver(raw);
+	elf_entries[I_OS]             = parse_os(raw);
+	elf_entries[I_ABI_VER]        = parse_abi_ver(raw);
+	elf_entries[I_TYPE]           = parse_type(raw);
+	elf_entries[I_MACH]           = parse_machine(raw);
+	elf_entries[I_VER]            = parse_version(raw);
+	elf_entries[I_ENTRY_ADDR]     = parse_entry_addr(raw);
+	elf_entries[I_PRG_HDR_OFFSET] = parse_prog_hdr_offset(raw);
+	elf_entries[I_SEC_HDR_OFFSET] = parse_sect_hdr_offset(raw);
+	elf_entries[I_FLAGS]          = parse_flags(raw);
+	elf_entries[I_ELF_HDR_SIZE]   = parse_elf_hdr_size(raw);
+	elf_entries[I_PRG_HDR_SIZE]   = parse_prog_hdr_size(raw);
+	elf_entries[I_PRG_HDR_NUM]    = parse_prog_hdr_count(raw);
+	elf_entries[I_SEC_HDR_SIZE]   = parse_sect_hdr_size(raw);
+	elf_entries[I_SEC_HDR_NUM]    = parse_sect_hdr_count(raw);
+	elf_entries[I_SEC_STR_TBL]    = parse_sect_hdr_strtable_index(raw);
 
 	print_data(elf_fields, elf_entries);
 

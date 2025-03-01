@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 /**
@@ -22,4 +23,14 @@ int nullify(void **series, int len)
 		series[i] = NULL;
 
 	return (0);
+}
+
+char *setup_str_mem(char *text, int len)
+{
+	char *mailback;
+
+	mem_alloc((void **) &mailback, sizeof(char), len);
+	sprintf(mailback, "%s", text);
+
+	return(mailback);
 }

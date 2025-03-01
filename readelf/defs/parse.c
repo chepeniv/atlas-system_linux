@@ -110,6 +110,15 @@ int is_elf(const unsigned char *data)
 
 	return (1);
 }
+char *setup_str_mem(char *text, int len)
+{
+	char *mailback;
+
+	mem_alloc((void **) &mailback, sizeof(char), len);
+	sprintf(mailback, "%s", text);
+
+	return(mailback);
+}
 
 char *get_arch(const unsigned char *data)
 {
@@ -127,8 +136,7 @@ char *get_arch(const unsigned char *data)
 			arch = "invalid";
 	}
 
-	mem_alloc((void **) &mailback, sizeof(char), 32);
-	sprintf(mailback, "%s", arch);
+	mailback = setup_str_mem(arch, 16);
 
 	return (mailback);
 }
@@ -149,8 +157,7 @@ char *get_endianess(const unsigned char *data)
 			text = "unknown";
 	}
 
-	mem_alloc((void **) &mailback, sizeof(char), 64);
-	sprintf(mailback, "%s", text);
+	mailback = setup_str_mem(text, 32);
 
 	return (mailback);
 }
@@ -168,8 +175,7 @@ char *get_elf_ver(const unsigned char *data)
 			text = "invalid";
 	}
 
-	mem_alloc((void **) &mailback, sizeof(char), 32);
-	sprintf(mailback, "%s", text);
+	mailback = setup_str_mem(text, 16);
 
 	return (mailback);
 }
@@ -183,8 +189,7 @@ char *get_os(const unsigned char *data)
 		if (elf_list_osabi[i].code == code)
 			text = elf_list_osabi[i].text;
 
-	mem_alloc((void **) &mailback, sizeof(char), 128);
-	sprintf(mailback, "%s", text);
+	mailback = setup_str_mem(text, 128);
 
 	return (mailback);
 }
@@ -194,7 +199,7 @@ char *get_abi_ver(const unsigned char *data)
 	/* ABI Version:    0 */
 	char *mailback;
 
-	mem_alloc((void **) &mailback, sizeof(char), 4);
+	mem_alloc((void **) &mailback, sizeof(char), 8);
 	sprintf(mailback, "%d", data[EI_ABIVERSION]);
 
 	return (mailback);
@@ -224,8 +229,7 @@ char *get_type(const unsigned char *data)
 			text = "Unknown";
 	}
 
-	mem_alloc((void **) &mailback, sizeof(char), 64);
-	sprintf(mailback, "%s", text);
+	mailback = setup_str_mem(text, 64);
 
 	return (mailback);
 }
@@ -239,8 +243,7 @@ char *get_machine(const unsigned char *data)
 		if (elf_list_machine[i].code == machine)
 			text = elf_list_machine[i].text;
 
-	mem_alloc((void **) &mailback, sizeof(char), 128);
-	sprintf(mailback, "%s", text);
+	mailback = setup_str_mem(text, 128);
 
 	return (mailback);
 }
@@ -261,8 +264,7 @@ char *get_version(const unsigned char *data)
 			text = "Invalid";
 	}
 
-	mem_alloc((void **) &mailback, sizeof(char), 32);
-	sprintf(mailback, "%s", text);
+	mailback = setup_str_mem(text, 16);
 
 	return (mailback);
 }
@@ -279,7 +281,7 @@ char *get_entry_addr(const unsigned char *data)
 	else
 		entry = (long int *) &data[0x18];
 
-	mem_alloc((void **) &mailback, sizeof(char), 16);
+	mem_alloc((void **) &mailback, sizeof(char), 32);
 	sprintf(mailback, "%#lx", *entry);
 
 	return (mailback);
@@ -301,7 +303,7 @@ char *get_prog_hdr_offset(const unsigned char *data)
 		offset = (long int *) &data[0x20];
 	}
 
-	mailback = create_text__int_str(*offset, " (bytes into file)", 64);
+	mailback = create_text__int_str(*offset, " (bytes into file)", 32);
 
 	return (mailback);
 }
@@ -323,7 +325,7 @@ char *get_sect_hdr_offset(const unsigned char *data)
 		offset = (long int *) &data[pos + 8];
 	}
 
-	mailback = create_text__int_str(*offset, " (bytes into file)", 64);
+	mailback = create_text__int_str(*offset, " (bytes into file)", 32);
 
 	return (mailback);
 }
@@ -335,7 +337,7 @@ char *get_flags(const unsigned char *data)
 
 	flags = _get_bytes(data, 0x24, 6);
 
-	mem_alloc((void **) &mailback, sizeof(char), 8);
+	mem_alloc((void **) &mailback, sizeof(char), 32);
 	if (flags)
 		sprintf(mailback, "%#x", *flags);
 	else
@@ -350,7 +352,7 @@ char *get_elf_hdr_size(const unsigned char *data)
 	char *mailback;
 
 	size = _get_bytes(data, 0x28, 12);
-	mailback = create_text__int_str(*size, " (bytes)", 32);
+	mailback = create_text__int_str(*size, " (bytes)", 16);
 
 	return (mailback);
 }
@@ -361,7 +363,7 @@ char *get_prog_hdr_size(const unsigned char *data)
 	char *mailback;
 
 	size = _get_bytes(data, 0x2a, 12);
-	mailback = create_text__int_str(*size, " (bytes)", 32);
+	mailback = create_text__int_str(*size, " (bytes)", 16);
 
 	return (mailback);
 }
@@ -372,7 +374,7 @@ char *get_prog_hdr_count(const unsigned char *data)
 	char *mailback;
 
 	num = _get_bytes(data, 0x2c, 12);
-	mailback = create_text__int_str(*num, NULL, 16);
+	mailback = create_text__int_str(*num, NULL, 8);
 
 	return (mailback);
 }
@@ -394,7 +396,7 @@ char *get_sect_hdr_count(const unsigned char *data)
 	char *mailback;
 
 	num = _get_bytes(data, 0x30, 12);
-	mailback = create_text__int_str(*num, NULL, 16);
+	mailback = create_text__int_str(*num, NULL, 8);
 
 	return (mailback);
 }
@@ -405,7 +407,7 @@ char *get_sect_hdr_strtable_index(const unsigned char *data)
 	char *mailback;
 
 	index = _get_bytes(data, 0x32, 12);
-	mailback = create_text__int_str(*index, NULL, 16);
+	mailback = create_text__int_str(*index, NULL, 8);
 
 	return (mailback);
 }

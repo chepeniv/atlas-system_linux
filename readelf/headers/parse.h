@@ -25,19 +25,23 @@
 #define I_SEC_STR_TBL    18
 
 int is_elf(const unsigned char *data);
+
 char *get_arch(const unsigned char *data);
 char *get_endianess(const unsigned char *data);
 char *get_elf_ver(const unsigned char *data);
+
 char *get_os(const unsigned char *data);
 char *get_abi_ver(const unsigned char *data);
 char *get_type(const unsigned char *data);
 char *get_machine(const unsigned char *data);
 char *get_version(const unsigned char *data);
+
 char *get_entry_addr(const unsigned char *data);
 char *get_prog_hdr_offset(const unsigned char *data);
 char *get_sect_hdr_offset(const unsigned char *data);
 char *get_flags(const unsigned char *data);
 char *get_elf_hdr_size(const unsigned char *data);
+
 char *get_prog_hdr_size(const unsigned char *data);
 char *get_prog_hdr_count(const unsigned char *data);
 char *get_sect_hdr_size(const unsigned char *data);

@@ -44,9 +44,9 @@ char *parse_sect_hdr_size(const unsigned char *data);
 char *parse_sect_hdr_count(const unsigned char *data);
 char *parse_sect_hdr_strtable_index(const unsigned char *data);
 
-typedef struct _elf_list_osabi_item {
+typedef struct _encoded_item {
 	int code;
 	char *text;
-} osabi_item;
+} encoded_item;
 
 #endif /* _PARSE_ */

@@ -7,24 +7,46 @@
 #include "../headers/mem.h"
 #include "../headers/const.h"
 
-osabi_item elf_list_osabi[256] = {
-	/* within order */
-	{ELFOSABI_SYSV, "UNIX system V ABI"},
-	{ELFOSABI_HPUX, "HP-UX"},
-	{ELFOSABI_NETBSD, "NetBSD"},
-	{ELFOSABI_GNU, "Object uses GNU ELF extensions"},
-	{ELFOSABI_LINUX, "Compatibility alias"},
-	{ELFOSABI_SOLARIS, "Sun Solaris"},
-	{ELFOSABI_AIX, "IBM AIX"},
-	{ELFOSABI_IRIX, "SGI Irix"},
-	{ELFOSABI_FREEBSD, "FreeBSD"},
-	{ELFOSABI_TRU64, "Compaq TRU64 UNIX"},
-	{ELFOSABI_MODESTO, "Novell Modesto"},
-	{ELFOSABI_OPENBSD, "OpenBSD"},
-	/* without order */
-	{ELFOSABI_ARM_AEABI, " ARM EABI "}, /*64*/
-	{ELFOSABI_ARM, " ARM "}, /*97*/
-	{ELFOSABI_STANDALONE, " Standalone (embedded) application "}, /*255*/
+encoded_item elf_list_machine[259] = {
+	{EM_NONE,        "No machine"},
+	{EM_M32,         "AT&T WE 32100"},
+	{EM_SPARC,       "SUN SPARC"},
+	{EM_386,         "Intel 80386"},
+	{EM_68K,         "Motorola m68k family"},
+	{EM_88K,         "Motorola m88k family"},
+	{EM_IAMCU,       "Intel MCU"},
+	{EM_860,         "Intel 80860"},
+	{EM_MIPS,        "MIPS R3000 big-endian"},
+	{EM_S370,        "IBM System/370"},
+	{EM_MIPS_RS3_LE, "MIPS R3000 little-endian"},
+	{EM_PARISC,      "HPPA"},
+	{EM_VPP500,      "Fujitsu VPP500"},
+	{EM_SPARC32PLUS, "Sun's v8plus"},
+	{EM_960,         "Intel 80960"},
+	{EM_PPC,         "PowerPC"},
+	{EM_PPC64,       "PowerPC 64-bit"},
+	{EM_S390,        "IBM S390"},
+	{EM_SPU,         "IBM SPU/SPC"},
+	{EM_X86_64,      "AMD x86-64 architecture"},
+	{-1, NULL}
+};
+
+encoded_item elf_list_osabi[256] = {
+	{ELFOSABI_SYSV,       "UNIX system V ABI"},
+	{ELFOSABI_HPUX,       "HP-UX"},
+	{ELFOSABI_NETBSD,     "NetBSD"},
+	{ELFOSABI_GNU,        "Object uses GNU ELF extensions"},
+	{ELFOSABI_LINUX,      "Compatibility alias"},
+	{ELFOSABI_SOLARIS,    "Sun Solaris"},
+	{ELFOSABI_AIX,        "IBM AIX"},
+	{ELFOSABI_IRIX,       "SGI Irix"},
+	{ELFOSABI_FREEBSD,    "FreeBSD"},
+	{ELFOSABI_TRU64,      "Compaq TRU64 UNIX"},
+	{ELFOSABI_MODESTO,    "Novell Modesto"},
+	{ELFOSABI_OPENBSD,    "OpenBSD"},
+	{ELFOSABI_ARM_AEABI,  "ARM EABI"},
+	{ELFOSABI_ARM,        "ARM"},
+	{ELFOSABI_STANDALONE, "Standalone (embedded) application"},
 	{-1, NULL}
 };
 
@@ -37,6 +59,7 @@ long _get_bytes(const unsigned char *data, int pos, int incr)
 		value = (long *) &data[pos];
 	else
 		value = (long *) &data[pos + incr]; /* ELFCLASS64 */
+
 
 	return (*value);
 }
@@ -130,32 +153,14 @@ char *get_elf_ver(const unsigned char *data)
 
 char *get_os(const unsigned char *data)
 {
-	/* OS/ABI:    UNIX - System V */
-	switch (data[EI_OSABI])
-	{
-		case (ELFOSABI_SYSV):
-			return ("UNIX System V ABI");
-		case (ELFOSABI_HPUX):
-			return ("HP-UX ABI");
-		case (ELFOSABI_NETBSD):
-			return ("NetBSD ABI");
-		case (ELFOSABI_LINUX):
-			return ("Linux ABI");
-		case (ELFOSABI_SOLARIS):
-			return ("Solaris ABI");
-		case (ELFOSABI_IRIX):
-			return ("IRIX ABI");
-		case (ELFOSABI_FREEBSD):
-			return ("FreeBSD ABI");
-		case (ELFOSABI_TRU64):
-			return ("TRU64 UNIX ABI");
-		case (ELFOSABI_ARM):
-			return ("ARM architecture ABI");
-		case (ELFOSABI_STANDALONE):
-			return ("Stand-alone (embedded) ABI");
-		default:
-			return ("UNIX System V ABI");
-	}
+	static char *text = NULL;
+	int code = data[EI_OSABI];
+
+	for (int i = 0; elf_list_osabi[i].code > -1; i++)
+		if (elf_list_osabi[i].code == code)
+			text = elf_list_osabi[i].text;
+
+	return (text);
 }
 
 char *make_abi_ver(const unsigned char *data)
@@ -171,7 +176,6 @@ char *make_abi_ver(const unsigned char *data)
 
 char *get_type(const unsigned char *data)
 {
-	/* Type:    EXEC (Executable file) */
 	uint16_t type;
 
 	type = data[0x10];
@@ -192,51 +196,14 @@ char *get_type(const unsigned char *data)
 
 char *get_machine(const unsigned char *data)
 {
-	/* Machine:    Advanced Micro Devices X86-64 */
-	uint16_t machine;
+	static char *text = NULL;
+	int machine = data[0x12];
 
-	machine = data[0x12];
-	switch (machine)
-	{
-		case (EM_M32):
-			return ("AT&T WE 32100");
-		case (EM_SPARC):
-			return ("Sun Microsystems SPARC");
-		case (EM_386):
-			return ("Intel 80386");
-		case (EM_68K):
-			return ("Motorola 68000");
-		case (EM_88K):
-			return ("Motorola 88000");
-		case (EM_860):
-			return ("Intel 80860");
-		case (EM_MIPS):
-			return ("MIPS RS3000 (big-endian only)");
-		case (EM_PARISC):
-			return ("HP/PA");
-		case (EM_SPARC32PLUS):
-			return ("SPARC with enhanced instruction set");
-		case (EM_PPC):
-			return ("PowerPC");
-		case (EM_PPC64):
-			return ("PowerPC 64-bit");
-		case (EM_S390):
-			return ("IBM S/390");
-		case (EM_ARM):
-			return ("Advanced RISC Machines");
-		case (EM_SH):
-			return ("Renesas SuperH");
-		case (EM_SPARCV9):
-			return ("SPARC v9 64-bit");
-		case (EM_IA_64):
-			return ("Intel Itanium");
-		case (EM_X86_64):
-			return ("AMD x86-64");
-		case (EM_VAX):
-			return ("DEC Vax");
-		default:
-			return ("Unknown");
-	}
+	for (int i = 0; elf_list_machine[i].code > -1; i++)
+		if (elf_list_machine[i].code == machine)
+			text = elf_list_machine[i].text;
+
+	return (text);
 }
 
 char *get_version(const unsigned char *data)

@@ -50,18 +50,18 @@ encoded_item elf_list_osabi[256] = {
 	{-1, NULL}
 };
 
-long _get_bytes(const unsigned char *data, int pos, int incr)
+void *_get_bytes(const unsigned char *data, int pos, int incr)
 {
 	int arch_class = 0x04;
 	long *value;
 
 	if (data[arch_class] == ELFCLASS32)
-		value = (long *) &data[pos];
+		value = (void *) &data[pos];
 	else
-		value = (long *) &data[pos + incr]; /* ELFCLASS64 */
+		value = (void *) &data[pos + incr]; /* ELFCLASS64 */
 
 
-	return (*value);
+	return (value);
 }
 
 char *_get_hex_str(const unsigned char *data, int pos, int incr, int bytes)
@@ -284,14 +284,14 @@ char *make_sect_hdr_offset(const unsigned char *data)
 
 char *make_flags(const unsigned char *data)
 {
-	uint32_t flags;
+	uint32_t *flags;
 	char *mailback;
 
 	flags = _get_bytes(data, 0x24, 6);
 
 	mem_alloc((void **) &mailback, BYTES, 8);
 	if (flags)
-		sprintf(mailback, "%#x", flags);
+		sprintf(mailback, "%#x", *flags);
 	else
 		sprintf(mailback, "0x0");
 
@@ -300,66 +300,66 @@ char *make_flags(const unsigned char *data)
 
 char *parse_elf_hdr_size(const unsigned char *data)
 {
-	uint16_t size;
+	uint16_t *size;
 	char *mailback;
 
 	size = _get_bytes(data, 0x28, 12);
-	mailback = create_text__int_str(size, " (bytes)", 32);
+	mailback = create_text__int_str(*size, " (bytes)", 32);
 
 	return (mailback);
 }
 
 char *parse_prog_hdr_size(const unsigned char *data)
 {
-	uint16_t size;
+	uint16_t *size;
 	char *mailback;
 
 	size = _get_bytes(data, 0x2a, 12);
-	mailback = create_text__int_str(size, " (bytes)", 32);
+	mailback = create_text__int_str(*size, " (bytes)", 32);
 
 	return (mailback);
 }
 
 char *parse_prog_hdr_count(const unsigned char *data)
 {
-	uint16_t num;
+	uint16_t *num;
 	char *mailback;
 
 	num = _get_bytes(data, 0x2c, 12);
-	mailback = create_text__int_str(num, NULL, 16);
+	mailback = create_text__int_str(*num, NULL, 16);
 
 	return (mailback);
 }
 
 char *parse_sect_hdr_size(const unsigned char *data)
 {
-	uint16_t size;
+	uint16_t *size;
 	char *mailback;
 
 	size = _get_bytes(data, 0x2e, 12);
-	mailback = create_text__int_str(size, " (bytes)", 16);
+	mailback = create_text__int_str(*size, " (bytes)", 16);
 
 	return (mailback);
 }
 
 char *parse_sect_hdr_count(const unsigned char *data)
 {
-	uint16_t num;
+	uint16_t *num;
 	char *mailback;
 
 	num = _get_bytes(data, 0x30, 12);
-	mailback = create_text__int_str(num, NULL, 16);
+	mailback = create_text__int_str(*num, NULL, 16);
 
 	return (mailback);
 }
 
 char *parse_sect_hdr_strtable_index(const unsigned char *data)
 {
-	uint16_t index;
+	uint16_t *index;
 	char *mailback;
 
 	index = _get_bytes(data, 0x32, 12);
-	mailback = create_text__int_str(index, NULL, 16);
+	mailback = create_text__int_str(*index, NULL, 16);
 
 	return (mailback);
 }

@@ -2,7 +2,7 @@
 #include "../headers/parse.h"
 #include "../headers/mem.h"
 
-encoded_item elf_list_machine[259] = {
+static encoded_item elf_list_machine[259] = {
 	{EM_NONE,        "No machine"},
 	{EM_M32,         "AT&T WE 32100"},
 	{EM_SPARC,       "SUN SPARC"},
@@ -26,7 +26,7 @@ encoded_item elf_list_machine[259] = {
 	{-1, NULL}
 };
 
-encoded_item elf_list_osabi[256] = {
+static encoded_item elf_list_osabi[256] = {
 	{ELFOSABI_SYSV,       "UNIX system V ABI"},
 	{ELFOSABI_HPUX,       "HP-UX"},
 	{ELFOSABI_NETBSD,     "NetBSD"},

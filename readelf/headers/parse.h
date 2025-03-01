@@ -48,7 +48,8 @@ char *get_sect_hdr_size(const unsigned char *data);
 char *get_sect_hdr_count(const unsigned char *data);
 char *get_sect_hdr_strtable_index(const unsigned char *data);
 
-typedef struct _encoded_item {
+typedef struct _encoded_item
+{
 	int code;
 	char *text;
 } encoded_item;

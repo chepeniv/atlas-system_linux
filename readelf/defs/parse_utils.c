@@ -27,7 +27,7 @@ char *get_hex_str(const unsigned char *data, int pos, int incr, int bytes)
 		incr = 0;
 
 	mem_alloc((void **) &mailback, sizeof(char), 128);
-	for (int b = 0; b < bytes; b++ )
+	for (int b = 0; b < bytes; b++)
 		sprintf(&mailback[b * 2], "%02x", data[pos + incr + b]);
 
 	return (mailback);

@@ -10,7 +10,8 @@
  * "readelf: Warning: Nothing to do.\n[readelf --help]" (no file given)
  * "readelf: Error: 'doesntexist': No such file"
  * "readelf: Error: Input file 'noread' is not readable"
- * "readelf: Error: Not an ELF file - it has the wrong magic bytes at the start"
+ * "readelf: Error:
+ *      Not an ELF file - it has the wrong magic bytes at the start"
  */
 
 int err_print(int code, char *procname, char *item)

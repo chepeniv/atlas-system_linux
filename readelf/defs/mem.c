@@ -32,5 +32,12 @@ char *setup_str_mem(char *text, int len)
 	mem_alloc((void **) &mailback, sizeof(char), len);
 	sprintf(mailback, "%s", text);
 
-	return(mailback);
+	return (mailback);
+}
+
+void free_text_array(char **text)
+{
+	for (int i = 0; text[i]; i++)
+		free(text[i]);
+	free(text);
 }

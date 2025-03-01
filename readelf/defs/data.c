@@ -98,12 +98,6 @@ int print_data(char **fields, char **entries)
  *   Section header string table index: 28
  * (next filename or error message)
  */
-void free_text_array(char **text)
-{
-	for (int i = 0; text[i]; i++)
-		free(text[i]);
-	free(text);
-}
 
 int process_header_data(unsigned char *raw)
 {

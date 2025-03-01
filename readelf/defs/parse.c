@@ -72,7 +72,7 @@ char *_get_hex_str(const unsigned char *data, int pos, int incr, int bytes)
 	if (data[arch_class] == ELFCLASS32)
 		incr = 0;
 
-	mem_alloc((void **) &mailback, BYTES, 128);
+	mem_alloc((void **) &mailback, sizeof(char), 128);
 	for (int b = 0; b < bytes; b++ )
 		sprintf(&mailback[b * 2], "%02x", data[pos + incr + b]);
 
@@ -92,7 +92,7 @@ static char *create_text__int_str(long value, char *append, int limit)
 {
 	char *mailback;
 
-	mem_alloc((void **) &mailback, BYTES, limit);
+	mem_alloc((void **) &mailback, sizeof(char), limit);
 	sprintf(mailback, "%ld", value);
 	if (append)
 		strcat(mailback, append);
@@ -113,62 +113,88 @@ int is_elf(const unsigned char *data)
 
 char *get_arch(const unsigned char *data)
 {
-	/* Class:    ELF64 */
-	switch (data[EI_CLASS]) /* byte index: [4] */
+	char *arch, *mailback;
+
+	switch (data[EI_CLASS])
 	{
 		case (ELFCLASS32):
-			return ("ELF32");
+			arch = "ELF32";
+			break;
 		case (ELFCLASS64):
-			return ("ELF64");
+			arch = "ELF64";
+			break;
 		default:
-			return ("invalid");
+			arch = "invalid";
 	}
+
+	mem_alloc((void **) &mailback, sizeof(char), 32);
+	sprintf(mailback, "%s", arch);
+
+	return (mailback);
 }
 
 char *get_endianess(const unsigned char *data)
 {
-	/* Data:    2's complement, little endian */
+	char *text, *mailback;
+
 	switch (data[EI_DATA]) /* byte index: [5] */
 	{
 		case (ELFDATA2LSB):
-			return ("2's compliment, little-endian");
+			text = "2's compliment, little-endian";
+			break;
 		case (ELFDATA2MSB):
-			return ("2's compliment, big-endian");
+			text = "2's compliment, big-endian";
+			break;
 		default:
-			return ("unknown");
+			text = "unknown";
 	}
+
+	mem_alloc((void **) &mailback, sizeof(char), 64);
+	sprintf(mailback, "%s", text);
+
+	return (mailback);
 }
 
 char *get_elf_ver(const unsigned char *data)
 {
-	/* Version:    1 (current) */
+	char *text, *mailback;
+
 	switch (data[EI_VERSION]) /* byte index: [6] */
 	{
 		case (EV_CURRENT):
-			return ("1 (current)");
+			text = "1 (current)";
+			break;
 		default:
-			return ("invalid");
+			text = "invalid";
 	}
+
+	mem_alloc((void **) &mailback, sizeof(char), 32);
+	sprintf(mailback, "%s", text);
+
+	return (mailback);
 }
 
 char *get_os(const unsigned char *data)
 {
-	static char *text = NULL;
+	char *text = NULL, *mailback;
 	int code = data[EI_OSABI];
 
 	for (int i = 0; elf_list_osabi[i].code > -1; i++)
 		if (elf_list_osabi[i].code == code)
 			text = elf_list_osabi[i].text;
 
-	return (text);
+	mem_alloc((void **) &mailback, sizeof(char), 128);
+	sprintf(mailback, "%s", text);
+
+	return (mailback);
 }
 
-char *make_abi_ver(const unsigned char *data)
+char *get_abi_ver(const unsigned char *data)
 {
 	/* ABI Version:    0 */
 	char *mailback;
 
-	mem_alloc((void **) &mailback, BYTES, 4);
+	mem_alloc((void **) &mailback, sizeof(char), 4);
 	sprintf(mailback, "%d", data[EI_ABIVERSION]);
 
 	return (mailback);
@@ -177,37 +203,51 @@ char *make_abi_ver(const unsigned char *data)
 char *get_type(const unsigned char *data)
 {
 	uint16_t type;
+	char *text, *mailback;
 
 	type = data[0x10];
 	switch (type)
 	{
 		case (ET_REL):
-			return ("");
+			text = "";
+			break;
 		case (ET_EXEC):
-			return ("EXEC (Executable file)");
+			text = "EXEC (Executable file)";
+			break;
 		case (ET_DYN):
-			return ("DYN (Position-Independent Executable file)");
+			text = "DYN (Position-Independent Executable file)";
+			break;
 		case (ET_CORE):
-			return ("");
+			text = "";
+			break;
 		default:
-			return ("Unknown");
+			text = "Unknown";
 	}
+
+	mem_alloc((void **) &mailback, sizeof(char), 64);
+	sprintf(mailback, "%s", text);
+
+	return (mailback);
 }
 
 char *get_machine(const unsigned char *data)
 {
-	static char *text = NULL;
+	char *text = NULL, *mailback;
 	int machine = data[0x12];
 
 	for (int i = 0; elf_list_machine[i].code > -1; i++)
 		if (elf_list_machine[i].code == machine)
 			text = elf_list_machine[i].text;
 
-	return (text);
+	mem_alloc((void **) &mailback, sizeof(char), 128);
+	sprintf(mailback, "%s", text);
+
+	return (mailback);
 }
 
 char *get_version(const unsigned char *data)
 {
+	char *text, *mailback;
 	uint32_t version;
 
 	/* Version:    0x1 */
@@ -215,13 +255,19 @@ char *get_version(const unsigned char *data)
 	switch (version)
 	{
 		case (EV_CURRENT):
-			return ("0x1");
+			text = "0x1";
+			break;
 		default:
-			return ("Invalid");
+			text = "Invalid";
 	}
+
+	mem_alloc((void **) &mailback, sizeof(char), 32);
+	sprintf(mailback, "%s", text);
+
+	return (mailback);
 }
 
-char *make_entry_addr(const unsigned char *data)
+char *get_entry_addr(const unsigned char *data)
 {
 	/* ElfN_Addr e_entry; */
 	char *mailback;
@@ -233,13 +279,13 @@ char *make_entry_addr(const unsigned char *data)
 	else
 		entry = (long int *) &data[0x18];
 
-	mem_alloc((void **) &mailback, BYTES, 16);
+	mem_alloc((void **) &mailback, sizeof(char), 16);
 	sprintf(mailback, "%#lx", *entry);
 
 	return (mailback);
 }
 
-char *make_prog_hdr_offset(const unsigned char *data)
+char *get_prog_hdr_offset(const unsigned char *data)
 {
 	/* ElfN_Off e_phoff; */
 	long int *offset, offset32;
@@ -260,7 +306,7 @@ char *make_prog_hdr_offset(const unsigned char *data)
 	return (mailback);
 }
 
-char *make_sect_hdr_offset(const unsigned char *data)
+char *get_sect_hdr_offset(const unsigned char *data)
 {
 	/* /1* ElfN_Off e_shoff; *1/ */
 	long int *offset, offset32;
@@ -282,14 +328,14 @@ char *make_sect_hdr_offset(const unsigned char *data)
 	return (mailback);
 }
 
-char *make_flags(const unsigned char *data)
+char *get_flags(const unsigned char *data)
 {
 	uint32_t *flags;
 	char *mailback;
 
 	flags = _get_bytes(data, 0x24, 6);
 
-	mem_alloc((void **) &mailback, BYTES, 8);
+	mem_alloc((void **) &mailback, sizeof(char), 8);
 	if (flags)
 		sprintf(mailback, "%#x", *flags);
 	else
@@ -298,7 +344,7 @@ char *make_flags(const unsigned char *data)
 	return (mailback);
 }
 
-char *parse_elf_hdr_size(const unsigned char *data)
+char *get_elf_hdr_size(const unsigned char *data)
 {
 	uint16_t *size;
 	char *mailback;
@@ -309,7 +355,7 @@ char *parse_elf_hdr_size(const unsigned char *data)
 	return (mailback);
 }
 
-char *parse_prog_hdr_size(const unsigned char *data)
+char *get_prog_hdr_size(const unsigned char *data)
 {
 	uint16_t *size;
 	char *mailback;
@@ -320,7 +366,7 @@ char *parse_prog_hdr_size(const unsigned char *data)
 	return (mailback);
 }
 
-char *parse_prog_hdr_count(const unsigned char *data)
+char *get_prog_hdr_count(const unsigned char *data)
 {
 	uint16_t *num;
 	char *mailback;
@@ -331,7 +377,7 @@ char *parse_prog_hdr_count(const unsigned char *data)
 	return (mailback);
 }
 
-char *parse_sect_hdr_size(const unsigned char *data)
+char *get_sect_hdr_size(const unsigned char *data)
 {
 	uint16_t *size;
 	char *mailback;
@@ -342,7 +388,7 @@ char *parse_sect_hdr_size(const unsigned char *data)
 	return (mailback);
 }
 
-char *parse_sect_hdr_count(const unsigned char *data)
+char *get_sect_hdr_count(const unsigned char *data)
 {
 	uint16_t *num;
 	char *mailback;
@@ -353,7 +399,7 @@ char *parse_sect_hdr_count(const unsigned char *data)
 	return (mailback);
 }
 
-char *parse_sect_hdr_strtable_index(const unsigned char *data)
+char *get_sect_hdr_strtable_index(const unsigned char *data)
 {
 	uint16_t *index;
 	char *mailback;

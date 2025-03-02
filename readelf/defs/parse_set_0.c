@@ -30,16 +30,16 @@ char *get_endianess(const unsigned char *data)
 	switch (data[EI_DATA]) /* byte index: [5] */
 	{
 		case (ELFDATA2LSB):
-			text = "2's compliment, little-endian";
+			text = "2's compliment, little endian";
 			break;
 		case (ELFDATA2MSB):
-			text = "2's compliment, big-endian";
+			text = "2's compliment, big endian";
 			break;
 		default:
 			text = "unknown";
 	}
 
-	mailback = setup_str_mem(text, 32);
+	mailback = setup_str_mem(text, 64);
 
 	return (mailback);
 }
@@ -97,7 +97,7 @@ char *get_type(const unsigned char *data)
 			text = "Unknown";
 	}
 
-	mailback = setup_str_mem(text, 64);
+	mailback = setup_str_mem(text, 128);
 
 	return (mailback);
 }

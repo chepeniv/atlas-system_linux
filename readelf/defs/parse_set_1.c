@@ -32,7 +32,7 @@ static encoded_item elf_list_osabi[256] = {
 	{ELFOSABI_NETBSD,     "NetBSD"},
 	{ELFOSABI_GNU,        "Object uses GNU ELF extensions"},
 	{ELFOSABI_LINUX,      "Compatibility alias"},
-	{ELFOSABI_SOLARIS,    "Sun Solaris"},
+	{ELFOSABI_SOLARIS,    "UNIX - Solaris"},
 	{ELFOSABI_AIX,        "IBM AIX"},
 	{ELFOSABI_IRIX,       "SGI Irix"},
 	{ELFOSABI_FREEBSD,    "FreeBSD"},

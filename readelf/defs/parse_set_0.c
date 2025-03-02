@@ -75,13 +75,11 @@ char *get_abi_ver(const unsigned char *data)
 
 char *get_type(const unsigned char *data)
 {
+	int shift;
 	uint16_t type;
-	int shift = 0;
 	char *text, *mailback;
 
-	if (data[0x05] == 2)
-		shift = sizeof(uint16_t) / 2;
-
+	shift = get_endian_shift(data);
 	type =  data[0x10 + shift];
 	switch (type)
 	{
@@ -105,6 +103,5 @@ char *get_type(const unsigned char *data)
 	}
 
 	mailback = setup_str_mem(text, 64);
-
 	return (mailback);
 }

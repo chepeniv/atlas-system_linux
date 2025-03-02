@@ -62,8 +62,11 @@ char *get_os(const unsigned char *data)
 char *get_machine(const unsigned char *data)
 {
 	char *text = NULL, *mailback;
-	int machine = data[0x12];
+	uint16_t machine;
+	int shift;
 
+	shift = get_endian_shift(data);
+	machine = data[0x12 + shift];
 	for (int i = 0; elf_list_machine[i].code > -1; i++)
 		if (elf_list_machine[i].code == machine)
 			text = elf_list_machine[i].text;
@@ -76,11 +79,14 @@ char *get_machine(const unsigned char *data)
 char *get_version(const unsigned char *data)
 {
 	char *text, *mailback;
-	uint32_t version;
+	uint32_t *version;
 
 	/* Version:    0x1 */
-	version = data[0x14];
-	switch (version)
+	/* version = data[0x14 + shift]; */
+	version = get_bytes(data, 0x14, 0, sizeof(uint32_t));
+	/* printf("version: %#x\n", *version); */
+	/* printf("version: %#x\n", EV_CURRENT); */
+	switch (*version)
 	{
 		case (EV_CURRENT):
 			text = "0x1";

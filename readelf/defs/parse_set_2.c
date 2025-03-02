@@ -7,12 +7,14 @@ char *get_entry_addr(const unsigned char *data)
 	Elf32_Addr entry32;
 	Elf64_Addr entry;
 	char *mailback;
+	int shift;
 
-	entry32 = data[0x18];
+	shift = get_endian_shift(data);
+	entry32 = data[0x18 + shift];
 	if (data[0x04] == ELFCLASS32)
 		entry = entry32;
 	else
-		entry = data[0x18];
+		entry = data[0x18 + shift];
 
 	mem_alloc((void **) &mailback, sizeof(char), 64);
 	sprintf(mailback, "%#lx", entry);
@@ -25,15 +27,18 @@ char *get_prog_hdr_offset(const unsigned char *data)
 	Elf64_Off offset;
 	Elf32_Off offset32;
 	char *mailback;
+	int shift;
+
+	shift = get_endian_shift(data);
 
 	if (data[0x04] == ELFCLASS32)
 	{
-		offset32 = data[0x1c];
+		offset32 = data[0x1c + shift];
 		offset =  offset32;
 	}
 	else
 	{   /* ELFCLASS64 */
-		offset =  data[0x20];
+		offset =  data[0x20 + shift];
 	}
 
 	mailback = create_text__int_str(offset, " (bytes into file)", 64);
@@ -68,9 +73,9 @@ char *get_flags(const unsigned char *data)
 	uint32_t *flags;
 	char *mailback;
 
-	flags = get_bytes(data, 0x24, 6);
-
+	flags = get_bytes(data, 0x24, 12, sizeof(uint32_t));
 	mem_alloc((void **) &mailback, sizeof(char), 32);
+
 	if (flags)
 		sprintf(mailback, "%#x", *flags);
 	else
@@ -81,11 +86,6 @@ char *get_flags(const unsigned char *data)
 
 char *get_elf_hdr_size(const unsigned char *data)
 {
-	uint16_t *size;
-	char *mailback;
-
-	size = get_bytes(data, 0x28, 12);
-	mailback = create_text__int_str(*size, " (bytes)", 32);
-
+	char *mailback = make_uint16_text(data, 0x28, 12, " (bytes)");
 	return (mailback);
 }

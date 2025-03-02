@@ -76,13 +76,20 @@ char *get_abi_ver(const unsigned char *data)
 char *get_type(const unsigned char *data)
 {
 	uint16_t type;
+	int shift = 0;
 	char *text, *mailback;
 
-	type = data[0x10];
+	if (data[0x05] == 2)
+		shift = sizeof(uint16_t) / 2;
+
+	type =  data[0x10 + shift];
 	switch (type)
 	{
+		case (ET_NONE):
+			text = "No file type";
+			break;
 		case (ET_REL):
-			text = "";
+			text = "REL (Relocatable file)";
 			break;
 		case (ET_EXEC):
 			text = "EXEC (Executable file)";
@@ -91,13 +98,13 @@ char *get_type(const unsigned char *data)
 			text = "DYN (Position-Independent Executable file)";
 			break;
 		case (ET_CORE):
-			text = "";
+			text = "Core file";
 			break;
 		default:
 			text = "Unknown";
 	}
 
-	mailback = setup_str_mem(text, 128);
+	mailback = setup_str_mem(text, 64);
 
 	return (mailback);
 }

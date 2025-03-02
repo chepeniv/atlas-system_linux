@@ -1,5 +1,7 @@
 #include "../headers/print.h"
+#include "../headers/parse_utils.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int print_hex(unsigned char *data, int len)
 {
@@ -12,4 +14,14 @@ int print_hex(unsigned char *data, int len)
 	}
 
 	return (len);
+}
+
+void print_extracted_hex(
+const unsigned char *data, int pos, int incr, int bytes)
+{
+	char *test;
+
+	test = get_hex_str(data, pos, incr, bytes);
+	printf("hex data extracted: %s\n", test);
+	free(test);
 }

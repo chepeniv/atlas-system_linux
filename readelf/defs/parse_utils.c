@@ -33,16 +33,6 @@ char *get_hex_str(const unsigned char *data, int pos, int incr, int bytes)
 	return (mailback);
 }
 
-void print_extracted_hex(
-const unsigned char *data, int pos, int incr, int bytes)
-{
-	char *test;
-
-	test = get_hex_str(data, pos, incr, bytes);
-	printf("hex data extracted: %s\n", test);
-	free(test);
-}
-
 char *create_text__int_str(long value, char *append, int limit)
 {
 	char *mailback;
@@ -64,4 +54,12 @@ int is_elf(const unsigned char *data)
 			return (0);
 
 	return (1);
+}
+
+int is_arch_32(const unsigned char *data)
+{
+	if (data[0x04] == 1)
+		return (1);
+
+	return (0);
 }

@@ -30,6 +30,12 @@
  * only system (3) and exec* (2/3) not allowed
  */
 
+/*
+ * //// TEST CASES ////
+ * salaris32, sortix32, sparcbigendian32, ubuntu64, jpeg.mod, python.obj
+ * libperl.so.5.18, sftp-server, vgpreload_memcheck-x86-linux.so, netbsd3:w
+ */
+
 int main(int c, char **argv)
 {
 	int readlen, hlen = 64;

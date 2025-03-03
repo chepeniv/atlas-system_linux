@@ -75,11 +75,12 @@ char *get_abi_ver(const unsigned char *data)
 
 char *get_type(const unsigned char *data)
 {
-	uint16_t type;
+	uint16_t *pos, value;
 	char *text, *mailback;
 
-	type =  data[0x10];
-	switch (type)
+	pos = (uint16_t *) &data[0x10];
+	value = get_reverse(data, *pos, sizeof(uint16_t));
+	switch (value)
 	{
 		case (ET_NONE):
 			text = "No file type";

@@ -2,10 +2,16 @@
 #include "../headers/parse.h"
 #include "../headers/mem.h"
 
+/*
+ * //// TEST CASES ////
+ * solaris32, sortix32, sparcbigendian32, ubuntu64, jpeg.mod, python.obj
+ * libperl.so.5.18, sftp-server, vgpreload_memcheck-x86-linux.so, netbsd32
+ */
+
 static encoded_item elf_list_machine[259] = {
 	{EM_NONE,        "No machine"},
 	{EM_M32,         "AT&T WE 32100"},
-	{EM_SPARC,       "SUN SPARC"},
+	{EM_SPARC,       "Sparc"},
 	{EM_386,         "Intel 80386"},
 	{EM_68K,         "Motorola m68k family"},
 	{EM_88K,         "Motorola m88k family"},
@@ -27,7 +33,7 @@ static encoded_item elf_list_machine[259] = {
 };
 
 static encoded_item elf_list_osabi[256] = {
-	{ELFOSABI_SYSV,       "UNIX system V"},
+	{ELFOSABI_SYSV,       "UNIX - System V"},
 	{ELFOSABI_HPUX,       "HP-UX"},
 	{ELFOSABI_NETBSD,     "NetBSD"},
 	{ELFOSABI_GNU,        "Object uses GNU ELF extensions"},
@@ -64,7 +70,8 @@ char *get_machine(const unsigned char *data)
 	char *text = NULL, *mailback;
 	uint16_t machine;
 
-	machine = data[0x12];
+	machine = *(uint16_t *) &data[0x12];
+	machine = get_reverse(data, machine, sizeof(uint16_t));
 	for (int i = 0; elf_list_machine[i].code > -1; i++)
 		if (elf_list_machine[i].code == machine)
 			text = elf_list_machine[i].text;
@@ -79,11 +86,7 @@ char *get_version(const unsigned char *data)
 	char *text, *mailback;
 	uint32_t *version;
 
-	/* Version:    0x1 */
-	/* version = data[0x14 + shift]; */
 	version = (uint32_t *) get_bytes(data, 0x14, 0, sizeof(uint32_t));
-	/* printf("version: %#x\n", *version); */
-	/* printf("version: %#x\n", EV_CURRENT); */
 	switch (*version)
 	{
 		case (EV_CURRENT):

@@ -1,7 +1,7 @@
 #include "../headers/parse.h"
 #include "../headers/parse_utils.h"
 #include "../headers/mem.h"
-#include "../headers/print.h"
+#include "../headers/text.h"
 
 char *get_entry_addr(const unsigned char *data)
 {

@@ -1,5 +1,5 @@
-#ifndef _PRINT_
-#define _PRINT_
+#ifndef _TEXT_
+#define _TEXT_
 
 int print_hex(unsigned char *data, int size);
 char *get_hex_str(const unsigned char *data, int pos, int incr, int bytes);
@@ -11,4 +11,4 @@ void print_extracted_hex(
 	const unsigned char *data,
 	int pos, int incr, int bytes);
 
-#endif /* _PRINT_ */
+#endif /* _TEXT_ */

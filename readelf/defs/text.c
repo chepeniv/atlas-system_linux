@@ -1,4 +1,4 @@
-#include "../headers/print.h"
+#include "../headers/text.h"
 #include "../headers/mem.h"
 #include "../headers/parse_utils.h"
 #include <stdio.h>

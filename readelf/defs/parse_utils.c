@@ -29,8 +29,9 @@ int is_elf(const unsigned char *data)
 
 	return (1);
 }
+
 uint64_t get_reverse(
-	const unsigned char *data, uint64_t value, uint64_t typesize)
+const unsigned char *data, uint64_t value, uint64_t typesize)
 {
 	uint64_t rev = value;
 
@@ -42,21 +43,18 @@ uint64_t get_reverse(
 
 uint64_t *get_bytes(const unsigned char *data, int pos, int incr, int typesize)
 {
-	uint64_t *loc, val;
-
-	(void) typesize;
+	uint64_t *loc;
+	static uint64_t val;
 
 	if (data[EI_CLASS] == ELFCLASS32)
 		loc = (uint64_t *) &data[pos];
-	else
-		loc = (uint64_t *) &data[pos + incr]; /* ELFCLASS64 */
+	else /* ELFCLASS64 */
+		loc = (uint64_t *) &data[pos + incr];
 
-	/* if (data[EI_DATA] == ELFDATA2MSB) */
-	/* 	val = bitwise_reverse(*loc, sizeof(uint64_t)); */
+	val = *loc;
+	val = get_reverse(data, val, typesize);
 
-	loc = &val;
-
-	return (loc);
+	return (&val);
 }
 
 char *make_uint16_text(

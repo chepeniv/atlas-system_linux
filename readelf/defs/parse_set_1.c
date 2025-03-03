@@ -22,7 +22,7 @@ static encoded_item elf_list_machine[259] = {
 	{EM_MIPS_RS3_LE, "MIPS R3000 little-endian"},
 	{EM_PARISC,      "HPPA"},
 	{EM_VPP500,      "Fujitsu VPP500"},
-	{EM_SPARC32PLUS, "Sun's v8plus"},
+	{EM_SPARC32PLUS, "Sparc v8+"},
 	{EM_960,         "Intel 80960"},
 	{EM_PPC,         "PowerPC"},
 	{EM_PPC64,       "PowerPC 64-bit"},
@@ -53,14 +53,18 @@ static encoded_item elf_list_osabi[256] = {
 
 char *get_os(const unsigned char *data)
 {
-	char *text = NULL, *mailback;
+	char *mailback, *text = NULL;
 	int code = data[EI_OSABI];
 
 	for (int i = 0; elf_list_osabi[i].code > -1; i++)
 		if (elf_list_osabi[i].code == code)
 			text = elf_list_osabi[i].text;
 
-	mailback = setup_str_mem(text, 128);
+	mem_alloc((void **) &mailback, 1, 64);
+	if (!text)
+		sprintf(mailback, "<unknown: %d>", code);
+	else
+		sprintf(mailback, "%s", text);
 
 	return (mailback);
 }

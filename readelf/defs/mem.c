@@ -9,6 +9,7 @@
  *
  * Return: 0
  */
+
 int mem_alloc(void **buff, int size, int len)
 {
 	*buff = malloc(size * len);

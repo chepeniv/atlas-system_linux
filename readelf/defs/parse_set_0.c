@@ -75,12 +75,10 @@ char *get_abi_ver(const unsigned char *data)
 
 char *get_type(const unsigned char *data)
 {
-	int shift;
 	uint16_t type;
 	char *text, *mailback;
 
-	shift = get_endian_shift(data);
-	type =  data[0x10 + shift];
+	type =  data[0x10];
 	switch (type)
 	{
 		case (ET_NONE):

@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <string.h>
 #include "../headers/parse.h"
 #include "../headers/parse_utils.h"
@@ -30,27 +29,34 @@ int is_elf(const unsigned char *data)
 
 	return (1);
 }
-
-int get_endian_shift(const unsigned char *data)
+uint64_t get_reverse(
+	const unsigned char *data, uint64_t value, uint64_t typesize)
 {
+	uint64_t rev = value;
+
 	if (data[EI_DATA] == ELFDATA2MSB)
-		return (1);
-	return (0);
+		rev = bitwise_reverse(value, typesize);
+
+	return (rev);
 }
 
-void *get_bytes(const unsigned char *data, int pos, int incr, int typesize)
+uint64_t *get_bytes(const unsigned char *data, int pos, int incr, int typesize)
 {
-	void *value;
-	int shift = 0;
+	uint64_t *loc, val;
 
 	(void) typesize;
 
 	if (data[EI_CLASS] == ELFCLASS32)
-		value = (void *) &data[pos];
+		loc = (uint64_t *) &data[pos];
 	else
-		value = (void *) &data[pos + incr]; /* ELFCLASS64 */
+		loc = (uint64_t *) &data[pos + incr]; /* ELFCLASS64 */
 
-	return (value);
+	/* if (data[EI_DATA] == ELFDATA2MSB) */
+	/* 	val = bitwise_reverse(*loc, sizeof(uint64_t)); */
+
+	loc = &val;
+
+	return (loc);
 }
 
 char *make_uint16_text(
@@ -60,7 +66,7 @@ int pos, int incr, char *append)
 	uint16_t *num;
 	char *mailback;
 
-	num = get_bytes(data, pos, incr, sizeof(uint16_t));
+	num = (uint16_t *) get_bytes(data, pos, incr, sizeof(uint16_t));
 	mailback = create_text__int_str(*num, append, 32);
 
 	return (mailback);

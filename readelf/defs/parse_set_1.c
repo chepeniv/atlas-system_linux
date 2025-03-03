@@ -28,7 +28,7 @@ static encoded_item elf_list_machine[259] = {
 	{EM_PPC64,       "PowerPC 64-bit"},
 	{EM_S390,        "IBM S390"},
 	{EM_SPU,         "IBM SPU/SPC"},
-	{EM_X86_64,      "AMD x86-64 architecture"},
+	{EM_X86_64,      "Advanced Micro Devices X86-64"},
 	{-1, NULL}
 };
 

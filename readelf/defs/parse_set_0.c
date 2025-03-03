@@ -92,7 +92,7 @@ char *get_type(const unsigned char *data)
 			text = "EXEC (Executable file)";
 			break;
 		case (ET_DYN):
-			text = "DYN (Position-Independent Executable file)";
+			text = "DYN (Shared object file)";
 			break;
 		case (ET_CORE):
 			text = "Core file";

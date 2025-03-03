@@ -27,7 +27,11 @@ char *get_entry_addr(const unsigned char *data)
 	value = get_reverse(data, value, width);
 
 	mem_alloc((void **) &mailback, sizeof(char), 64);
-	sprintf(mailback, "%#lx", value);
+
+	if (value)
+		sprintf(mailback, "%#lx", value);
+	else
+		sprintf(mailback, "0x0");
 
 	return (mailback);
 }

@@ -1,31 +1,7 @@
 #include "../headers/parse.h"
 #include "../headers/parse_utils.h"
 #include "../headers/mem.h"
-
-static Elf64_Off get_hdr_offset(
-const unsigned char *data, uint16_t pos, uint16_t incr)
-{
-	Elf32_Off *offset32;
-	Elf64_Off *offset64;
-	Elf64_Off value;
-	unsigned int width;
-
-	if (data[EI_CLASS] == ELFCLASS32)
-	{
-		width = sizeof(Elf32_Off);
-		offset32 = (Elf32_Off *) &data[pos];
-		value = *offset32;
-	}
-	else /* ELFCLASS64 */
-	{
-		width = sizeof(Elf64_Off);
-		offset64 = (Elf64_Off *) &data[pos + incr];
-		value = *offset64;
-	}
-	value = get_reverse(data, value, width);
-
-	return (value);
-}
+#include "../headers/print.h"
 
 char *get_entry_addr(const unsigned char *data)
 {
@@ -97,5 +73,6 @@ char *get_flags(const unsigned char *data)
 char *get_elf_hdr_size(const unsigned char *data)
 {
 	char *mailback = make_uint16_text(data, 0x28, 12, " (bytes)");
+
 	return (mailback);
 }

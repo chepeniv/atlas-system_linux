@@ -3,6 +3,17 @@
 #include "../headers/parse_utils.h"
 #include "../headers/mem.h"
 
+int is_elf(const unsigned char *data)
+{
+	unsigned char elfmagic[4] = { 0x7f, 0x45, 0x4c, 0x46 };
+
+	for (int i = 0; i < 4; i++)
+		if (elfmagic[i] != data[i])
+			return (0);
+
+	return (1);
+}
+
 uint64_t bitwise_reverse(uint64_t origin, uint64_t len)
 {
 	uint64_t l_pos, r_pos, shift, rev = 0;
@@ -17,17 +28,6 @@ uint64_t bitwise_reverse(uint64_t origin, uint64_t len)
 	}
 
 	return (rev);
-}
-
-int is_elf(const unsigned char *data)
-{
-	unsigned char elfmagic[4] = { 0x7f, 0x45, 0x4c, 0x46 };
-
-	for (int i = 0; i < 4; i++)
-		if (elfmagic[i] != data[i])
-			return (0);
-
-	return (1);
 }
 
 uint64_t get_reverse(
@@ -57,42 +57,27 @@ uint64_t *get_bytes(const unsigned char *data, int pos, int incr, int typesize)
 	return (&val);
 }
 
-char *make_uint16_text(
-const unsigned char *data,
-int pos, int incr, char *append)
+Elf64_Off get_hdr_offset(
+const unsigned char *data, uint16_t pos, uint16_t incr)
 {
-	uint16_t *num;
-	char *mailback;
+	Elf32_Off *offset32;
+	Elf64_Off *offset64;
+	Elf64_Off value;
+	unsigned int width;
 
-	num = (uint16_t *) get_bytes(data, pos, incr, sizeof(uint16_t));
-	mailback = create_text__int_str(*num, append, 32);
+	if (data[EI_CLASS] == ELFCLASS32)
+	{
+		width = sizeof(Elf32_Off);
+		offset32 = (Elf32_Off *) &data[pos];
+		value = *offset32;
+	}
+	else /* ELFCLASS64 */
+	{
+		width = sizeof(Elf64_Off);
+		offset64 = (Elf64_Off *) &data[pos + incr];
+		value = *offset64;
+	}
+	value = get_reverse(data, value, width);
 
-	return (mailback);
-}
-
-char *get_hex_str(const unsigned char *data, int pos, int incr, int bytes)
-{
-	int arch_class = 0x04;
-	char *mailback;
-
-	if (data[arch_class] == ELFCLASS32)
-		incr = 0;
-
-	mem_alloc((void **) &mailback, sizeof(char), 128);
-	for (int b = 0; b < bytes; b++)
-		sprintf(&mailback[b * 2], "%02x", data[pos + incr + b]);
-
-	return (mailback);
-}
-
-char *create_text__int_str(long value, char *append, int limit)
-{
-	char *mailback;
-
-	mem_alloc((void **) &mailback, sizeof(char), limit);
-	sprintf(mailback, "%ld", value);
-	if (append)
-		strcat(mailback, append);
-
-	return (mailback);
+	return (value);
 }

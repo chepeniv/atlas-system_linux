@@ -35,7 +35,7 @@ static encoded_item elf_list_machine[259] = {
 static encoded_item elf_list_osabi[256] = {
 	{ELFOSABI_SYSV,       "UNIX - System V"},
 	{ELFOSABI_HPUX,       "HP-UX"},
-	{ELFOSABI_NETBSD,     "NetBSD"},
+	{ELFOSABI_NETBSD,     "UNIX - NetBSD"},
 	{ELFOSABI_GNU,        "Object uses GNU ELF extensions"},
 	{ELFOSABI_LINUX,      "Compatibility alias"},
 	{ELFOSABI_SOLARIS,    "UNIX - Solaris"},

@@ -62,7 +62,7 @@ char *get_os(const unsigned char *data)
 
 	mem_alloc((void **) &mailback, 1, 64);
 	if (!text)
-		sprintf(mailback, "<unknown: %d>", code);
+		sprintf(mailback, "<unknown: %x>", code);
 	else
 		sprintf(mailback, "%s", text);
 

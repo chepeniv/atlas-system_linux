@@ -30,10 +30,10 @@ char *get_endianess(const unsigned char *data)
 	switch (data[EI_DATA]) /* byte index: [5] */
 	{
 		case (ELFDATA2LSB):
-			text = "2's compliment, little endian";
+			text = "2's complement, little endian";
 			break;
 		case (ELFDATA2MSB):
-			text = "2's compliment, big endian";
+			text = "2's complement, big endian";
 			break;
 		default:
 			text = "unknown";

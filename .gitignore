@@ -1,26 +1,47 @@
-# reference extensions
+######## reference extensions
+######## documentation
 
 # *.doc
 # *.doc.*
 # *.man
 # *.ref
 # *.ref.*
-# *.test.*
+# *.test.* 
+# test-*
+# test_*
 
-# common
+######## testing
 
+*.file
+*.dummy.*
+*.test
+*.cunit.*
+
+######## output analysis
+
+*.check
+*.check.*
+*.cmp
+*.cmp.*
 *.err
 *.error
-*.exec
+*.log
+*.output
+
+######## force ignore
+
 *.ignore
 *.ignore.*
-*.log
+
+######## generated files
+
 *.o
 *.out
-*.test
-*~
+*.exec
 *.x
-test-*
-__pycache__
+*~
 
-# specific files
+######## specific files
+
+__pycache__
+hsh

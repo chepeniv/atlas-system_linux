@@ -1,11 +1,8 @@
 BITS 64
-; build:
-;   nasm -f elf64 -g -F dwarf hello.asm
-; link:
-;   ld hello.o -o hello.x
-; vim config:
-;   let g:asmsyntax = 'nasm'
-;   let g:ale_linters = {'asm': ['nasm']}
+
+; INSTRUCTIONS
+; write a copycat of strlen(3)
+; prototype: size_t asm_strlen(const char *str);
 
 SECTION .rodata
 

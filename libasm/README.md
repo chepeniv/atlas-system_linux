@@ -28,3 +28,14 @@
 
 no lib or sys calls are allowed -- specifically, `call` and `syscall`
 instructions are prohibited
+
+## configuration
+
+### vim config:
+
+if using the ALE plugin
+
+```vim
+let g:asmsyntax = 'nasm'
+let g:ale_linters = {'asm': ['nasm']}
+```

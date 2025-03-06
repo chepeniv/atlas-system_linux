@@ -1,4 +1,5 @@
 BITS 64
+
 ; for the as/gas assemblers add the directives
 ; .intel_syntax noprefix
 ; .intel_mnemonic

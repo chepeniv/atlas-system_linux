@@ -5,6 +5,16 @@
 - [wikipedia: x86 registers](https://en.wikipedia.org/wiki/X86#x86_registers)
 - [wikibook: x86 Architecture](https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture)
 
+### files
+
+#### syscall codes:
+
+`/usr/include/asm/unistd_64.h`
+
+#### interrupt codes (?):
+
+`/usr/include/asm-generic/unistd.h`
+
 ## objectives
 
 - what is the difference between `Intel` and `AT&T` syntaxes

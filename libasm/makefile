@@ -12,9 +12,9 @@ LD = ld
 
 .PHONY: clean
 
-all:
-
 ######## GLOBAL
+
+all:
 
 tests: test_0
 
@@ -23,25 +23,13 @@ asm: asm-0
 ######## ASM TESTING
 
 test-0: asm-0
-	${CCMD} ${DEFS} test_0.c -o run_test_0
+	${CCMD} -c test_0.c 
+	${CCMD} test_0.o 0-strlen.o -o test_0.run
 
 ######## ASM TASKS
 
 asm-0:
-	nasm -f elf64 0-strlen.asm -o 0-strlen.o
-
-######## x86-64 asm TESTING
-
-hello:
-	${ASD} hello.asm 
-	ld hello.o -o hello.x
-	./hello.x
-
-add:
-	${ASD} add.asm 
-	${CCMD} -c test_add.c -o test_add.o
-	${LD} add.o test_add.o -o add.x
-	${MEMTEST} ./add.x 7 8
+	${AS} 0-strlen.asm -o 0-strlen.o
 
 ######## UTILITY
 

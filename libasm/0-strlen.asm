@@ -11,18 +11,20 @@ BITS 64
 ;
 ; MAN (3): calculate and return the length in bytes of given string pointed to
 ; by text excluding the terminating null character
-
-SECTION .rodata
+;
+; integers pointer:
+;     RDI, RSI, RDX, RCX, R8, and R9.
+;
+; floats:
+;     XMM0...7
 
 SECTION .text
 
-c_exit: ; call exit(0);
-	mov eax, 1
-	mov ebx, 0
-	int 0x80
-
-global _start
-_start:
-
-	;ret
-	jmp c_exit
+global asm_strlen
+asm_strlen:
+	; next_char:
+	;     get the next 1 byte pos
+	; jump back to next_char if not null
+	; subtract end addr from start addr
+	mov rax, rdi
+	ret

@@ -36,6 +36,11 @@ test-2: clean asm-2
 	${CCMD} test_2.o 2-strncmp.o -o test_2.run
 	./test_2.run
 
+test-3: clean asm-3
+	${CCMD} -c tests/test_3.c 
+	${CCMD} test_3.o 3-strchr.o -o test_3.run
+	./test_3.run
+
 ######## ASM TASKS
 
 asm-0:
@@ -46,6 +51,9 @@ asm-1:
 
 asm-2:
 	${ASD} 2-strncmp.asm
+
+asm-2:
+	${ASD} 3-strchr.asm
 
 ######## UTILITY
 

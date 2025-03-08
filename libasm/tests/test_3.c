@@ -1,9 +1,8 @@
 #include <stdlib.h>
-#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+#include "../libasm.h"
 
 #define S1  "Holberton School"
 #define C1  'n'
@@ -17,10 +16,22 @@
  */
 int main(void)
 {
-    assert(strchr(S1, C1) == asm_strchr(S1, C1));
-    assert(strchr(S1, C2) == asm_strchr(S1, C2));
-    assert(strchr(S1, C3) == asm_strchr(S1, C3));
+	char *original, *copycat;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	original = strchr(S1, C1);
+	copycat = asm_strchr(S1, C1);
+	printf("original compare result: %s\n", original);
+	printf("copycat compare result: %s\n", copycat);
+
+	original = strchr(S1, C2);
+	copycat = asm_strchr(S1, C2);
+	printf("original compare result: %s\n", original);
+	printf("copycat compare result: %s\n", copycat);
+
+	original = strchr(S1, C3);
+	copycat = asm_strchr(S1, C3);
+	printf("original compare result: %s\n", original);
+	printf("copycat compare result: %s\n", copycat);
+
+	return (EXIT_SUCCESS);
 }

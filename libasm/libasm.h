@@ -6,7 +6,7 @@
 size_t asm_strlen(const char *text);
 int    asm_strcmp(const char *left, const char *right);
 int    asm_strncmp(const char *left, const char *right, size_t n);
-int    asm_strchr(const char *text, int c);
+char  *asm_strchr(const char *text, int c);
 char  *asm_strstr(const char *text, const char *sequence);
 void  *asm_memcpy(void *dest, const void *source, size_t n);
 size_t asm_putc(int c);

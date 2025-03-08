@@ -36,5 +36,16 @@ int main(void)
 	printf("original compare result: %d\n", original);
 	printf("copycat compare result: %d\n", copycat);
 
+	original = strncmp(
+		"Holberton School",
+		"Holberton",
+		strlen("Holberton School"));
+	copycat = asm_strncmp(
+		"Holberton School",
+		"Holberton",
+		strlen("Holberton School"));
+	printf("\noriginal compare result: %d\n", original);
+	printf("copycat compare result: %d\n", copycat);
+
 	return (EXIT_SUCCESS);
 }

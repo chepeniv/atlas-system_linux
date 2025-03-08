@@ -15,7 +15,7 @@ LD = ld
 
 ######## GLOBAL
 
-all: test_0 test_1
+all: test-0 test-1
 
 asm: asm-0 asm-1
 
@@ -33,7 +33,7 @@ test-1: clean asm-1
 
 test-2: clean asm-2
 	${CCMD} -c tests/test_2.c 
-	${CCMD} test_2.o 2-strncmp.o -o test_2.run
+	${CCMD} -Wno-overlength-strings test_2.o 2-strncmp.o -o test_2.run
 	./test_2.run
 
 test-3: clean asm-3
@@ -52,7 +52,7 @@ asm-1:
 asm-2:
 	${ASD} 2-strncmp.asm
 
-asm-2:
+asm-3:
 	${ASD} 3-strchr.asm
 
 ######## UTILITY

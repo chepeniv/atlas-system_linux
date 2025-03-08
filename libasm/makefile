@@ -1,4 +1,5 @@
 CC = gcc
+GDB = cgdb
 MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
 DEFS = def_*.c
 CFLAGS = -Wall -Werror -Wextra -ggdb3
@@ -22,14 +23,15 @@ asm: asm-0
 
 ######## ASM TESTING
 
-test-0: asm-0
-	${CCMD} -c test_0.c 
+test-0: clean asm-0
+	${CCMD} -c tests/test_0.c 
 	${CCMD} test_0.o 0-strlen.o -o test_0.run
+	${GDB} test_0.run
 
 ######## ASM TASKS
 
 asm-0:
-	${AS} 0-strlen.asm -o 0-strlen.o
+	${ASD} 0-strlen.asm
 
 ######## UTILITY
 

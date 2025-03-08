@@ -119,7 +119,7 @@ SECTION .rodata
 ; read-only static data is declared here
 ```
 
-anchor pointns within the asm file are mark as:
+anchor points within the asm file are marked as:
 ```asm
 anch: ; this is a position which can be jumped to
       ; although they aren't functions they can be conceptualized as such

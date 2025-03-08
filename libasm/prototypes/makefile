@@ -13,7 +13,7 @@ LD = ld
 .PHONY: clean
 
 hello:
-	${ASD} hello.asm 
+	${AS} hello.asm 
 	ld hello.o -o hello.x
 	./hello.x
 

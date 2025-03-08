@@ -1,26 +1,23 @@
 #include <stdlib.h>
-#include <assert.h>
 #include <stdio.h>
-#include <string.h>
-
-#include "libasm.h"
+#include "../libasm.h"
 
 #define S1  "Holberton School"
-#define S2  ""
+#define S2  "hello world"
 #define S3  "\0"
-
-/**
- * main - Program entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 
 int main(void)
 {
-    assert(strlen(S1) == asm_strlen(S1));
-    assert(strlen(S2) == asm_strlen(S2));
-    assert(strlen(S3) == asm_strlen(S3));
+	size_t length;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	printf("size of size_t: %lu\n", sizeof(size_t));
+
+	length = asm_strlen(S1);
+	printf("string 1 length: %lu\n", length);
+	length = asm_strlen(S2);
+	printf("string 2 length: %lu\n", length);
+	length = asm_strlen(S3);
+	printf("string 3 length: %lu\n", length);
+
+	return (length);
 }

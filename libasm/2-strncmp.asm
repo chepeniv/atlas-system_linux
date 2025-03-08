@@ -15,9 +15,10 @@ BITS 64
 ;
 ; RETURN:
 ; returns an integer indicating the result of the comparison:
-;     0, if the s1 and s2 are equal;
-;     negative value if s1 is less than s2;
-;     positive value if s1 is greater than s2.
+;     0, if the s1 and s2 are equal up to n
+;
+;     otherwise, the ascii difference of the last mismatching
+;     characters is returned
 ;
 ; integers, pointers: RDI, RSI, RDX, RCX, R8, R9.
 
@@ -38,9 +39,9 @@ asm_strncmp:
 	; COMPARE
 	next_char:
 		cmp rcx, rdx
-		je end_of_string
+		je end_of_cmp
 		test rax, rbx
-		jz end_of_string
+		jz end_of_cmp
 
 		inc rcx
 		movzx rax, byte [rdi + rcx]
@@ -50,6 +51,6 @@ asm_strncmp:
 		je next_char
 
 	; RETURN
-	end_of_string:
+	end_of_cmp:
 		sub rax, rbx
 		ret

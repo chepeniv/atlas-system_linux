@@ -15,23 +15,29 @@ LD = ld
 
 ######## GLOBAL
 
-all:
+all: test_0 test_1
 
-tests: test_0
-
-asm: asm-0
+asm: asm-0 asm-1
 
 ######## ASM TESTING
 
 test-0: clean asm-0
 	${CCMD} -c tests/test_0.c 
 	${CCMD} test_0.o 0-strlen.o -o test_0.run
-	${GDB} test_0.run
+	# ${GDB} test_0.run
+
+test-1: clean asm-1
+	${CCMD} -c tests/test_1.c 
+	${CCMD} test_1.o 1-strcmp.o -o test_1.run
+	./test_1.run
 
 ######## ASM TASKS
 
 asm-0:
 	${ASD} 0-strlen.asm
+
+asm-1:
+	${ASD} 1-strcmp.asm
 
 ######## UTILITY
 

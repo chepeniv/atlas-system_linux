@@ -14,19 +14,25 @@ int main(void)
 
 	original = strcmp(S1, S1);
 	copycat = asm_strcmp(S1, S1);
-	printf("strings: %s -- %s \n", S1, S1);
+	printf("\nstrings: %s -- %s \n", S1, S1);
 	printf("original compare result: %d\n", original);
 	printf("copycat compare result: %d\n", copycat);
 
 	original = strcmp(S1, S2);
 	copycat = asm_strcmp(S1, S2);
-	printf("strings: %s -- %s \n", S1, S2);
+	printf("\nstrings: %s -- %s \n", S1, S2);
 	printf("original compare result: %d\n", original);
 	printf("copycat compare result: %d\n", copycat);
 
 	original = strcmp(S1, S3);
 	copycat = asm_strcmp(S1, S3);
-	printf("strings: %s -- %s \n", S1, S3);
+	printf("\nstrings: %s -- %s \n", S1, S3);
+	printf("original compare result: %d\n", original);
+	printf("copycat compare result: %d\n", copycat);
+
+	original = strcmp(S3, S1);
+	copycat = asm_strcmp(S3, S1);
+	printf("\nstrings: %s -- %s \n", S3, S1);
 	printf("original compare result: %d\n", original);
 	printf("copycat compare result: %d\n", copycat);
 

@@ -1,25 +1,40 @@
 #include <stdlib.h>
-#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+#include "../libasm.h"
 
 #define S1  "Holberton School"
-#define S2  ""
-#define S3  "Holberton Socool"
+#define S2  "Hello"
+#define S3  "Holbarton Socool"
 
-/**
- * main - Program entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 int main(void)
 {
-    assert(strncmp(S1, S3, 1) == asm_strncmp(S1, S3, 1));
-    assert(strncmp(S1, S3, 11) == asm_strncmp(S1, S3, 11));
-    assert(strncmp(S1, S3, 15) == asm_strncmp(S1, S3, 15));
+	int original, copycat;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	original = strncmp(S1, S1, 6);
+	copycat = asm_strncmp(S1, S1, 6);
+	printf("\nstrings: %s -- %s \n", S1, S1);
+	printf("original compare result: %d\n", original);
+	printf("copycat compare result: %d\n", copycat);
+
+	original = strncmp(S1, S2, 6);
+	copycat = asm_strncmp(S1, S2, 6);
+	printf("\nstrings: %s -- %s \n", S1, S2);
+	printf("original compare result: %d\n", original);
+	printf("copycat compare result: %d\n", copycat);
+
+	original = strncmp(S1, S3, 6);
+	copycat = asm_strncmp(S1, S3, 6);
+	printf("\nstrings: %s -- %s \n", S1, S3);
+	printf("original compare result: %d\n", original);
+	printf("copycat compare result: %d\n", copycat);
+
+	original = strncmp(S3, S1, 6);
+	copycat = asm_strncmp(S3, S1, 6);
+	printf("\nstrings: %s -- %s \n", S3, S1);
+	printf("original compare result: %d\n", original);
+	printf("copycat compare result: %d\n", copycat);
+
+	return (EXIT_SUCCESS);
 }

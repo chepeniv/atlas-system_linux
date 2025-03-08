@@ -51,11 +51,18 @@ asm_strncmp:
 		je next_char
 
 	; RETURN
+	; len(left-match) < len(right-match) and len(left) = n
+	;     return 0
+	;
+	; len(left-match) < len(right-match) and len(left) < n
+	;     return diff
 	end_of_cmp:
 		test rax, rbx
+
 		jz end_of_str
 		sub rax, rbx
 		ret
-		end_of_str:
+
+	end_of_str:
 		mov rax, 0
 		ret

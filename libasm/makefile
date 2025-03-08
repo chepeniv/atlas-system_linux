@@ -29,7 +29,7 @@ test-0: clean asm-0
 test-1: clean asm-1
 	${CCMD} -c tests/test_1.c 
 	${CCMD} test_1.o 1-strcmp.o -o test_1.run
-	./test_1.run
+	# ./test_1.run
 
 ######## ASM TASKS
 

@@ -25,12 +25,38 @@ SECTION .text
 global asm_strcmp
 asm_strcmp:
 
+	; SETUP
+	mov rax, 1
+	mov rbx, 1
 	mov rcx, -1
-	next_char:
-		inc rcx
-		mov rax, [rdi + rcx]
-		cmp al,0
-		jne next_char
 
-	mov rax, rcx
-	ret
+	; COMPARE
+	next_char:
+		test rax, rbx
+		jz end_of_string
+
+		inc rcx
+		movzx rax, byte [rdi + rcx]
+		movzx rbx, byte [rsi + rcx]
+
+		cmp rax, rbx
+		je next_char
+
+	; RETURN
+	end_of_string:
+		cmp rax, rbx
+
+		jz zero
+		js negative
+
+		positive:
+		mov rax, 1
+		ret
+
+		negative:
+		mov rax, -1
+		ret
+
+		zero:
+		mov rax, 0
+		ret

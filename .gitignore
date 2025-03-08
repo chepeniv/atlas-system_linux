@@ -35,9 +35,11 @@
 
 ######## generated files
 
+*.exec
 *.o
 *.out
-*.exec
+*.run
+*.start
 *.x
 *~
 

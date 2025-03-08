@@ -39,11 +39,11 @@ int main(void)
 	original = strncmp(
 		"Holberton School",
 		"Holberton",
-		strlen("Holberton School"));
+		strlen("Holberton"));
 	copycat = asm_strncmp(
 		"Holberton School",
 		"Holberton",
-		strlen("Holberton School"));
+		strlen("Holberton"));
 	printf("\noriginal compare result: %d\n", original);
 	printf("copycat compare result: %d\n", copycat);
 

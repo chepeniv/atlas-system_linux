@@ -32,7 +32,7 @@ test-1: clean asm-1
 	# ./test_1.run
 
 test-2: clean asm-2
-	${CCMD} -c tests/test_2.c 
+	${CCMD} -Wno-overlength-strings -c tests/test_2.c 
 	${CCMD} -Wno-overlength-strings test_2.o 2-strncmp.o -o test_2.run
 	./test_2.run
 

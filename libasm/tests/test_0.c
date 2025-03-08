@@ -10,8 +10,6 @@ int main(void)
 {
 	size_t length;
 
-	printf("size of size_t: %lu\n", sizeof(size_t));
-
 	length = asm_strlen(S1);
 	printf("string 1 length: %lu\n", length);
 	length = asm_strlen(S2);

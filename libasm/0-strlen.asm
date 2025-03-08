@@ -25,12 +25,13 @@ SECTION .text
 
 global asm_strlen
 asm_strlen:
+
 	mov rcx, -1
 	next_char:
 		inc rcx
-		mov rax, [byte rdi + rcx]
+		mov rax, [rdi + rcx]
 		cmp al,0
 		jne next_char
 
-		mov rax, rcx
-		ret
+	mov rax, rcx
+	ret

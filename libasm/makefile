@@ -6,7 +6,7 @@ CFLAGS = -Wall -Werror -Wextra -ggdb3
 DB_FLAGS = -ggdb3
 CCMD = ${CC} ${CFLAGS} ${DB_FLAGS}
 AS = nasm -f elf64
-ASD = ${AS} -g -F dwarf
+ASD = ${AS} -g # -F dwarf
 LD = ld
 
 .DELETE_ON_ERROR:

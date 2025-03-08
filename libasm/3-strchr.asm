@@ -5,10 +5,10 @@ BITS 64
 ; copycat of strchr(3)
 ;
 ; prototype:
-;     int asm_strchr(const char *text, int c);
+;     char *asm_strchr(const char *text, int c);
 ;
 ; MAN (3):
-; returns a pointer to the first occurrence of the character 'c' within the
+; return a pointer to the first occurrence of the character 'c' within the
 ; given string 'text' if found, otherwise NULL. the terminating null byte '\0'
 ; is considered a valid argument
 ;
@@ -23,24 +23,24 @@ asm_strchr:
 
 	; SETUP
 	mov rax, 1
-	mov rbx, 1
 	mov rcx, -1
 
 	; COMPARE
 	next_char:
-		cmp rcx, rdx
-		je end_of_cmp
-		test rax, rbx
-		jz end_of_cmp
+		test rax, rax
+		jz end_of_str
 
 		inc rcx
 		movzx rax, byte [rdi + rcx]
-		movzx rbx, byte [rsi + rcx]
+		cmp rax, rsi
+		jne next_char
 
-		cmp rax, rbx
-		je next_char
+		; MATCH FOUND
+		add rdi, rcx
+		mov rax, rdi
+		ret
 
-	; RETURN
-	end_of_cmp:
-		sub rax, rbx
+	; NO MATCH
+	end_of_str:
+		mov rax, 0
 		ret

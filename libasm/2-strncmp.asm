@@ -52,5 +52,10 @@ asm_strncmp:
 
 	; RETURN
 	end_of_cmp:
+		test rax, rbx
+		jz end_of_str
 		sub rax, rbx
+		ret
+		end_of_str:
+		mov rax, 0
 		ret

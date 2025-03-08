@@ -13,8 +13,6 @@ SECTION .text
 
 global asm_dbl
 asm_dbl:
-
+	add rdi, rdi
 	mov rax, rdi
-	add rax, rdi
-
 	ret

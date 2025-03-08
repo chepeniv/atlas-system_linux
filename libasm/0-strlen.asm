@@ -1,5 +1,7 @@
 BITS 64
 
+; DEFAULT REL
+
 ; INSTRUCTIONS:
 ;
 ; lib and sys calls are NOT permitted, specifically 'call' and 'syscall'
@@ -12,19 +14,23 @@ BITS 64
 ; MAN (3): calculate and return the length in bytes of given string pointed to
 ; by text excluding the terminating null character
 ;
-; integers pointer:
-;     RDI, RSI, RDX, RCX, R8, and R9.
-;
-; floats:
-;     XMM0...7
+; integers, pointers: RDI, RSI, RDX, RCX, R8, R9.
+; floats: XMM0...7
+
+; SECTION .note.GNU-stack ; suppress /usr/bin/ld warning
+
+SECTION .rodata
 
 SECTION .text
 
 global asm_strlen
 asm_strlen:
-	; next_char:
-	;     get the next 1 byte pos
-	; jump back to next_char if not null
-	; subtract end addr from start addr
-	mov rax, rdi
-	ret
+	mov rcx, -1
+	next_char:
+		inc rcx
+		mov rax, [byte rdi + rcx]
+		cmp al,0
+		jne next_char
+
+		mov rax, rcx
+		ret

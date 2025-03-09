@@ -24,12 +24,12 @@ asm: asm-0 asm-1 asm-2 asm-3 asm-4 asm-5 asm-6
 test-0: clean asm-0
 	${CCMD} -c tests/test_0.c 
 	${CCMD} test_0.o 0-strlen.o -o test_0.run
-	# ${GDB} test_0.run
+	test_0.run
 
 test-1: clean asm-1
 	${CCMD} -c tests/test_1.c 
 	${CCMD} test_1.o 1-strcmp.o -o test_1.run
-	# ./test_1.run
+	./test_1.run
 
 test-2: clean asm-2
 	${CCMD} -Wno-overlength-strings -c tests/test_2.c 
@@ -58,7 +58,7 @@ test-6: clean asm-6
 
 test-7: clean asm-7 asm-0
 	${CCMD} -c tests/test_7.c 
-	${CCMD} test_7.o 7-puts.o -o test_7.run
+	${CCMD} test_7.o 7-puts.o 0-strlen.o -o test_7.run
 	./test_7.run
 
 ######## ASM TASKS

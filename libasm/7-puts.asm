@@ -1,14 +1,16 @@
 BITS 64
 
 ; INSTRUCTIONS:
-; 'call' is NOT allowed
+;
 ; write a procedure that prints a string to stdout
 ; return the total number of bytes written
-; only one 'call' to 'asm_strlen' is permitted
-; only ONE 'syscall' is permitted
-; NO jump instructions permitted
 ;
-; prototype: size_t asm_puts(const char *text);
+; NO jump instructions permitted
+; only ONE 'call' to 'asm_strlen' is permitted
+; only ONE 'syscall' is permitted
+;
+; prototype:
+;     size_t asm_puts(const char *text);
 ;
 ; MAN (3):
 ; the implementation of this version might differ from glibc's
@@ -17,6 +19,8 @@ BITS 64
 ;
 ; argument order: RDI, RSI, RDX, RCX, R8, R9.
 
+extern asm_strlen
+
 SECTION .note.GNU-stack ; suppress /usr/binl/ld warning
 
 SECTION .text
@@ -24,15 +28,13 @@ SECTION .text
 global asm_puts
 asm_puts:
 
-	push rdi     ; mov val in rdi to the stack
-				 ; rsp changes accordingly
+	call asm_strlen
 
-	mov rdi, 1   ; fd = stdout
-	mov rsi, rsp ; addr = stack pointer
-	mov rdx, 1   ; 1 byte
+	mov rsi, rdi
+	mov rdi, 1
+	mov rdx, rax
 
-	mov rax, 1   ; rax   ( rdi, rsi,  rdx )
-	syscall      ; write ( fd,  addr, len )
+	mov rax, 1
+	syscall
 
-	pop rdi      ; pop val from stack and restore rsp
 	ret

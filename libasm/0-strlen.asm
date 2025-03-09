@@ -17,7 +17,7 @@ BITS 64
 ; integers, pointers: RDI, RSI, RDX, RCX, R8, R9.
 ; floats: XMM0...7
 
-; SECTION .note.GNU-stack ; suppress /usr/bin/ld warning
+SECTION .note.GNU-stack ; suppress /usr/bin/ld warning
 
 SECTION .rodata
 

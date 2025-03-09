@@ -46,6 +46,11 @@ test-4: clean asm-4
 	${CCMD} test_4.o 4-strstr.o -o test_4.run
 	./test_4.run
 
+test-5: clean asm-5
+	${CCMD} -c tests/test_5.c 
+	${CCMD} test_5.o 5-memcpy.o -o test_5.run
+	./test_5.run
+
 ######## ASM TASKS
 
 asm-0:
@@ -62,6 +67,9 @@ asm-3:
 
 asm-4:
 	${ASD} 4-strstr.asm
+
+asm-5:
+	${ASD} 5-memcpy.asm
 
 ######## UTILITY
 

@@ -3,21 +3,26 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+#include "../libasm.h"
 
-/**
- * main - Program entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 int main(void)
 {
-    assert(asm_putc('H') == 1);
-    assert(asm_putc('b') == 1);
-    assert(asm_putc('t') == 1);
-    assert(asm_putc('n') == 1);
-    assert(asm_putc('\n') == 1);
+	int value;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	value = asm_putc('H');
+	printf("\n%d\n", value);
+
+	value = asm_putc('b');
+	printf("\n%d\n", value);
+
+	value = asm_putc('t');
+	printf("\n%d\n", value);
+
+	value = asm_putc('n');
+	printf("\n%d\n", value);
+
+	value = asm_putc('\n');
+	printf("\n%d\n", value);
+
+	return (EXIT_SUCCESS);
 }

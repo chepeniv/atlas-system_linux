@@ -15,9 +15,9 @@ LD = ld
 
 ######## GLOBAL
 
-all: test-0 test-1 test-2 test-3 test-4
+all: test-0 test-1 test-2 test-3 test-4 test-5 test-6
 
-asm: asm-0 asm-1 asm-2 asm-3 asm-4 
+asm: asm-0 asm-1 asm-2 asm-3 asm-4 asm-5 asm-6
 
 ######## ASM TESTING
 
@@ -51,6 +51,11 @@ test-5: clean asm-5
 	${CCMD} test_5.o 5-memcpy.o -o test_5.run
 	./test_5.run
 
+test-6: clean asm-6
+	${CCMD} -c tests/test_6.c 
+	${CCMD} test_6.o 6-putc.o -o test_6.run
+	./test_6.run
+
 ######## ASM TASKS
 
 asm-0:
@@ -70,6 +75,9 @@ asm-4:
 
 asm-5:
 	${ASD} 5-memcpy.asm
+
+asm-6:
+	${ASD} 6-putc.asm
 
 ######## UTILITY
 

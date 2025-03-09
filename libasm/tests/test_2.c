@@ -14,27 +14,27 @@ int main(void)
 
 	original = strncmp(S1, S1, 6);
 	copycat = asm_strncmp(S1, S1, 6);
-	printf("\nstrings: %s -- %s \n", S1, S1);
-	printf("original compare result: %d\n", original);
-	printf("copycat compare result: %d\n", copycat);
+	printf("\n%s\n%s\n", S3, S1);
+	printf("original : %d\n", original);
+	printf("copycat  : %d\n", copycat);
 
 	original = strncmp(S1, S2, 6);
 	copycat = asm_strncmp(S1, S2, 6);
-	printf("\nstrings: %s -- %s \n", S1, S2);
-	printf("original compare result: %d\n", original);
-	printf("copycat compare result: %d\n", copycat);
+	printf("\n%s\n%s\n", S3, S1);
+	printf("original : %d\n", original);
+	printf("copycat  : %d\n", copycat);
 
 	original = strncmp(S1, S3, 6);
 	copycat = asm_strncmp(S1, S3, 6);
-	printf("\nstrings: %s -- %s \n", S1, S3);
-	printf("original compare result: %d\n", original);
-	printf("copycat compare result: %d\n", copycat);
+	printf("\n%s\n%s\n", S3, S1);
+	printf("original : %d\n", original);
+	printf("copycat  : %d\n", copycat);
 
 	original = strncmp(S3, S1, 6);
 	copycat = asm_strncmp(S3, S1, 6);
-	printf("\nstrings: %s -- %s \n", S3, S1);
-	printf("original compare result: %d\n", original);
-	printf("copycat compare result: %d\n", copycat);
+	printf("\n%s\n%s\n", S3, S1);
+	printf("original : %d\n", original);
+	printf("copycat  : %d\n", copycat);
 
 	original = strncmp(
 		"Holberton School",
@@ -44,8 +44,8 @@ int main(void)
 		"Holberton School",
 		"Holberton",
 		strlen("Holberton"));
-	printf("\noriginal compare result: %d\n", original);
-	printf("copycat compare result: %d\n", copycat);
+	printf("\noriginal : %d\n", original);
+	printf("copycat  : %d\n", copycat);
 
 	return (EXIT_SUCCESS);
 }

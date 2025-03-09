@@ -65,22 +65,18 @@ asm_strcasecmp:
 
 	; RETURN
 	end_of_string:
-		; sub rax, rbx
+		sub rax, rbx
+		ret
+
+		; cmp rax, rbx
+		; jz zero
+		; js negative
+		; positive:
+		; mov rax, 1
 		; ret
-
-		cmp rax, rbx
-
-		jz zero
-		js negative
-
-		positive:
-		mov rax, -1
-		ret
-
-		negative:
-		mov rax, 1
-		ret
-
-		zero:
-		mov rax, 0
-		ret
+		; negative:
+		; mov rax, -1
+		; ret
+		; zero:
+		; mov rax, 0
+		; ret

@@ -38,6 +38,7 @@ asm_strncmp:
 
 	; COMPARE
 	next_char:
+
 		inc rcx
 		movzx rax, byte [rdi + rcx]
 		movzx rbx, byte [rsi + rcx]
@@ -48,17 +49,6 @@ asm_strncmp:
 		jz end_of_str
 		cmp rax, rbx
 		je next_char
-
-		; RETURN
-		; len(left-match) = n
-		;     AND
-		; len(left-match) < len(right-match)
-		;     return 0
-
-		; len(left-match) < n
-		;     AND
-		; len(left-match) < len(right-match)
-		;     return diff
 
 		end_of_str:
 			sub rax, rbx

@@ -9,6 +9,10 @@
 #define S2  "HOLBERTON SCHOOL"
 #define S3  "Holberton SchooL"
 #define S4  "holberton socool"
+#define S5  "HOLBERTON"
+#define S6  "holberton"
+#define S7  "HoLbErToN ScHoOl"
+#define S8  "hOlBeRtOn sChOOL"
 
 int main(void)
 {
@@ -32,6 +36,21 @@ int main(void)
 	printf("comparing:\n%s\n%s\n", S1, S4);
 	original = strcasecmp(S1, S4);
 	copycat = asm_strcasecmp(S1, S4);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("comparing:\n%s\n%s\n", S3, S6);
+	original = strcasecmp(S3, S6);
+	copycat = asm_strcasecmp(S3, S6);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("comparing:\n%s\n%s\n", S7, S8);
+	original = strcasecmp(S7, S8);
+	copycat = asm_strcasecmp(S7, S8);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("comparing:\n%s\n%s\n", "", S6);
+	original = strcasecmp("", S6);
+	copycat = asm_strcasecmp("", S6);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
 
 	return (EXIT_SUCCESS);

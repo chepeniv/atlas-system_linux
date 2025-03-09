@@ -50,12 +50,12 @@ asm_strcasecmp:
 
 	; COMPARE
 	next_char:
-		test rax, rbx
-		jz end_of_string
-
 		inc rcx
 		movzx rax, byte [rdi + rcx]
 		movzx rbx, byte [rsi + rcx]
+
+		test rax, rbx
+		jz end_of_string
 
 		jmp capitalize
 		cont_next_char:

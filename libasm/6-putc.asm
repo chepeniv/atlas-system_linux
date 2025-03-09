@@ -8,7 +8,7 @@ BITS 64
 ;
 ; prototype: size_t asm_putc(int c);
 ;
-; MAN (3): this implementation differs from clib's
+; MAN (3): this implementation differs from glibc's
 ;
 ; argument order: RDI, RSI, RDX, RCX, R8, R9.
 
@@ -19,21 +19,15 @@ SECTION .text
 global asm_putc
 asm_putc:
 
-	mov rcx, 0
-	copy:
-		cmp rcx, rdx
-		jge conclude
+	push rdi     ; mov val in rdi to the stack
+				 ; rsp changes accordingly
 
-		mov al, byte [rsi + rcx]
+	mov rdi, 1   ; fd = stdout
+	mov rsi, rsp ; addr = stack pointer
+	mov rdx, 1   ; 1 byte
 
-		cmp al, 0
-		je conclude
+	mov rax, 1   ;   rax(rdi, rsi,  rdx);
+	syscall      ; write(fd,  addr, len);
 
-		mov [rdi + rcx], al
-
-		inc rcx
-		jmp copy
-
-	conclude:
-		mov rax, rdi
-		ret
+	pop rdi      ; pop val from stack and restore rsp
+	ret

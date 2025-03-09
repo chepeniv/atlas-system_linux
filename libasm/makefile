@@ -61,6 +61,11 @@ test-7: clean asm-7 asm-0
 	${CCMD} test_7.o 7-puts.o 0-strlen.o -o test_7.run
 	./test_7.run
 
+test-8: clean asm-8
+	${CCMD} -c tests/test_8.c 
+	${CCMD} test_8.o 8-strcasecmp.o -o test_8.run
+	./test_8.run
+
 ######## ASM TASKS
 
 asm-0:
@@ -86,6 +91,9 @@ asm-6:
 
 asm-7:
 	${ASD} 7-puts.asm
+
+asm-8:
+	${ASD} 8-strcasecmp.asm
 
 ######## UTILITY
 

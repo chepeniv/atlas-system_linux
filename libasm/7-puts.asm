@@ -33,7 +33,6 @@ asm_puts:
 	mov rsi, rdi
 	mov rdi, 1
 	mov rdx, rax
-
 	mov rax, 1
 	syscall
 

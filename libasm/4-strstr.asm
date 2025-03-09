@@ -2,15 +2,18 @@ BITS 64
 
 ; INSTRUCTIONS:
 ; 'call' and 'syscall' are NOT allowed
-; copycat of strchr(3)
+; copycat of strstr(3)
 ;
 ; prototype:
-;     char *asm_strchr(const char *text, int c);
+;     char *asm_strstr(const char *text, const char *phrase);
 ;
 ; MAN (3):
-; return a pointer to the first occurrence of the character 'c' within the
-; given string 'text' if found, otherwise NULL. the terminating null byte '\0'
-; is considered a valid argument
+; this function finds  the  first  occurrence of the substring 'phrase' in the
+; string 'text'.  terminating null bytes ('\0') are not compared.
+;
+; RETURN:
+; pointer to the beginning of the found 'phrase', otherwise NULL if nothing
+; found
 ;
 ; argument order: RDI, RSI, RDX, RCX, R8, R9.
 
@@ -18,7 +21,7 @@ SECTION .note.GNU-stack ; suppress /usr/binl/ld warning
 
 SECTION .text
 
-global asm_strchr
+global asm_strstr
 asm_strchr:
 
 	; SETUP

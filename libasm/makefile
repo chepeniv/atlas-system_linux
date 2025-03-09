@@ -15,9 +15,9 @@ LD = ld
 
 ######## GLOBAL
 
-all: test-0 test-1
+all: test-0 test-1 test-2 test-3 test-4
 
-asm: asm-0 asm-1
+asm: asm-0 asm-1 asm-2 asm-3 asm-4 
 
 ######## ASM TESTING
 
@@ -41,6 +41,11 @@ test-3: clean asm-3
 	${CCMD} test_3.o 3-strchr.o -o test_3.run
 	./test_3.run
 
+test-4: clean asm-4
+	${CCMD} -c tests/test_4.c 
+	${CCMD} test_4.o 4-strstr.o -o test_4.run
+	./test_4.run
+
 ######## ASM TASKS
 
 asm-0:
@@ -54,6 +59,9 @@ asm-2:
 
 asm-3:
 	${ASD} 3-strchr.asm
+
+asm-4:
+	${ASD} 4-strstr.asm
 
 ######## UTILITY
 

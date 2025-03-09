@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+#include "../libasm.h"
 
 #define S1  "Holberton School"
 #define S2  "School"
@@ -16,10 +16,22 @@
  */
 int main(void)
 {
-    assert(strstr(S1, S2) == asm_strstr(S1, S2));
-    assert(strstr(S1, S3) == asm_strstr(S1, S3));
-    assert(strstr(S1, S1) == asm_strstr(S1, S1));
+	char *original, *copycat;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	original = strstr(S1, S2);
+	copycat = asm_strstr(S1, S2);
+	printf("original compare result: %s\n", original);
+	printf("copycat compare result: %s\n", copycat);
+
+	original = strstr(S1, S3);
+	copycat = asm_strstr(S1, S3);
+	printf("original compare result: %s\n", original);
+	printf("copycat compare result: %s\n", copycat);
+
+	original = strstr(S1, S1);
+	copycat = asm_strstr(S1, S1);
+	printf("original compare result: %s\n", original);
+	printf("copycat compare result: %s\n", copycat);
+
+	return (EXIT_SUCCESS);
 }

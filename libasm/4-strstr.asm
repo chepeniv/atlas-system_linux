@@ -22,24 +22,47 @@ SECTION .note.GNU-stack ; suppress /usr/binl/ld warning
 SECTION .text
 
 global asm_strstr
-asm_strchr:
+asm_strstr:
 
 	; SETUP
-	mov rax, 1
 	mov rcx, -1
+	movzx r8, byte [rsi]
 
 	; SEARCH
-	next_char:
+	search_loop:
+		inc rcx
+		movzx rax, byte [rdi + rcx]
+
+		test rax, rax
+		jz end_of_str
+		cmp rax, r8
+		jne search_loop
+
+	; SETUP
+	mov rdx, 0
+
+	; CHECK
+	match_loop:
+		inc rcx
+		inc rdx
+
+		movzx rax, byte [rdi + rcx]
+		movzx rbx, byte [rsi + rdx]
+
+		test rbx, rbx
+		jz match_found
+
 		test rax, rax
 		jz end_of_str
 
-		inc rcx
-		movzx rax, byte [rdi + rcx]
-		cmp rax, rsi
-		jne next_char
+		cmp rax, rbx
+		jne search_loop
+		je match_loop
 
-		; MATCH FOUND
-		add rdi, rcx
+	; MATCH FOUND
+	match_found:
+		sub rcx, rdx ; get the correct offset
+		add rdi, rcx ; get the new pointer
 		mov rax, rdi
 		ret
 
@@ -47,3 +70,4 @@ asm_strchr:
 	end_of_str:
 		mov rax, 0
 		ret
+

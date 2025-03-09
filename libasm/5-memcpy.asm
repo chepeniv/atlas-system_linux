@@ -25,55 +25,21 @@ SECTION .text
 global asm_memcpy
 asm_memcpy:
 
-	; SETUP
-	mov rcx, -1
-	movzx r8, byte [rsi]
+	mov rcx, 0
+	copy:
+		cmp rcx, rdx
+		jge conclude
 
-	; EMPTY SEARCH PHRASE
-	test r8, r8
-	jz return_pointer
+		mov al, byte [rsi + rcx]
 
-	; SEARCH
-	search_loop:
+		cmp al, 0
+		je conclude
+
+		mov [rdi + rcx], al
+
 		inc rcx
-		movzx rax, byte [rdi + rcx]
+		jmp copy
 
-		test rax, rax
-		jz end_of_str
-		cmp rax, r8
-		jne search_loop
-
-	; SETUP
-	mov rdx, 0
-
-	; CHECK
-	match_loop:
-		inc rcx
-		inc rdx
-
-		movzx rax, byte [rdi + rcx]
-		movzx rbx, byte [rsi + rdx]
-
-		test rbx, rbx
-		jz match_found
-
-		test rax, rax
-		jz end_of_str
-
-		cmp rax, rbx
-		jne search_loop
-		je match_loop
-
-	; MATCH FOUND
-	match_found:
-		sub rcx, rdx ; get the correct offset
-		add rdi, rcx ; get the new pointer
-	return_pointer:
+	conclude:
 		mov rax, rdi
 		ret
-
-	; NO MATCH
-	end_of_str:
-		mov rax, 0
-		ret
-

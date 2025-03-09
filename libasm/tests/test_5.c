@@ -7,19 +7,21 @@
 
 int main(void)
 {
-    int i;
-    char *src, *dest;
+    char *src, *dest, *original, *copycat;
 
     src = strdup("Holberton");
+	dest = strdup("......... School");
 
-    for (i = 0; i <= 9; i++)
+    for (int i = 0; i <= 9; i++)
     {
-        dest = strdup("......... School");
 
-        assert(asm_memcpy(dest, src, i) == dest);
-        printf("%s\n", dest);
-        free(dest);
+        copycat = asm_memcpy(dest, src, i);
+        original = memcpy(dest, src, i);
+        printf("%s\n", original);
+        printf("%s\n", copycat);
     }
+
+	free(dest);
     free(src);
 
     return (EXIT_SUCCESS);

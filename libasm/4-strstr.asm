@@ -28,6 +28,10 @@ asm_strstr:
 	mov rcx, -1
 	movzx r8, byte [rsi]
 
+	; EMPTY SEARCH PHRASE
+	test r8, r8
+	jz return_pointer
+
 	; SEARCH
 	search_loop:
 		inc rcx
@@ -63,6 +67,7 @@ asm_strstr:
 	match_found:
 		sub rcx, rdx ; get the correct offset
 		add rdi, rcx ; get the new pointer
+	return_pointer:
 		mov rax, rdi
 		ret
 

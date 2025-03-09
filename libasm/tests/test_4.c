@@ -40,5 +40,15 @@ int main(void)
 	printf("original : %s\n", original);
 	printf("copycat  : %s\n", copycat);
 
+	original = strstr("hello world", "");
+	copycat = asm_strstr("hello world", "");
+	printf("original : %s\n", original);
+	printf("copycat  : %s\n", copycat);
+
+	original = strstr("", "");
+	copycat = asm_strstr("", "");
+	printf("original : %s\n", original);
+	printf("copycat  : %s\n", copycat);
+
 	return (EXIT_SUCCESS);
 }

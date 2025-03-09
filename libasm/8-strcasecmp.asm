@@ -74,11 +74,11 @@ asm_strcasecmp:
 		js negative
 
 		positive:
-		mov rax, 1
+		mov rax, -1
 		ret
 
 		negative:
-		mov rax, -1
+		mov rax, 1
 		ret
 
 		zero:

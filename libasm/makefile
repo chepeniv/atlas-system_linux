@@ -56,6 +56,11 @@ test-6: clean asm-6
 	${CCMD} test_6.o 6-putc.o -o test_6.run
 	./test_6.run
 
+test-7: clean asm-7 asm-0
+	${CCMD} -c tests/test_7.c 
+	${CCMD} test_7.o 7-puts.o -o test_7.run
+	./test_7.run
+
 ######## ASM TASKS
 
 asm-0:
@@ -78,6 +83,9 @@ asm-5:
 
 asm-6:
 	${ASD} 6-putc.asm
+
+asm-7:
+	${ASD} 7-puts.asm
 
 ######## UTILITY
 

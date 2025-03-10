@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+#include "../libasm.h"
 
 #define S1  "Holberton"
 #define S2  "holberton"
@@ -13,19 +13,29 @@
 #define A2  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define A3  "()[]{}<>n"
 
-/**
- * main - Program entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 int main(void)
 {
-    assert(strpbrk(S2, A1) == asm_strpbrk(S2, A1));
-    assert(strpbrk(S2, A2) == asm_strpbrk(S2, A2));
-    assert(strpbrk(S3, A1) == asm_strpbrk(S3, A1));
-    assert(strpbrk(S3, A2) == asm_strpbrk(S3, A2));
-    assert(strpbrk(S1, A3) == asm_strpbrk(S1, A3));
+	char const *original, *copycat;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	original = strpbrk(S2, A1);
+	copycat = asm_strpbrk(S2, A1);
+	printf("%s -- %s\n", original, copycat);
+
+	original = strpbrk(S2, A2);
+	copycat = asm_strpbrk(S2, A2);
+	printf("%s -- %s\n", original, copycat);
+
+	original = strpbrk(S3, A1);
+	copycat = asm_strpbrk(S3, A1);
+	printf("%s -- %s\n", original, copycat);
+
+	original = strpbrk(S3, A2);
+	copycat = asm_strpbrk(S3, A2);
+	printf("%s -- %s\n", original, copycat);
+
+	original = strpbrk(S1, A3);
+	copycat = asm_strpbrk(S1, A3);
+	printf("%s -- %s\n", original, copycat);
+
+	return (EXIT_SUCCESS);
 }

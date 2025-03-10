@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "../libasm.h"
+#include "lorem_ipsum.h"
 
 #define S1  "Holberton School"
 #define S2  "HOLBERTON SCHOOL"
@@ -12,6 +13,8 @@
 #define S5  "HOLBERTON"
 #define S6  "holberton"
 #define S7  "HoLbErToN ScHoOl"
+#define S8  "hOlBeRtOn sChOOL"
+
 #define S8  "hOlBeRtOn sChOOL"
 
 int main(void)
@@ -48,10 +51,16 @@ int main(void)
 	copycat = asm_strcasecmp(S7, S8);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
 
-	printf("comparing:\n%s\n%s\n", "", S6);
-	original = strcasecmp("", S6);
-	copycat = asm_strcasecmp("", S6);
+	original = strcasecmp(LOREM, LOREM);
+	copycat = asm_strcasecmp(LOREM, LOREM);
+	assert(strcasecmp(LOREM, LOREM) == asm_strcasecmp(LOREM, LOREM));
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	original = strcasecmp(LOREM, LOREM_B);
+	copycat = asm_strcasecmp(LOREM, LOREM_B);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+	/* assert(strcasecmp(LOREM, LOREM_B) == strcasecmp(LOREM, LOREM_B)); */
+	assert(strcasecmp(LOREM, LOREM_B) == asm_strcasecmp(LOREM, LOREM_B));
 
 	return (EXIT_SUCCESS);
 }

@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "../libasm.h"
+#include "lorem_ipsum.h"
 
 #define S1  "Holberton School"
 #define S2  "HOLgERTON SCHOOL"
@@ -58,6 +59,11 @@ int main(void)
 	original = strncasecmp("", S6, 2);
 	copycat = asm_strncasecmp("", S6, 2);
 	assert(strncasecmp("", S6, 2) == asm_strncasecmp("", S6, 2));
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	original = strncasecmp(LOREM, LOREM_B, 4096);
+	copycat = asm_strncasecmp(LOREM, LOREM_B, 4096);
+	assert(strncasecmp(LOREM, LOREM_B, 4096) == asm_strncasecmp(LOREM, LOREM_B, 4096));
 	printf("original: %d\ncopycat: %d\n", original, copycat);
 
 	return (EXIT_SUCCESS);

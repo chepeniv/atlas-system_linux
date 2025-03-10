@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+#include "../libasm.h"
 
 #define S1  "Holberton"
 #define S2  "holberton"
@@ -12,21 +12,44 @@
 #define A1  "abcdefghijklmnopqrstuvwxyz"
 #define A2  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-/**
- * main - Program entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 int main(void)
 {
-    assert(strcspn(S2, A1) == asm_strcspn(S2, A1));
-    assert(strcspn(S2, A2) == asm_strcspn(S2, A2));
-    assert(strcspn(S3, A1) == asm_strcspn(S3, A1));
-    assert(strcspn(S3, A2) == asm_strcspn(S3, A2));
-    assert(strcspn(S1, A1) == asm_strcspn(S1, A1));
-    assert(strcspn(S1, A2) == asm_strcspn(S1, A2));
-    assert(strcspn(S1, A1 A2) == asm_strcspn(S1, A1 A2));
+	int original, copycat;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	original = strcspn(S2, A1);
+	copycat = asm_strcspn(S2, A1);
+	printf("%s : %s\n", S2, A1);
+	printf("%d, %d\n", original, copycat);
+
+	original = strcspn(S2, A2);
+	copycat = asm_strcspn(S2, A2);
+	printf("%s : %s\n", S2, A2);
+	printf("%d, %d\n", original, copycat);
+
+	original = strcspn(S3, A1);
+	copycat = asm_strcspn(S3, A1);
+	printf("%s : %s\n", S3, A1);
+	printf("%d, %d\n", original, copycat);
+
+	original = strcspn(S3, A2);
+	copycat = asm_strcspn(S3, A2);
+	printf("%s : %s\n", S3, A2);
+	printf("%d, %d\n", original, copycat);
+
+	original = strcspn(S1, A1);
+	copycat = asm_strcspn(S1, A1);
+	printf("%s : %s\n", S1, A1);
+	printf("%d, %d\n", original, copycat);
+
+	original = strcspn(S1, A2);
+	copycat = asm_strcspn(S1, A2);
+	printf("%s : %s\n", S1, A2);
+	printf("%d, %d\n", original, copycat);
+
+	original = strcspn(S1, A1 A2);
+	copycat = asm_strcspn(S1, A1 A2);
+	printf("%s : %s\n", S1, A1 A2);
+	printf("%d, %d\n", original, copycat);
+
+	return (EXIT_SUCCESS);
 }

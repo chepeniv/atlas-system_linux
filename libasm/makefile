@@ -78,6 +78,11 @@ test-10: clean asm-10
 	${CCMD} ${OBJ} -o test_10.run
 	${RUN}
 
+test-10: clean asm-11
+	${CCMD} -c tests/test_11.c 
+	${CCMD} ${OBJ} -o test_11.run
+	${RUN}
+
 ######## ASM TASKS
 
 asm-0:
@@ -112,6 +117,9 @@ asm-9:
 
 asm-10:
 	${ASD} 10-strspn.asm
+
+asm-11:
+	${ASD} 11-strcspn.asm
 
 ######## UTILITY
 

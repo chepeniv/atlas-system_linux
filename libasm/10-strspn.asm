@@ -15,61 +15,50 @@ BITS 64
 ; number of bytes in the head-end of 'text' that consist entirely of characters
 ; passing the filter
 ;
-; argument order: RDI, RSI, RDX, RCX, R8, R9.
+; arguments : RDI, RSI, RDX, RCX, R8, R9.
+; preserve  : RBP, RBX, R12, R13, R14, R15
 
 SECTION .note.GNU-stack ; suppress /usr/bin/ld warning
 
 SECTION .text
 
-; A-Z: 65-90  (41-5a)
-; a-z: 97-122 (61-7a)
-capitalize:
-	cmp rax, 0x61
-	jle no_cap_left
-	cmp rax, 0x7a
-	jge no_cap_left
-	sub rax, 0x20
-	no_cap_left:
-
-	cmp rbx, 0x61
-	jle no_cap_right
-	cmp rbx, 0x7a
-	jge no_cap_right
-	sub rbx, 0x20
-	no_cap_right:
-
-	jmp cont_next_char
-
 global asm_strspn
 asm_strspn:
 
-	; SETUP
-	mov rax, 1
-	mov rbx, 1
-	mov rcx, -1
+	push rbx
+	mov rcx, -1 ; next_char counter
+	mov r8, 0   ; result
 
-	; COMPARE
 	next_char:
 		inc rcx
 		movzx rax, byte [rdi + rcx]
-		movzx rbx, byte [rsi + rcx]
 
-		cmp rcx, rdx
-		je end_of_cmp
-		test rax, rbx
-		jz end_of_str
+		test rax, rax
+		jz end_of_cmp
 
-		jmp capitalize
+		mov rdx, -1 ; reset check_char counter
+		jmp check_char
 		cont_next_char:
+		inc r8
 
 		cmp rax, rbx
 		je next_char
 
-	; RETURN
-	end_of_str:
-		sub rax, rbx
-		ret
+	check_char:
+		inc rdx
+		movzx rbx, byte [rsi + rdx]
 
+		test rbx, rbx
+		jz end_of_cmp
+
+		cmp rax, rbx
+		je cont_next_char
+
+		jmp check_char
+
+
+	; RETURN
 	end_of_cmp:
-		mov rax, 0
+		pop rbx
+		mov rax, r8
 		ret

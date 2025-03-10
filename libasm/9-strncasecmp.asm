@@ -20,6 +20,7 @@ BITS 64
 ; respectively." ~
 ;
 ; integers, pointers: RDI, RSI, RDX, RCX, R8, R9.
+; preserve  : RBP, RBX, R12, R13, R14, R15
 
 SECTION .note.GNU-stack ; suppress /usr/bin/ld warning
 
@@ -48,6 +49,7 @@ global asm_strncasecmp
 asm_strncasecmp:
 
 	; SETUP
+	push rbx
 	mov rax, 1
 	mov rbx, 1
 	mov rcx, -1
@@ -72,8 +74,10 @@ asm_strncasecmp:
 	; RETURN
 	end_of_str:
 		sub rax, rbx
+		pop rbx
 		ret
 
 	end_of_cmp:
+		pop rbx
 		mov rax, 0
 		ret

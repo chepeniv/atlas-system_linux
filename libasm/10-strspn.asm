@@ -41,8 +41,7 @@ asm_strspn:
 		cont_next_char:
 		inc r8
 
-		cmp rax, rbx
-		je next_char
+		jmp next_char
 
 	check_char:
 		inc rdx

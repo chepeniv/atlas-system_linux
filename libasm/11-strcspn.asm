@@ -27,8 +27,9 @@ global asm_strcspn
 asm_strcspn:
 
 	push rbx
-	mov rcx, -1 ; next_char counter
-	mov r8, 0   ; result
+
+	mov rcx, -1
+	mov r8, 0
 
 	next_char:
 		inc rcx
@@ -37,23 +38,23 @@ asm_strcspn:
 		test rax, rax
 		jz end_of_cmp
 
-		mov rdx, -1 ; reset check_char counter
+		mov rdx, -1
 		jmp check_char
+
 		cont_next_char:
 		inc r8
 
-		cmp rax, rbx
-		je next_char
+		jmp next_char
 
 	check_char:
 		inc rdx
 		movzx rbx, byte [rsi + rdx]
 
 		test rbx, rbx
-		jz end_of_cmp
+		jz cont_next_char
 
 		cmp rax, rbx
-		je cont_next_char
+		je end_of_cmp
 
 		jmp check_char
 

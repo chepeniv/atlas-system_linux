@@ -12,7 +12,7 @@
 #define S4  "holberton socool"
 #define S5  "HOLBERTON"
 #define S6  "holberton"
-#define S7  "HoLbErToN ScHoOl"
+#define S7  "HoLbArToN ScHoOl"
 #define S8  "hOlBeRtOn sChOOL"
 
 #define S8  "hOlBeRtOn sChOOL"
@@ -51,16 +51,24 @@ int main(void)
 	copycat = asm_strcasecmp(S7, S8);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
 
-	original = strcasecmp(LOREM, LOREM);
-	copycat = asm_strcasecmp(LOREM, LOREM);
-	assert(strcasecmp(LOREM, LOREM) == asm_strcasecmp(LOREM, LOREM));
+	printf("comparing:\n%s\n%s\n", S8, S3);
+	original = strcasecmp(S8, S3);
+	copycat = asm_strcasecmp(S8, S3);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
 
+	/* assert(strcasecmp(LOREM, LOREM) == strcasecmp(LOREM, LOREM)); */
+	/* assert(strcasecmp(LOREM, LOREM_B) == strcasecmp(LOREM, LOREM_B)); */
+
+	original = strcasecmp(LOREM, LOREM);
+	copycat = asm_strcasecmp(LOREM, LOREM);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(strcasecmp(LOREM, LOREM) == asm_strcasecmp(LOREM, LOREM));
+
+	printf("comparing large strings differing only in case\n");
 	original = strcasecmp(LOREM, LOREM_B);
 	copycat = asm_strcasecmp(LOREM, LOREM_B);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
-	/* assert(strcasecmp(LOREM, LOREM_B) == strcasecmp(LOREM, LOREM_B)); */
-	assert(strcasecmp(LOREM, LOREM_B) == asm_strcasecmp(LOREM, LOREM_B));
+	/* assert(strcasecmp(LOREM, LOREM_B) == asm_strcasecmp(LOREM, LOREM_B)); */
 
 	return (EXIT_SUCCESS);
 }

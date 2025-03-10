@@ -78,7 +78,7 @@ test-10: clean asm-10
 	${CCMD} ${OBJ} -o test_10.run
 	${RUN}
 
-test-10: clean asm-11
+test-11: clean asm-11
 	${CCMD} -c tests/test_11.c 
 	${CCMD} ${OBJ} -o test_11.run
 	${RUN}

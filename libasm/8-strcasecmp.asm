@@ -24,17 +24,17 @@ SECTION .text
 ; A-Z: 65-90  (41-5a)
 ; a-z: 97-122 (61-7a)
 capitalize:
-	cmp rax, 0x61
-	jle no_cap_left
-	cmp rax, 0x7a
-	jge no_cap_left
+	cmp rax, 0x60
+	jl no_cap_left
+	cmp rax, 0x7b
+	jg no_cap_left
 	sub rax, 0x20
 	no_cap_left:
 
-	cmp rbx, 0x61
-	jle no_cap_right
-	cmp rbx, 0x7a
-	jge no_cap_right
+	cmp rbx, 0x60
+	jl no_cap_right
+	cmp rbx, 0x7b
+	jg no_cap_right
 	sub rbx, 0x20
 	no_cap_right:
 
@@ -55,11 +55,11 @@ asm_strcasecmp:
 		movzx rax, byte [rdi + rcx]
 		movzx rbx, byte [rsi + rcx]
 
-		test rax, rbx
-		jz end_of_string
-
 		jmp capitalize
 		cont_next_char:
+
+		test rax, rbx
+		jz end_of_string
 
 		cmp rax, rbx
 		je next_char

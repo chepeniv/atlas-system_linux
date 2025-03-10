@@ -50,10 +50,9 @@ asm_strpbrk:
 		jz cont_next_char
 
 		cmp rax, rbx
-		je match_found
-		jmp check_char
+		jne check_char
 
-	match_found:
+	; match_found:
 		pop rbx
 		add rdi, rcx
 		mov rax, rdi

@@ -22,36 +22,43 @@ int main(void)
 	original = strncasecmp(S1, S1, 7);
 	copycat = asm_strncasecmp(S1, S1, 7);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(original == copycat);
 
 	printf("\n%s\n%s\n", S1, S2);
 	original = strncasecmp(S1, S2, 6);
 	copycat = asm_strncasecmp(S1, S2, 6);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(original == copycat);
 
 	printf("\n%s\n%s\n", S1, S3);
 	original = strncasecmp(S1, S3, 12);
 	copycat = asm_strncasecmp(S1, S3, 12);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(original == copycat);
 
 	printf("\n%s\n%s\n", S1, S4);
 	original = strncasecmp(S1, S4, 8);
 	copycat = asm_strncasecmp(S1, S4, 8);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(original == copycat);
 
 	printf("\n%s\n%s\n", S3, S6);
 	original = strncasecmp(S3, S6, 5);
 	copycat = asm_strncasecmp(S3, S6, 5);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(original == copycat);
 
 	printf("\n%s\n%s\n", S7, S8);
 	original = strncasecmp(S7, S8, 4);
 	copycat = asm_strncasecmp(S7, S8, 4);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(original == copycat);
 
 	printf("\n%s\n%s\n", "", S6);
 	original = strncasecmp("", S6, 2);
 	copycat = asm_strncasecmp("", S6, 2);
 	printf("original: %d\ncopycat: %d\n", original, copycat);
+	assert(original == copycat);
 
 	return (EXIT_SUCCESS);
 }

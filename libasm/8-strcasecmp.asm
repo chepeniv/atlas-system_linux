@@ -44,6 +44,7 @@ global asm_strcasecmp
 asm_strcasecmp:
 
 	; SETUP
+	push rbx
 	mov rax, 1
 	mov rbx, 1
 	mov rcx, -1
@@ -66,17 +67,5 @@ asm_strcasecmp:
 	; RETURN
 	end_of_string:
 		sub rax, rbx
+		pop rbx
 		ret
-
-		; cmp rax, rbx
-		; jz zero
-		; js negative
-		; positive:
-		; mov rax, 1
-		; ret
-		; negative:
-		; mov rax, -1
-		; ret
-		; zero:
-		; mov rax, 0
-		; ret

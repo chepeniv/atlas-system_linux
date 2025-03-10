@@ -6,10 +6,10 @@
 #include "../libasm.h"
 
 #define S1  "Holberton School"
-#define S2  "HOLBERTON SCHOOL"
+#define S2  "HOLgERTON SCHOOL"
 #define S3  "Holberton SchooL"
-#define S4  "holberton socool"
-#define S5  "HOLBERTON"
+#define S4  "holbenotn socool"
+#define S5  "HOLnonTON"
 #define S6  "holberton"
 #define S7  "HoLbErToN ScHoOl"
 #define S8  "hOlBeRtOn sChOOL"

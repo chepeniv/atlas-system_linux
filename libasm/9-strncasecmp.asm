@@ -58,8 +58,10 @@ asm_strncasecmp:
 		movzx rax, byte [rdi + rcx]
 		movzx rbx, byte [rsi + rcx]
 
+		cmp rcx, rdx
+		je end_of_cmp
 		test rax, rbx
-		jz end_of_string
+		jz end_of_str
 
 		jmp capitalize
 		cont_next_char:
@@ -68,6 +70,10 @@ asm_strncasecmp:
 		je next_char
 
 	; RETURN
-	end_of_string:
+	end_of_str:
 		sub rax, rbx
+		ret
+
+	end_of_cmp:
+		mov rax, 0
 		ret

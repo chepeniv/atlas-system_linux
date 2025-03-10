@@ -9,9 +9,9 @@
 #define S2  "holberton"
 #define S3  "HOLBERTON"
 
-#define A1  "abcdefghijklmnopqrstuvwxyz"
-#define A2  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-#define A3  "()[]{}<>n"
+#define A1  "nopqrstuvwxyz"
+#define A2  "ABCDEFG"
+#define A3  "()[]{}<>e"
 
 int main(void)
 {

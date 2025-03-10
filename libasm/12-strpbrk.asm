@@ -28,19 +28,17 @@ asm_strpbrk:
 
 	push rbx
 	mov rcx, -1
-	mov r8, 0
 
 	next_char:
 		inc rcx
 		movzx rax, byte [rdi + rcx]
 
 		test rax, rax
-		jz end_of_cmp
+		jz no_match
 
-		mov rdx, -1 ; reset check_char counter
+		mov rdx, -1
 		jmp check_char
 		cont_next_char:
-		inc r8
 
 		jmp next_char
 
@@ -49,15 +47,19 @@ asm_strpbrk:
 		movzx rbx, byte [rsi + rdx]
 
 		test rbx, rbx
-		jz end_of_cmp
+		jz cont_next_char
 
 		cmp rax, rbx
-		je cont_next_char
-
+		je match_found
 		jmp check_char
 
-	; RETURN
-	end_of_cmp:
+	match_found:
 		pop rbx
-		mov rax, r8
+		add rdi, rcx
+		mov rax, rdi
+		ret
+
+	no_match:
+		pop rbx
+		mov rax, 0
 		ret

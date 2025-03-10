@@ -1,7 +1,6 @@
 CC = gcc
 GDB = cgdb
 MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
-DEFS = def_*.c
 CFLAGS = -Wall -Werror -Wextra -ggdb3
 DB_FLAGS = -ggdb3
 CCMD = ${CC} ${CFLAGS} ${DB_FLAGS}
@@ -9,62 +8,70 @@ AS = nasm -f elf64
 ASD = ${AS} -g # -F dwarf
 LD = ld
 
+OBJ = *.o
+RUN = ./*.run
+
 .DELETE_ON_ERROR:
 
 .PHONY: clean
 
 ######## GLOBAL
 
-all: test-0 test-1 test-2 test-3 test-4 test-5 test-6
+all: asm
 
-asm: asm-0 asm-1 asm-2 asm-3 asm-4 asm-5 asm-6
+asm: asm-0 asm-1 asm-2 asm-3 asm-4 asm-5 asm-6 asm-7 asm-8 asm-9
 
 ######## ASM TESTING
 
 test-0: clean asm-0
 	${CCMD} -c tests/test_0.c 
-	${CCMD} test_0.o 0-strlen.o -o test_0.run
-	test_0.run
+	${CCMD} ${OBJ} -o test_0.run
+	${RUN}
 
 test-1: clean asm-1
 	${CCMD} -c tests/test_1.c 
-	${CCMD} test_1.o 1-strcmp.o -o test_1.run
-	./test_1.run
+	${CCMD} ${OBJ} -o test_1.run
+	${RUN}
 
 test-2: clean asm-2
 	${CCMD} -Wno-overlength-strings -c tests/test_2.c 
-	${CCMD} -Wno-overlength-strings test_2.o 2-strncmp.o -o test_2.run
-	./test_2.run
+	${CCMD} -Wno-overlength-strings ${OBJ} -o test_2.run
+	${RUN}
 
 test-3: clean asm-3
 	${CCMD} -c tests/test_3.c 
-	${CCMD} test_3.o 3-strchr.o -o test_3.run
-	./test_3.run
+	${CCMD} ${OBJ} -o test_3.run
+	${RUN}
 
 test-4: clean asm-4
 	${CCMD} -c tests/test_4.c 
-	${CCMD} test_4.o 4-strstr.o -o test_4.run
-	./test_4.run
+	${CCMD} ${OBJ} -o test_4.run
+	${RUN}
 
 test-5: clean asm-5
 	${CCMD} -c tests/test_5.c 
-	${CCMD} test_5.o 5-memcpy.o -o test_5.run
-	./test_5.run
+	${CCMD} ${OBJ} -o test_5.run
+	${RUN}
 
 test-6: clean asm-6
 	${CCMD} -c tests/test_6.c 
-	${CCMD} test_6.o 6-putc.o -o test_6.run
-	./test_6.run
+	${CCMD} ${OBJ} -o test_6.run
+	${RUN}
 
 test-7: clean asm-7 asm-0
 	${CCMD} -c tests/test_7.c 
-	${CCMD} test_7.o 7-puts.o 0-strlen.o -o test_7.run
-	./test_7.run
+	${CCMD} ${OBJ} -o test_7.run
+	${RUN}
 
 test-8: clean asm-8
 	${CCMD} -c tests/test_8.c 
-	${CCMD} test_8.o 8-strcasecmp.o -o test_8.run
-	./test_8.run
+	${CCMD} ${OBJ} -o test_8.run
+	${RUN}
+
+test-9: clean asm-9
+	${CCMD} -c tests/test_9.c 
+	${CCMD} ${OBJ} -o test_9.run
+	${RUN}
 
 ######## ASM TASKS
 
@@ -94,6 +101,9 @@ asm-7:
 
 asm-8:
 	${ASD} 8-strcasecmp.asm
+
+asm-9:
+	${ASD} 9-strncasecmp.asm
 
 ######## UTILITY
 

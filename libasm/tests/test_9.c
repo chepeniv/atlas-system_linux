@@ -3,28 +3,55 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libasm.h"
+#include "../libasm.h"
 
 #define S1  "Holberton School"
 #define S2  "HOLBERTON SCHOOL"
 #define S3  "Holberton SchooL"
 #define S4  "holberton socool"
+#define S5  "HOLBERTON"
+#define S6  "holberton"
+#define S7  "HoLbErToN ScHoOl"
+#define S8  "hOlBeRtOn sChOOL"
 
-/**
- * main - Program entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 int main(void)
 {
-    assert(strncasecmp(S1, S3, 1) == asm_strncasecmp(S1, S3, 1));
-    assert(strncasecmp(S1, S2, 11) == asm_strncasecmp(S1, S2, 11));
-    assert(strncasecmp(S1, S3, 11) == asm_strncasecmp(S1, S3, 11));
-    assert(strncasecmp(S1, S2, 16) == asm_strncasecmp(S1, S2, 16));
-    assert(strncasecmp(S1, S3, 16) == asm_strncasecmp(S1, S3, 16));
-    assert(strncasecmp(S1, S4, 11) == asm_strncasecmp(S1, S4, 11));
-    assert(strncasecmp(S1, S4, 16) == asm_strncasecmp(S1, S4, 16));
+	int original, copycat;
 
-    printf("All good!\n");
-    return (EXIT_SUCCESS);
+	printf("\n%s\n%s\n", S1, S1);
+	original = strncasecmp(S1, S1, 7);
+	copycat = asm_strncasecmp(S1, S1, 7);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("\n%s\n%s\n", S1, S2);
+	original = strncasecmp(S1, S2, 6);
+	copycat = asm_strncasecmp(S1, S2, 6);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("\n%s\n%s\n", S1, S3);
+	original = strncasecmp(S1, S3, 12);
+	copycat = asm_strncasecmp(S1, S3, 12);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("\n%s\n%s\n", S1, S4);
+	original = strncasecmp(S1, S4, 8);
+	copycat = asm_strncasecmp(S1, S4, 8);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("\n%s\n%s\n", S3, S6);
+	original = strncasecmp(S3, S6, 5);
+	copycat = asm_strncasecmp(S3, S6, 5);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("\n%s\n%s\n", S7, S8);
+	original = strncasecmp(S7, S8, 4);
+	copycat = asm_strncasecmp(S7, S8, 4);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	printf("\n%s\n%s\n", "", S6);
+	original = strncasecmp("", S6, 2);
+	copycat = asm_strncasecmp("", S6, 2);
+	printf("original: %d\ncopycat: %d\n", original, copycat);
+
+	return (EXIT_SUCCESS);
 }

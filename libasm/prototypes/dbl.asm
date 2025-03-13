@@ -7,6 +7,7 @@ BITS 64
 ; syscall defs
 ;     /usr/include/asm/unistd_64.h
 
+SECTION .note.GNU-stack ; suppress /usr/bin/ld warning
 SECTION .note.GNU-stack
 
 SECTION .text

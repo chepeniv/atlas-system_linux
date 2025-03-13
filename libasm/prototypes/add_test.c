@@ -27,5 +27,6 @@ int main(int n, char **v)
 	printf("result of asm_dbl(%d) is %d\n", a, c);
 	c = asm_add(a, b);
 	printf("result of asm_add(%d, %d) is %d\n", a, b, c);
+
 	return (0);
 }

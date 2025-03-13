@@ -21,8 +21,13 @@ add:
 	${ASD} dbl.asm
 	${ASD} add.asm 
 	${CCMD} -c add_test.c -o add_test.o
-	${CCMD} add.o dbl.o add_test.o -o add.x
+	${CCMD} add.o dbl.o add_test.o -o add.x 
 	./add.x 17 83
+
+add_print:
+	${ASD} add_print.asm 
+	gcc add_print.o
+	./a.out
 
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start

@@ -5,7 +5,7 @@
 - [glibc: signal sets](https://www.gnu.org/software/libc/manual/html_node/Signal-Sets.html)
 
 - `signal (7)`
-- `singnal (2)`
+- `signal (2)`
 - `sinaction (2)`
 - `kill (2)`
 

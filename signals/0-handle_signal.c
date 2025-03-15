@@ -14,7 +14,15 @@
 
 void print_gotcha(int signum)
 {
-	printf("Gotcha! %d\n", signum);
+	static int queue = 0;
+
+	queue++;
+
+	while (queue > 0)
+	{
+		printf("Gotcha! %d\n", signum);
+		queue--;
+	}
 }
 
 /**
@@ -31,11 +39,6 @@ void print_gotcha(int signum)
 int handle_signal(void)
 {
 	void (*new_handler)(int);
-	sigset_t new_set;
-
-	sigemptyset(&new_set);
-	sigaddset(&new_set, SIGINT);
-	sigprocmask(SIG_UNBLOCK, &new_set, NULL);
 
 	new_handler = signal(SIGINT, print_gotcha);
 	if (new_handler == SIG_ERR)

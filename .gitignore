@@ -12,6 +12,7 @@
 
 ######## testing
 
+run-*
 *.file
 *.dummy.*
 *.test

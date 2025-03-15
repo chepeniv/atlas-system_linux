@@ -1,14 +1,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
-
 #include "../signals.h"
 
-/**
- * main - Entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 int main(void)
 {
     int i;

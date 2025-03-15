@@ -1,6 +1,8 @@
-#include "signals.h"
 #include <signal.h>
 #include <stdio.h>
+#include <unistd.h>
+#include "signals.h"
+
 
 /**
  * print_gotcha - prints gotcha message along with value received
@@ -26,8 +28,14 @@ void print_gotcha(int signum)
  * Return: (int) success '0'; error '-1'
  */
 
-int handle_signal(void) {
+int handle_signal(void)
+{
 	void (*new_handler)(int);
+	sigset_t new_set;
+
+	sigemptyset(&new_set);
+	sigaddset(&new_set, SIGINT);
+	sigprocmask(SIG_UNBLOCK, &new_set, NULL);
 
 	new_handler = signal(SIGINT, print_gotcha);
 	if (new_handler == SIG_ERR)

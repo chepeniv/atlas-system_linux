@@ -1,8 +1,8 @@
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "signals.h"
-
 
 /**
  * print_gotcha - prints gotcha message along with value received
@@ -14,15 +14,7 @@
 
 void print_gotcha(int signum)
 {
-	static int queue = 0;
-
-	queue++;
-
-	while (queue > 0)
-	{
-		printf("Gotcha! %d\n", signum);
-		queue--;
-	}
+	printf("Gotcha! %d\n", signum);
 }
 
 /**

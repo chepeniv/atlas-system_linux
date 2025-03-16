@@ -33,5 +33,8 @@ all:
 	${CCMD} 4-trace_signal_sender.c tests/test-4.c -o run-4
 	./run-4
 
+5-task:
+	${CCMD} 5-signal_describe.c -o describe.x
+
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start run-*

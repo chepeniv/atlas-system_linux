@@ -4,6 +4,19 @@
 #include <sys/types.h>
 #include <signal.h>
 
+/**
+ * struct _desc_index - stores a signal int code along with a brief string
+ * description
+ * @code: the number code of a signal
+ * @desc: a string briefly describing the signal
+ */
+
+typedef struct _desc_index
+{
+	int code;
+	char *desc;
+} desc_index;
+
 /* REQUIRED FUNCTIONS */
 
 int handle_signal(void);

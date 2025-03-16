@@ -3,7 +3,8 @@
 #include <stdlib.h>
 
 /**
- * current_handler_signal - retrieve the current handler for the `SIGINT` signal
+ * current_handler_signal - retrieve the current handler for the `SIGINT`
+ * signal
  *
  * Description: the handler remains unchanged after calling this function
  * restrictions: `sigaction`(2) is not allowed

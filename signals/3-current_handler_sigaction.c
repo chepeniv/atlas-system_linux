@@ -3,8 +3,9 @@
 #include <stdlib.h>
 
 /**
- * current_handler_signal - retrieve the current handler for the 'SIGINT'
+ * current_handler_sigaction - retrieve the current handler for the 'SIGINT'
  * signal
+ * @void: [suppress betty-doc misinterpretation]
  *
  * Description: the handler remains unchanged after calling this function
  * restrictions: 'sigaction'(2) must be used; 'signal'(2) is not allowed

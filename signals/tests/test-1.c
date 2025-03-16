@@ -8,11 +8,6 @@
 void print_hello(int);
 void set_print_hello(void);
 
-/**
- * main - Entry point
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
- */
 int main(void)
 {
     void (*handler)(int);

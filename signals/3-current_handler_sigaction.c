@@ -32,5 +32,4 @@ void (*current_handler_sigaction(void))(int)
 		return (NULL);
 
 	return (current_handler);
-
 }

@@ -38,7 +38,6 @@ int trace_signal_sender(void)
 
 	new_sa.sa_sigaction = &sig_handler_print_sender;
 	new_sa.sa_flags = SA_SIGINFO;
-
 	result = sigaction(SIGQUIT, &new_sa, NULL);
 
 	return (result);

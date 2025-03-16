@@ -1,5 +1,6 @@
 #include "signals.h"
 #include <stdio.h>
+#include <signal.h>
 
 /**
  * print_gotcha - prints gotcha message along with value received
@@ -26,6 +27,13 @@ void print_gotcha(int signum)
 
 int handle_sigaction(void)
 {
-	return (0);
+	int result;
+	struct sigaction new_sa;
+
+	new_sa.sa_handler = &print_gotcha;
+
+	result = sigaction(SIGINT, &new_sa, NULL);
+
+	return (result);
 }
 

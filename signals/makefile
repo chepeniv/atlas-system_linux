@@ -25,5 +25,9 @@ all:
 	${CCMD} 0-handle_signal.c tests/test-0.c -o run-0
 	# ./run-0
 
+2-task:
+	${CCMD} 2-handle_sigaction.c tests/test-2.c -o run-2
+	./run-2
+
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start run-*

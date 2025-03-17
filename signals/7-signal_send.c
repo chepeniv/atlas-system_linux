@@ -1,9 +1,6 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-/* #include <linux/signal.h> */
-/* #include <sys/syscall.h> */
-/* #include <unistd.h> */
 
 /**
  * main - a program that sends the 'SIGINT' signal to a process given by its
@@ -29,7 +26,7 @@
 
 int main(int count, char **arguments)
 {
-	int target_pid, result;
+	int target_pid;
 
 	if (count != 2)
 	{
@@ -37,9 +34,7 @@ int main(int count, char **arguments)
 		return (EXIT_FAILURE);
 	}
 
-	/* syscall(SYS_pidfd_send_signal, target_pid, SIGINT, NULL, 0); */
 	target_pid = atoi(arguments[1]);
-	result = kill(target_pid, SIGINT);
-
-	return (result);
+	if (kill(target_pid, SIGINT))
+		return(1);
 }

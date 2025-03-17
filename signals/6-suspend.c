@@ -31,17 +31,7 @@ void handle_sigint(int signum)
 
 int main(void)
 {
-	/* sigset_t wait_set; */
-	/* struct sigaction new_sa; */
-
-	/* new_sa.sa_handler = &handle_sigint; */
-	/* sigaction(SIGINT, &new_sa, NULL); */
 	signal(SIGINT, handle_sigint);
-
-	/* sigemptyset(&wait_set); */
-	/* sigaddset(&wait_set, SIGINT); */
-	/* sigsuspend(&wait_set); */
 	pause();
-
-	fprintf(stdout, "Signal Received\n");
+	fprintf(stdout, "Signal received\n");
 }

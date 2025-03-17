@@ -2,6 +2,11 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * handle_sigint - prints a simple message to stdout
+ * @signum: number to output with message
+ */
+
 void handle_sigint(int signum)
 {
 	fprintf(stdout, "Caught %d\n", signum);

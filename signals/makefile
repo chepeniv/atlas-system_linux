@@ -42,5 +42,8 @@ all:
 	${CCMD} 6-suspend.c -o ${BINDIR}/suspend.x
 	${BINDIR}/suspend.x
 
+7-task:
+	${CCMD} 7-signal_send.c -o ${BINDIR}/sigsend.x
+
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start run-*

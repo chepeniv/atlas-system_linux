@@ -12,7 +12,7 @@
 
 void print_gotcha(int signum)
 {
-	fprintf(stdout, "Gotcha! %d\n", signum);
+	fprintf(stdout, "Gotcha! [%d]\n", signum);
 	fflush(stdout);
 }
 

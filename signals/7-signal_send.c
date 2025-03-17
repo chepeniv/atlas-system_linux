@@ -29,7 +29,7 @@
 
 int main(int count, char **arguments)
 {
-	int target_pid;
+	int target_pid, result;
 
 	if (count != 2)
 	{
@@ -39,5 +39,7 @@ int main(int count, char **arguments)
 
 	/* syscall(SYS_pidfd_send_signal, target_pid, SIGINT, NULL, 0); */
 	target_pid = atoi(arguments[1]);
-	kill(target_pid, SIGINT);
+	result = kill(target_pid, SIGINT);
+
+	return (result);
 }

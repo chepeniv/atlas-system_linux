@@ -86,7 +86,7 @@ after the signal has been received and handled
 - suspend indefinitely until a signal is received
 - when a `SIGINT` is received, print `Caught %d\n` where is the signal number
 - after the first `SIGINT` is received
-	-  print `Signal Received\n` with exit `EXIT_SUCCESS`
+	- print `Signal Received\n` with exit `EXIT_SUCCESS`
 - the `exit`, `sleep`, and `_exit` functions are not allowed
 - no loops are allowed
 

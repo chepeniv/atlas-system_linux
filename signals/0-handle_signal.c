@@ -15,6 +15,7 @@
 void print_gotcha(int signum)
 {
 	fprintf(stdout, "Gotcha! [%d]\n", signum);
+	fflush(stdout);
 }
 
 /**
@@ -30,10 +31,10 @@ void print_gotcha(int signum)
 
 int handle_signal(void)
 {
-	void (*new_handler)(int);
+	void (*prev_handler)(int);
 
-	new_handler = signal(SIGINT, print_gotcha);
-	if (new_handler == SIG_ERR)
+	prev_handler = signal(SIGINT, print_gotcha);
+	if (prev_handler == SIG_ERR)
 		return (-1);
 
 	return (0);

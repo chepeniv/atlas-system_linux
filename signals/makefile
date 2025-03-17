@@ -10,6 +10,8 @@ CCMD = ${CC} ${CFLAGS} ${DB_FLAGS}
 
 OBJ = *.o
 RUN = ./run-*
+BINDIR = build
+TESTDIR = tests
 
 MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
 
@@ -34,7 +36,7 @@ all:
 	build/run-4
 
 5-task:
-	${CCMD} 5-signal_describe.c -o describe.x
+	${CCMD} 5-signal_describe.c -o build/describe.x
 
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start run-*

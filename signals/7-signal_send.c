@@ -36,5 +36,5 @@ int main(int count, char **arguments)
 
 	target_pid = atoi(arguments[1]);
 	if (kill(target_pid, SIGINT))
-		return(1);
+		return (1);
 }

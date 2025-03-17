@@ -40,6 +40,7 @@ all:
 
 6-task:
 	${CCMD} 6-suspend.c -o ${BINDIR}/suspend.x
+	${BINDIR}/suspend.x
 
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start run-*

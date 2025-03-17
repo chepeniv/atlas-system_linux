@@ -1,4 +1,12 @@
-#include "signals.h"
+#include <signal.h>
+#include <stdio.h>
+#include <unistd.h>
+
+void handle_sigint(int signum)
+{
+	fprintf(stdout, "Caught %d\n", signum);
+	fflush(stdout);
+}
 
 /**
  * main - sets a handler for the 'SIGINT' signal, and exits right after the
@@ -18,4 +26,17 @@
 
 int main(void)
 {
+	/* sigset_t wait_set; */
+	/* struct sigaction new_sa; */
+
+	/* new_sa.sa_handler = &handle_sigint; */
+	/* sigaction(SIGINT, &new_sa, NULL); */
+	signal(SIGINT, handle_sigint);
+
+	/* sigemptyset(&wait_set); */
+	/* sigaddset(&wait_set, SIGINT); */
+	/* sigsuspend(&wait_set); */
+	pause();
+
+	fprintf(stdout, "Signal Received\n");
 }

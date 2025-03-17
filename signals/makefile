@@ -22,16 +22,16 @@ MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=al
 all: 
 
 0-task:
-	${CCMD} 0-handle_signal.c tests/test-0.c -o run-0
-	# ./run-0
+	${CCMD} 0-handle_signal.c tests/test-0.c -o build/run-0
+	build/run-0
 
 2-task:
-	${CCMD} 2-handle_sigaction.c tests/test-2.c -o run-2
-	./run-2
+	${CCMD} 2-handle_sigaction.c tests/test-2.c -o build/run-2
+	build/run-2
 
 4-task:
-	${CCMD} 4-trace_signal_sender.c tests/test-4.c -o run-4
-	./run-4
+	${CCMD} 4-trace_signal_sender.c tests/test-4.c -o build/run-4
+	build/run-4
 
 5-task:
 	${CCMD} 5-signal_describe.c -o describe.x

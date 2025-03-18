@@ -3,11 +3,13 @@
 #include "signals.h"
 
 /**
- * func - desc
- * @param: desc
+ * sigset_init - a function that initializes a sigset
+ * @set: a pointer to the signal set to initialize
+ * @signals: a '0'-terminated array of 'int's, each being a signal number
  *
- * Description: details
- * sub section: extra info
- *
- * Return: desc of return val and meanings
+ * Return: 0 upon success or -1 upon failure
  */
+
+int sigset_init(sigset_t *set, int *signals)
+{
+}

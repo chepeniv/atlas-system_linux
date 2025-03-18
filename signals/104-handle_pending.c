@@ -3,11 +3,16 @@
 #include "signals.h"
 
 /**
- * func - desc
- * @param: desc
+ * handle_pending - sets up a handler for all pending signals of the current
+ * process
+ * @handler: a pointer to the function to set for pending signals
  *
- * Description: details
- * sub section: extra info
+ * Instructions:
+ * use of `signal` (2) is prohibited.
  *
- * Return: desc of return val and meanings
+ * Return: 0 upon success or -1 upon failure
  */
+
+int handle_pending(int (*handler)(int))
+{
+}

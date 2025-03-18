@@ -3,11 +3,16 @@
 #include "signals.h"
 
 /**
- * func - desc
- * @param: desc
+ * all_in_one - sets up a single handler for all signals
  *
- * Description: details
- * sub section: extra info
- *
- * Return: desc of return val and meanings
+ * Instructions:
+ * no more than two functions in within the file.
+ * no more than ten lines within functions.
+ * 'signal' (2) is not permitted.
+ * within the handler, use of 'psiginfo', to print information about the signal
+ * received, is mandatory.
  */
+
+void all_in_one(void)
+{
+}

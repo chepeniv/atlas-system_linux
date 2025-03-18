@@ -3,11 +3,17 @@
 #include "signals.h"
 
 /**
- * func - desc
- * @param: desc
+ * signals_block - blocks a given set of signals from being delivered to the
+ * current process
+ * @signals: a `0`-terminated array of `int`s, each being a signal number
+ * to block
  *
- * Description: details
- * sub section: extra info
+ * Instructions:
+ * use of either `signal` (2) and `sigaction` (2) is prohibited.
  *
- * Return: desc of return val and meanings
+ * Return: 0 upon success or -1 upon failure
  */
+
+int signals_block(int *signals)
+{
+}

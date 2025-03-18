@@ -156,3 +156,68 @@ cover:
 
 include examples and at least one image at the top. publish your blog post on
 Medium or Linkedin and share it.
+
+# Advanced Task
+
+## 12. I'm saying it's unkillable (16 pts)
+
+`100-all_in_one.c`
+
+write a function that sets up a single handler for all signals
+
+- prototype: `void all_in_one(void);`
+- no more than two functions in within the file
+- no more than ten lines within functions
+- `signal` (2) is not permitted
+- within the handler, use of `psiginfo`, to print information about the signal
+  received, is mandatory
+
+## 13. Sigset (7 pts)
+
+`101-sigset_init.c`
+
+write a function that initializes a sigset
+
+- prototype: `int sigset_init(sigset_t *set, int *signals);`
+	- `set` is a pointer to the signal set to initialize
+	- `signals` is a `0`-terminated array of `int`s, each being a signal
+	  number
+- return 0 upon success or -1 upon failure
+
+## 14. Block Signals (7 pts)
+
+`102-signals_block.c`
+
+write a function that blocks a given set of signals from being delivered to the
+current process
+
+- prototype: `int signals_block(int *signals);`
+	- `signals` is a `0`-terminated array of `int`s, each being a signal
+	  number to block
+- return 0 upon success or -1 upon failure
+- use of either `signal` (2) and `sigaction` (2) is prohibited
+
+## 15. Unblock Signals (7 pts)
+
+`103-signals_unblock.c`
+
+write a function that unblocks a given set of signals from being delivered to
+the current process
+
+- prototype: `int signals_unblock(int *signals);`
+	- `signals` is a `0`-terminated array of `int`s, each being a signal
+	  number to block
+- return 0 upon success or -1 upon failure
+- use of either `signal` (2) and `sigaction` (2) is prohibited
+
+## 16. handle pending signals (7 pts)
+
+`104-handle_pending.c`
+
+write a function that sets up a handler for all pending signals of the current
+process
+
+- prototype: `int handle_pending(int (*handler)(int));`
+	- `handler` is a pointer to the function to set for pending signals
+- return 0 upon success or -1 upon failure
+- use of `signal` (2) is prohibited

@@ -26,6 +26,14 @@ void (*current_handler_sigaction(void))(int);
 int trace_signal_sender(void);
 int pid_exist(pid_t pid);
 
+/* ADVANCED TASKS FUNCTIONS */
+
+void all_in_one(void);
+int sigset_init(sigset_t *set, int *signals);
+int signals_block(int *signals);
+int signals_unblock(int *signals);
+int handle_pending(int (*handler)(int));
+
 /* SUPPLEMENTARY FUNCTIONS */
 
 void print_gotcha(int signum);

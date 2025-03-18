@@ -45,5 +45,8 @@ all:
 7-task:
 	${CCMD} 7-signal_send.c -o ${BINDIR}/sigsend.x
 
+10-task:
+	${CCMD} 10-pid_exist.c ${TESTDIR}/test-10.c -o ${BINDIR}/pid_exist.x
+
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start run-*

@@ -1,13 +1,22 @@
-#include "signals.h"
+#include <signal.h>
+#include <sys/types.h>
 
 /**
- * function_name - brief description
- * @paramA: desc of paramA
- * @paramB: desc of paramB
- * ...
+ * pid_exist - test if a process exists given its pid
+ * @pid: process id number to investigate
  *
- * Description: a more thorough desc
- * sub section: sub sect desc
+ * Instructions:
+ * no more than one function in your file.
+ * no more than one line in your function.
+ * no more than two headers in your file.
+ * your 'signals.h' is not allowed.
+ * the 'getpgid' function is not allowed.
  *
- * Return: desc of return vals
+ * Return: if the process with the given pid exist '1' is returned, otherwise
+ * '0'
  */
+
+int pid_exist(pid_t pid)
+{
+	return (kill(pid, SIGCHLD) + 1);
+}

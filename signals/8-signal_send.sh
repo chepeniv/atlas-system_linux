@@ -13,7 +13,7 @@
 
 if [ $# != 1 ];
 	then printf "Usage: %s <pid>\n" $0;
-	return 1;
+	exit 1;
 else
 	# echo "SIGQUIT"
 	kill -3 $1

@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <signal.h>
 #include <sys/types.h>
 #include "signals.h"
@@ -16,4 +17,15 @@
 
 int signals_block(int *signals)
 {
+	sigset_t set;
+	int result;
+
+	sigemptyset(&set);
+
+	for (int s = 0; signals[s]; s++)
+		result = sigaddset(&set, signals[s]);
+
+	result = sigprocmask(SIG_SETMASK, &set, NULL);
+
+	return (result);
 }

@@ -12,4 +12,11 @@
 
 int sigset_init(sigset_t *set, int *signals)
 {
+	sigemptyset(set);
+	int result;
+
+	for (int s = 0; signals[s]; s++)
+		result = sigaddset(set, signals[s]);
+
+	return (result);
 }

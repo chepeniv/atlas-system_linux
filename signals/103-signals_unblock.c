@@ -23,7 +23,8 @@ int signals_unblock(int *signals)
 	sigemptyset(&set);
 
 	for (int s = 0; signals[s]; s++)
-		result = sigaddset(&set, signals[s]);
+		if (!sigismember(&set, signals[s]))
+			result = sigaddset(&set, signals[s]);
 
 	result = sigprocmask(SIG_UNBLOCK, &set, NULL);
 

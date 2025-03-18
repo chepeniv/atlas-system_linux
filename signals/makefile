@@ -23,6 +23,8 @@ MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=al
 
 all: 
 
+######## CORE TASKS
+
 0-task:
 	${CCMD} 0-handle_signal.c tests/test-0.c -o ${BINDIR}/run-0
 	${BINDIR}/run-0
@@ -47,6 +49,25 @@ all:
 
 10-task:
 	${CCMD} 10-pid_exist.c ${TESTDIR}/test-10.c -o ${BINDIR}/pid_exist.x
+
+######## ADVANCED TASKS
+
+12-task:
+	${CCMD} 100-all_in_one.c ${TESTDIR}/test-100.c -o ${BINDIR}/adv_100.x
+
+13-task:
+	${CCMD} 101-sigset_init.c ${TESTDIR}/test-101.c -o ${BINDIR}/adv_101.x
+
+14-task:
+	${CCMD} 102-signals_block.c ${TESTDIR}/test-102.c -o ${BINDIR}/adv_102.x
+
+15-task:
+	${CCMD} 103-signals_unblock.c ${TESTDIR}/test-103.c -o ${BINDIR}/adv_103.x
+
+16-task:
+	${CCMD} 104-handle_pending.c ${TESTDIR}/test-104.c -o ${BINDIR}/adv_104.x
+
+######## UTILITY 
 
 clean:
 	$(RM) -v *~ *.exec *.o *.out *.x run_* *.run *.start run-*

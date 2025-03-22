@@ -1,8 +1,8 @@
 CC = gcc
 GDB = cgdb
 
-CUNIT = $(shell pkg-config -cflags -libs cunit)
-CRITERION = $(shell pkg-config -cflags -libs criterion)
+# CUNIT = $(shell pkg-config -cflags -libs cunit)
+# CRITERION = $(shell pkg-config -cflags -libs criterion)
 # I_FLAGS = $(shell pkg-config --cflags gtk4)
 # L_FLAGS = $(shell pkg-config --libs gtk4)
 
@@ -25,14 +25,14 @@ MEMTEST = valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=al
 all: hnm
 
 hnm: 
-	${CC} ${CFLAGS} *.o 0-hreadelf.c -o 0-hreadelf
+	${CCMD} *.c -o hnm
 
 defs:
 
 ######## UTILITY 
 
 clean:
-	$(RM) -v *~ *.exec *.o *.out *.x  *-hreadelf defs/*.o
+	$(RM) -v *~ *.exec *.o *.out *.x  *-hreadelf defs/*.o hnm
 
 clean-obj:
 	$(RM) -v *~ *.o defs/*.o

@@ -14,7 +14,7 @@ BINDIR   := build
 TESTDIR  := tests
 DEFDIR   := defs
 HEADIR   := headers
-DEFS     := $(shell find ${DEFDIR}/*.c)
+# DEFS     := $(shell find ${DEFDIR}/*.c)
 
 MEMTEST  := valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=all
 
@@ -24,24 +24,27 @@ MEMTEST  := valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=
 
 all: hnm
 
-test: hnm
-	./hnm targets/elf-solaris-sparc-ls
-	./hnm targets/elf-NetBSD-x86_64-echo
+test: 
+	./hnm targets/*
+
+memtest: 
 	${MEMTEST} ./hnm targets/elf-Haiku-GCC2-ls
 
 hnm: clean
 	${CCMD} *.c -o hnm
 
 betty: 
-	betty-style *.c *.h
-	betty-doc *.c *.h
+	echo "running Betty coding style checks..."
+	@betty-style *.c *.h
+	echo "running Betty documentation checks..."
+	@betty-doc *.c *.h
 
 defs:
 
 ######## UTILITY 
 
 clean:
-	$(RM) -v *~ *.exec *.o *.out *.x  *-hreadelf defs/*.o hnm
+	@$(RM) -v *~ *.exec *.o *.out *.x  hnm
 
 clean-obj:
-	$(RM) -v *~ *.o defs/*.o
+	@$(RM) -v *~ *.o 

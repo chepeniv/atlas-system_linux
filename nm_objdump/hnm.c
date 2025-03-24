@@ -9,6 +9,9 @@
 #include <errno.h>
 #include <elf.h>
 
+#define CLASS32 1
+#define CLASS64 2
+
 typedef union
 {
 	unsigned char *raw;
@@ -16,45 +19,45 @@ typedef union
 	Elf64_Ehdr    *arch64;
 } Ehdr;
 
-/* uint64_t bitwise_reverse( */
-/* uint64_t origin, */
-/* uint64_t len) */
-/* { */
-/* 	uint64_t l_pos, r_pos, shift, rev = 0; */
+uint64_t bitwise_reverse(
+uint64_t frwd,
+uint64_t len)
+{
+	uint64_t l_pos, r_pos, shift, rev = 0;
 
-/* 	for (uint64_t b = 0; b < len / 2u; b++) */
-/* 	{ */
-/* 		shift = ((len - 1u) - (2u * b)) * 8u; */
-/* 		r_pos = 0xffu << (b * 8u); */
-/* 		l_pos = r_pos << shift; */
-/* 		rev |= (r_pos & origin) << shift; */
-/* 		rev |= (l_pos & origin) >> shift; */
-/* 	} */
+	for (uint64_t b = 0; b < len / 2u; b++)
+	{
+		shift = ((len - 1u) - (2u * b)) * 8u;
+		r_pos = 0xffu << (b * 8u);
+		l_pos = r_pos << shift;
+		rev |= (r_pos & frwd) << shift;
+		rev |= (l_pos & frwd) >> shift;
+	}
 
-/* 	return (rev); */
-/* } */
+	return (rev);
+}
 
-/* uint64_t get_reverse( */
-/* const unsigned char *data, */
-/* uint64_t             value, */
-/* uint64_t             typesize) */
-/* { */
-/* 	uint64_t rev = value; */
+uint64_t rectify_elfdata(
+const unsigned char *elf_raw,
+uint64_t             value,
+uint64_t             typesize)
+{
+	uint64_t rev = value;
 
-/* 	if (data[EI_DATA] == ELFDATA2MSB) */
-/* 		rev = bitwise_reverse(value, typesize); */
+	if (elf_raw[EI_DATA] == ELFDATA2MSB)
+		rev = bitwise_reverse(value, typesize);
 
-/* 	return (rev); */
-/* } */
+	return (rev);
+}
 
 int get_arch(unsigned char *elf_raw)
 {
 	switch (elf_raw[EI_CLASS])
 	{
 		case ELFCLASS32:
-			return (1);
+			return (CLASS32);
 		case ELFCLASS64:
-			return (2);
+			return (CLASS64);
 		default:
 			return (0);
 	}
@@ -68,6 +71,50 @@ int is_elf(unsigned char *elf_entry)
 		return (get_arch(elf_entry));
 	else
 		return (0);
+}
+
+int is_straight(unsigned char *elf_raw)
+{
+	switch (elf_raw[EI_DATA])
+	{
+		case ELFDATA2LSB:
+			return (1);
+		default:
+			return (0);
+	}
+}
+
+void print_section_header_data(Ehdr elfhdr)
+{
+	int arch;
+	long sect_offset;
+
+	if (!is_straight(elfhdr.raw))
+	{
+		printf("skipping big-endian order file\n");
+		return;
+	}
+
+	arch = get_arch(elfhdr.raw);
+	switch (arch)
+	{
+		case CLASS32:
+			sect_offset = elfhdr.arch32->e_shoff;
+			sect_offset = rectify_elfdata(
+				elfhdr.raw,
+				sect_offset,
+				sizeof(Elf32_Off));
+			printf("arch32: phoff: %d\n", (int) sect_offset);
+			break;
+		case CLASS64:
+			sect_offset = elfhdr.arch64->e_shoff;
+			sect_offset = rectify_elfdata(
+				elfhdr.raw,
+				sect_offset,
+				sizeof(Elf64_Off));
+			printf("arch64: phoff: %ld\n", sect_offset);
+			break;
+	}
 }
 
 int main(int count, char **args)
@@ -100,11 +147,11 @@ int main(int count, char **args)
 				Ehdr elfhdr;
 				case 1:
 					elfhdr.arch32 = (Elf32_Ehdr *) elf_data;
-					(void) elfhdr;
+					print_section_header_data(elfhdr);
 					break;
 				case 2:
 					elfhdr.arch64 = (Elf64_Ehdr *) elf_data;
-					(void) elfhdr;
+					print_section_header_data(elfhdr);
 					break;
 				default:
 					error(0, 0, "%s: file format not recognized ", args[i]);

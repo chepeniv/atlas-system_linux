@@ -26,6 +26,7 @@ all: hnm
 
 test: 
 	@./hnm targets/*
+	@./hnm targets/no_symbols/*
 
 memtest: 
 	${MEMTEST} ./hnm targets/elf-Haiku-GCC2-ls

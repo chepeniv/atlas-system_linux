@@ -25,8 +25,8 @@ MEMTEST  := valgrind -s --track-origins=yes --leak-check=full --show-leak-kinds=
 all: hnm
 
 test: 
-	@./hnm targets/*
-	@./hnm targets/no_symbols/*
+	@./hnm targets/* 
+	@./hnm targets/no_symbols/* 
 
 memtest: 
 	${MEMTEST} ./hnm targets/elf-Haiku-GCC2-ls

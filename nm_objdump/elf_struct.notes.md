@@ -58,12 +58,11 @@ Elf64_Shdr *
 Elf64_Shdr *
 	sym_header   = sect_headers + incr;
 
-Elf64_Sym *
-	sym_table    = entry_header + sect_headers->sh_offset;
-	/*incr to access other symbols */
+Elf64_Sym * /*incr to access other symbols */
+	sym_table    = entry_header + sym_header->sh_offset;
 
 char *
-	str_table    = entry_header + sect_headers + sym_table->sh_link;
+	str_table    = entry_header + sect_headers + sym_header->sh_link;
 
 char *
 	sym_str      = str_table + sym_table->st_name;

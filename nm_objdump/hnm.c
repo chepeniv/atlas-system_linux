@@ -8,16 +8,25 @@
 #include <error.h>
 #include <errno.h>
 #include <elf.h>
+#include "elf_ptr.h"
 
 #define CLASS32 1
 #define CLASS64 2
 
-typedef union
-{
-	unsigned char *raw;
-	Elf32_Ehdr    *arch32;
-	Elf64_Ehdr    *arch64;
-} Ehdr;
+typedef unsigned char byte;
+
+/* typedef union */
+/* { */
+/* 	unsigned char *raw; */
+/* 	Elf32_Shdr    *arch32; */
+/* 	Elf64_Shdr    *arch64; */
+/* } Sect_Hdr; */
+/* typedef union */
+/* { */
+/* 	unsigned char *raw; */
+/* 	Elf32_Ehdr    *arch32; */
+/* 	Elf64_Ehdr    *arch64; */
+/* } Entry_Hdr; */
 
 uint64_t bitwise_reverse(
 uint64_t frwd,
@@ -73,7 +82,7 @@ int is_elf(unsigned char *elf_entry)
 		return (0);
 }
 
-int is_straight(unsigned char *elf_raw)
+int is_decr_end(unsigned char *elf_raw)
 {
 	switch (elf_raw[EI_DATA])
 	{
@@ -84,45 +93,108 @@ int is_straight(unsigned char *elf_raw)
 	}
 }
 
-void print_section_header_data(Ehdr elfhdr)
+void *mmap_file(char *path, int size)
 {
-	int arch;
-	long sect_offset;
+	int fd;
+	void *elf_data;
 
-	if (!is_straight(elfhdr.raw))
+	fd = open(path, O_RDONLY);
+	elf_data = mmap(
+		NULL, size,
+		PROT_READ, MAP_PRIVATE,
+		fd, 0);
+	close(fd);
+
+	return (elf_data);
+}
+
+Elf64_Ehdr *get_elf_hdr(void *elf_data)
+{
+	Elf64_Ehdr *elfhdr = NULL;
+	unsigned char *elf_entry;
+
+	elf_entry = (unsigned char *) elf_data;
+
+	if (is_elf(elf_entry))
+		elfhdr = (Elf64_Ehdr *) elf_data;
+
+	return (elfhdr);
+}
+
+void print_symb(char *str_tbl, Elf64_Sym *sym_tbl)
+{
+	char *str = str_tbl + sym_tbl->st_name;
+
+	if (strcmp(str, ""))
 	{
-		printf("skipping big-endian order file\n");
-		return;
+		if (sym_tbl->st_value)
+			printf("%016lx %s\n", sym_tbl->st_value, str);
+		else
+			printf("%16c %s\n", ' ', str);
+	}
+}
+
+Elf64_Shdr *get_sym_sect(Elf64_Shdr *root_sect, uint64_t count )
+{
+	Elf64_Shdr *sym_sect = NULL;
+
+	for (uint64_t i = 0; i < count; i++)
+	{
+		/* printf("sect symbol type %d\n", (root_sect + i)->sh_type); */
+		if ((root_sect + i)->sh_type == SHT_SYMTAB)
+		{
+			sym_sect = root_sect + i;
+			/* printf("sect type: %d\n", sym_sect->sh_type); */
+			/* printf("sect %lu is the symbol table\n", i); */
+			break;
+		}
 	}
 
-	arch = get_arch(elfhdr.raw);
-	switch (arch)
-	{
-		case CLASS32:
-			sect_offset = elfhdr.arch32->e_shoff;
-			sect_offset = rectify_elfdata(
-				elfhdr.raw,
-				sect_offset,
-				sizeof(Elf32_Off));
-			printf("arch32: phoff: %d\n", (int) sect_offset);
-			break;
-		case CLASS64:
-			sect_offset = elfhdr.arch64->e_shoff;
-			sect_offset = rectify_elfdata(
-				elfhdr.raw,
-				sect_offset,
-				sizeof(Elf64_Off));
-			printf("arch64: phoff: %ld\n", sect_offset);
-			break;
-	}
+	return (sym_sect);
+}
+
+char *get_str_tbl(
+byte *entry,
+Elf64_Shdr *sects,
+Elf64_Shdr *sym_sect)
+{
+	char *str_tbl;
+	Elf64_Shdr *ref_sect;
+
+	ref_sect = sects + sym_sect->sh_link;
+	str_tbl  = (char *) entry + ref_sect->sh_offset;
+
+	return (str_tbl);
+}
+
+void print_a_sym(Elf64_Ehdr *elf_hdr)
+{
+	Elf64_Shdr *root_sect, *sym_sect;
+	Elf64_Sym  *sym_tbl;
+	char       *str_tbl; /* *sym_str; */
+	byte       *indexer;
+	uint64_t    symb_count;
+
+	indexer   = (byte *) elf_hdr;
+
+	root_sect = (Elf64_Shdr *) (indexer + elf_hdr->e_shoff);
+	sym_sect  =  get_sym_sect(root_sect, elf_hdr->e_shnum);
+	symb_count = sym_sect->sh_size / sizeof(Elf64_Sym);
+
+	sym_tbl   = (Elf64_Sym *) (indexer + sym_sect->sh_offset);
+	str_tbl   =  get_str_tbl(indexer, root_sect, sym_sect);
+
+	for (uint64_t s = 0; s < symb_count; s++)
+		print_symb(str_tbl, sym_tbl + s);
+
 }
 
 int main(int count, char **args)
 {
-	int fd, length;
-	void *elf_data; /* *elf_data_cruiser; */
-	unsigned char *elf_entry;
+	int size;
+	void *elf_data;
 	struct stat elf_info;
+	Elf64_Ehdr *elfhdr;
 
 	for (int i = 1; i < count; i++)
 	{
@@ -132,32 +204,17 @@ int main(int count, char **args)
 		}
 		else if (S_ISREG(elf_info.st_mode) && elf_info.st_size)
 		{
-			length = elf_info.st_size;
-
-			fd = open(args[i], O_RDONLY);
-			elf_data = mmap(
-				NULL, length,
-				PROT_READ, MAP_PRIVATE,
-				fd, 0);
-			close(fd);
-
-			elf_entry = (unsigned char *) elf_data;
-			switch (is_elf(elf_entry))
+			size     = elf_info.st_size;
+			elf_data = mmap_file(args[i], size);
+			elfhdr   = get_elf_hdr(elf_data);
+			if (!elfhdr)
+				error(0, 0, "%s: file format not recognized ", args[i]);
+			else
 			{
-				Ehdr elfhdr;
-				case 1:
-					elfhdr.arch32 = (Elf32_Ehdr *) elf_data;
-					print_section_header_data(elfhdr);
-					break;
-				case 2:
-					elfhdr.arch64 = (Elf64_Ehdr *) elf_data;
-					print_section_header_data(elfhdr);
-					break;
-				default:
-					error(0, 0, "%s: file format not recognized ", args[i]);
+				print_a_sym(elfhdr);
 			}
 
-			munmap(elf_data, length);
+			munmap(elf_data, size);
 		}
 		else if S_ISDIR(elf_info.st_mode)
 		{

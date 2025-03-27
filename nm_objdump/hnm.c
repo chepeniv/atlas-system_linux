@@ -13,8 +13,6 @@
 #define CLASS32 1
 #define CLASS64 2
 
-typedef unsigned char byte;
-
 /* typedef union */
 /* { */
 /* 	unsigned char *raw; */
@@ -124,6 +122,7 @@ Elf64_Ehdr *get_elf_hdr(void *elf_data)
 void print_symb(char *str_tbl, Elf64_Sym *sym_tbl)
 {
 	char *str = str_tbl + sym_tbl->st_name;
+	/* char *str = SYMB_STR(str_tbl, sym_tbl); */
 
 	if (strcmp(str, ""))
 	{
@@ -140,12 +139,9 @@ Elf64_Shdr *get_sym_sect(Elf64_Shdr *root_sect, uint64_t count )
 
 	for (uint64_t i = 0; i < count; i++)
 	{
-		/* printf("sect symbol type %d\n", (root_sect + i)->sh_type); */
 		if ((root_sect + i)->sh_type == SHT_SYMTAB)
 		{
 			sym_sect = root_sect + i;
-			/* printf("sect type: %d\n", sym_sect->sh_type); */
-			/* printf("sect %lu is the symbol table\n", i); */
 			break;
 		}
 	}
@@ -153,40 +149,32 @@ Elf64_Shdr *get_sym_sect(Elf64_Shdr *root_sect, uint64_t count )
 	return (sym_sect);
 }
 
-char *get_str_tbl(
-byte *entry,
-Elf64_Shdr *sects,
-Elf64_Shdr *sym_sect)
+void iterate_over_symbols(
+Elf64_Shdr *sym_sect,
+Elf64_Sym  *sym_tbl,
+char       *str_tbl)
 {
-	char *str_tbl;
-	Elf64_Shdr *ref_sect;
-
-	ref_sect = sects + sym_sect->sh_link;
-	str_tbl  = (char *) entry + ref_sect->sh_offset;
-
-	return (str_tbl);
-}
-
-void print_a_sym(Elf64_Ehdr *elf_hdr)
-{
-	Elf64_Shdr *root_sect, *sym_sect;
-	Elf64_Sym  *sym_tbl;
-	char       *str_tbl; /* *sym_str; */
-	byte       *indexer;
 	uint64_t    symb_count;
 
-	indexer   = (byte *) elf_hdr;
-
-	root_sect = (Elf64_Shdr *) (indexer + elf_hdr->e_shoff);
-	sym_sect  =  get_sym_sect(root_sect, elf_hdr->e_shnum);
 	symb_count = sym_sect->sh_size / sizeof(Elf64_Sym);
-
-	sym_tbl   = (Elf64_Sym *) (indexer + sym_sect->sh_offset);
-	str_tbl   =  get_str_tbl(indexer, root_sect, sym_sect);
 
 	for (uint64_t s = 0; s < symb_count; s++)
 		print_symb(str_tbl, sym_tbl + s);
+}
 
+void process_symbols(Elf64_Ehdr *elf_hdr)
+{
+	Elf64_Shdr *root_sect;
+	Elf64_Shdr *sym_sect;
+	Elf64_Sym  *sym_tbl;
+	char       *str_tbl;
+
+	root_sect = (Elf64_Shdr *) SECT_HDR(elf_hdr);
+	sym_sect  =  get_sym_sect(root_sect, elf_hdr->e_shnum);
+	sym_tbl   = (Elf64_Sym *) SECT(elf_hdr, sym_sect);
+	str_tbl   =  STR_TBL(elf_hdr, root_sect, sym_sect);
+
+	iterate_over_symbols(sym_sect, sym_tbl, str_tbl);
 }
 
 int main(int count, char **args)
@@ -211,7 +199,7 @@ int main(int count, char **args)
 				error(0, 0, "%s: file format not recognized ", args[i]);
 			else
 			{
-				print_a_sym(elfhdr);
+				process_symbols(elfhdr);
 			}
 
 			munmap(elf_data, size);

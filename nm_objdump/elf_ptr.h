@@ -5,37 +5,30 @@
 #include <stdint.h>
 
 /******** COUNTERS ********/
-/**************************/
 
-/* typecast to (uint64_t *) or (uint32_t *) ? */
 #define SEC_COUNT(elf_hdr) \
-	((uint64_t) (elf_hdr)->e_shnum)
+	((elf_hdr)->e_shnum)
 
-/* typecast to (uint64_t *) or (uint32_t *) ? */
+/* typecast to either (uint64_t *) or (uint32_t *) */
 #define SYM_COUNT(sect_hdr) \
 	((uint64_t) (sect_hdr)->sh_size / sizeof(Elf64_Sym))
 
 /******** ELF POINTER ARITMETIC ********/
-/***************************************/
 
+/* typecast ptr and increment by incr */
 #define INCR_PTR(ptr, incr) \
 	((char *) (ptr) + (incr))
 
-/* typecast to (Elf64_Shdr *) or (Elf32_Shdr *) */
+/* get the first section header */
 #define SECT_HDR(elf_hdr) \
 	INCR_PTR((elf_hdr), (elf_hdr)->e_shoff)
 
+/* find the section referred to by sect_hdr */
 #define SECT(elf_hdr, sect_hdr) \
 	INCR_PTR((elf_hdr), (sect_hdr)->sh_offset)
 
-/* typecast to (Elf64_Sym *) or (Elf32_Sym *)*/
-#define SYMB(elf_hdr, sect_hdr) \
-	SECT((elf_hdr), (sect_hdr))
-
-#define STR_TBL(elf_hdr, rootsect_hdr, sym_sect_hdr) \
-	SECT((elf_hdr), (rootsect_hdr) + (sym_sect_hdr)->sh_link)
-
-#define SYMB_STR(str_tbl, sym_tbl) \
-	INCR_PTR((str_tbl), (sym_tbl)->st_name)
+/* go to string table section and typecast it to char * */
+#define STR_TBL(elf_hdr, sect_hdr, sym_sect_hdr) \
+	(char *) SECT((elf_hdr), (sect_hdr) + (sym_sect_hdr)->sh_link)
 
 #endif /* _ELF_PTR_ */

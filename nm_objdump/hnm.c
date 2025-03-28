@@ -127,9 +127,15 @@ void print_symb(char *str_tbl, Elf64_Sym *sym_tbl)
 	if (strcmp(str, ""))
 	{
 		if (sym_tbl->st_value)
-			printf("%016lx %s\n", sym_tbl->st_value, str);
+			printf("%016lx %d %s\n",
+				sym_tbl->st_value,
+				sym_tbl->st_info,
+				str);
 		else
-			printf("%16c %s\n", ' ', str);
+			printf("%16c %d %s\n",
+				' ',
+				sym_tbl->st_info,
+				str);
 	}
 }
 
@@ -154,7 +160,7 @@ Elf64_Shdr *sym_sect,
 Elf64_Sym  *sym_tbl,
 char       *str_tbl)
 {
-	uint64_t    symb_count;
+	uint64_t symb_count;
 
 	symb_count = sym_sect->sh_size / sizeof(Elf64_Sym);
 

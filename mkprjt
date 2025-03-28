@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+mkdir $1; cd $1
+mkdir assets build include notes prototypes reference source targets tests
+touch README.md makefile
+
+

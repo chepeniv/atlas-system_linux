@@ -31,7 +31,7 @@ create a c function that prints some basic info about python lists.
 
 - prototype: `void print_python_list(PyObject *pylist);`
 - compilation: `gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared -Wl,
-  -sosame,PyList -o libPyList.so -fPIC -I/usr/include/python3.9 1-python.c`
+  -soname,PyList -o libPyList.so -fPIC -I/usr/include/python3.9 1-python.c`
 
 ### resources
 
@@ -48,7 +48,7 @@ create two c functions that print some basic info about python lists and python
 byte objects
 
 - compilation: `gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared -Wl,
-  -sosame,libPython.so  -o libPython.so -fPIC
+  -soname,libPython.so  -o libPython.so -fPIC
   -I/usr/include/python3.9 2-python.c`
 - prohibited macros and functions:
 	- `Py_SIZE`
@@ -77,7 +77,7 @@ and python float objects
 
 - you're allowed to use the c standard library
 - compilation: `gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared -Wl,
-  -sosame,libPython.so  -o libPython.so -fPIC
+  -soname,libPython.so  -o libPython.so -fPIC
   -I/usr/include/python3.9 3-python.c`
 - prohibited macros and functions:
 	- `Py_SIZE`
@@ -126,7 +126,7 @@ create a function that prints python strings
 
 - you're allowed to use the c standard library
 - compilation: `gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared -Wl,
-  -sosame,libPython.so  -o libPython.so -fPIC
+  -soname,libPython.so  -o libPython.so -fPIC
   -I/usr/include/python3.9 4-python.c`
 
 ## 5. CPython Integers (12 pts)
@@ -147,5 +147,5 @@ create a c function that prints python integers
 	- `PyLong_SHIFT`
 	- `PyLong_Check`
 - compilation: `gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared -Wl,
-  -sosame,libPython.so  -o libPython.so -fPIC
+  -soname,libPython.so  -o libPython.so -fPIC
   -I/usr/include/python3.9 5-python.c`

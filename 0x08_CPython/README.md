@@ -2,7 +2,7 @@
 
 ## Big O Notation
 
-- constant: `O()`
+- constant: `O(1)`
 - linear: `O(n)`
 - factorial: `O(n!)`
 - n square: `O(n^2)`

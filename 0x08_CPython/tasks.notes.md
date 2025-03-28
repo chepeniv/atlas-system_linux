@@ -18,7 +18,7 @@ the order given:
 - L09 - measure a list: `alist.count()`
 - L10 - sort a list: `alist.sort()`
 - L11 - reverse a list: `alist.reverse()`
-- L11 - delete a list: `del alist`
+- L12 - delete a list: `del alist`
 
 ## 1. CPython #0: Python lists (13 pts)
 

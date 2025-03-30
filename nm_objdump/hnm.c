@@ -13,6 +13,14 @@
 #define CLASS32 1
 #define CLASS64 2
 
+/*
+ * TODO
+ * - get the correct type symbols
+ * - handle 32 v 64 bit architure
+ * - handle decr end v incr end encoding
+ * - copy over design and functions from previous elf project
+ */
+
 /* typedef union */
 /* { */
 /* 	unsigned char *raw; */

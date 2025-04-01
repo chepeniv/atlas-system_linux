@@ -36,10 +36,11 @@ void print_python_list(PyObject *pylist)
 {
 	Py_ssize_t list_size, list_alloc;
 
+
 	if (PyList_Check(pylist))
 	{
 		list_size = PyList_Size(pylist);
-		list_alloc = list_size;
+		list_alloc = ((PyListObject *)pylist)->allocated;
 
 		printf(
 			"[*] Python list info\n"

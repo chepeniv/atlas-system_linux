@@ -31,16 +31,18 @@ defs:
 
 ######## TESTING
 
-test: 
+1-test:
+	python3 tests/test-1.py
 
-memtest: 
+1-memtest: 
+	${MEMTEST} python3 tests/test-1.py
 
 ######## UTILITY 
 
 betty: 
-	echo "running Betty coding style checks..."
+	@echo "running Betty coding style checks..."
 	@betty-style *.c *.h
-	echo "running Betty documentation checks..."
+	@echo "running Betty documentation checks..."
 	@betty-doc *.c *.h
 
 clean:

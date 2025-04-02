@@ -32,6 +32,10 @@ all: clean 1-task 2-task 3-task 4-task 5-task
 	${CCMD} ${LIBPY} 2-python.c
 	cp libPython.so tests/
 
+3-task:
+	${CCMD} ${LIBPY} 3-python.c
+	cp libPython.so tests/
+
 defs:
 
 ######## TESTING
@@ -42,6 +46,9 @@ defs:
 2-test:
 	python3 tests/test-2.py
 
+3-test:
+	python3 -u tests/test-3.py
+
 ######## memory checks
 
 1-memtest:
@@ -50,9 +57,9 @@ defs:
 ######## UTILITY
 
 betty:
-	@echo "running Betty coding style checks..."
+	@echo "running Betty CODING STYLE checks..."
 	@betty-style *.c *.h
-	@echo "running Betty documentation checks..."
+	@echo "running Betty DOCUMENTATION checks..."
 	@betty-doc *.c *.h
 
 clean: clean-obj clean-lib

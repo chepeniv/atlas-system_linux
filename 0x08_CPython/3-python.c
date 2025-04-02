@@ -62,7 +62,7 @@ void print_hex_bytes(PyObject *obj, Py_ssize_t size)
 
 	objbytes = (unsigned char *) ((PyBytesObject *) obj)->ob_sval;
 
-	if (objbytes[readlen] == '\0')
+	if (readlen != 10 && objbytes[readlen] == '\0')
 		readlen++;
 	printf("  first %d bytes:", readlen);
 	for (Py_ssize_t x = 0; x < readlen; x++)

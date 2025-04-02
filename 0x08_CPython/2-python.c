@@ -5,13 +5,6 @@
  * python lists and python byte objects:
  *     void print_python_list(PyObject *pylist)
  *     void print_python_bytes(PyObject *pybytes)
- *
- * PROHIBITIONS:
- *     Py_SIZE
- *     Py_TYPE
- *     PyList_GetItem
- *     PyBytes_AS_STRING
- *     PyBytes_GET_SIZE
  */
 
 /**
@@ -26,6 +19,8 @@ void print_bytes(PyObject *obj, Py_ssize_t size)
 	int readlen = (size < 10) ? size : 10;
 
 	objbytes = (unsigned char *) ((PyBytesObject *) obj)->ob_sval;
+	if (objbytes[readlen] == '\0')
+		readlen++;
 
 	printf("  first %d bytes:", readlen);
 	for (Py_ssize_t x = 0; x < readlen; x++)

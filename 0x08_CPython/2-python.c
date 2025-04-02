@@ -15,16 +15,16 @@
  */
 
 /**
- * print_bytes -
- * @obj:
- * @size:
+ * print_bytes - output at most ten bytes in hexadecimal form
+ * @obj: the python object from which to extract the bytes
+ * @size: a size limit that prevents invalid access
  */
 
 void print_bytes(PyObject *obj, Py_ssize_t size)
 {
-	char *objbytes;
+	unsigned char *objbytes;
 
-	objbytes = ((PyBytesObject *) obj)->ob_sval;
+	objbytes = (unsigned char *) ((PyBytesObject *) obj)->ob_sval;
 
 	printf("  first <n> bytes:");
 
@@ -93,6 +93,8 @@ void print_python_list_items(PyObject *pylist, Py_ssize_t list_len)
 		item = ((PyListObject *) pylist)->ob_item[i];
 		type = item->ob_type;
 		printf("Element %ld: %s\n", i, type->tp_name);
+		if (PyBytes_Check(item))
+			print_python_bytes(item);
 	}
 }
 

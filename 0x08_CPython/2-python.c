@@ -19,9 +19,9 @@ void print_bytes(PyObject *obj, Py_ssize_t size)
 	int readlen = (size < 10) ? size : 10;
 
 	objbytes = (unsigned char *) ((PyBytesObject *) obj)->ob_sval;
+
 	if (objbytes[readlen] == '\0')
 		readlen++;
-
 	printf("  first %d bytes:", readlen);
 	for (Py_ssize_t x = 0; x < readlen; x++)
 		printf(" %02x", objbytes[x]);
@@ -66,7 +66,7 @@ void print_python_bytes(PyObject *pybytes)
 	}
 	else
 	{
-		printf(" [ERROR] Invalid Bytes Object\n");
+		printf("  [ERROR] Invalid Bytes Object\n");
 	}
 }
 

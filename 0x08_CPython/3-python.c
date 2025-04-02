@@ -154,7 +154,7 @@ void print_python_list(PyObject *pylist)
 
 	if (PyList_Check(pylist))
 	{
-		list_size = PyList_Size(pylist);
+		list_size = ((PyListObject *)pylist)->ob_base.ob_size;
 		list_alloc = ((PyListObject *)pylist)->allocated;
 
 		printf(

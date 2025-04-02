@@ -1,9 +1,10 @@
 CC      := gcc
 GDB     := cgdb
 
-CFLAGS  := -Wall -Werror -Wextra -pedantic -std=c99 
+CFLAGS  := -Wall -Werror -Wextra -pedantic -std=c99
 CDEBUG  := -ggdb3
 CLINK   := -shared -fPIC
+LIBPY   := -Wl,-soname=libPython -o libPython.so
 CPY     := $(shell pkg-config -cflags -libs python3)
 CCMD    := ${CC} ${CFLAGS} ${CDEBUG} ${CLINK} ${CPY}
 
@@ -23,9 +24,13 @@ all: clean 1-task 2-task 3-task 4-task 5-task
 
 ######## TASKS
 
-1-task: 
+1-task:
 	${CCMD} -Wl,-soname=PyList -o libPyList.so 1-python.c
 	cp libPyList.so tests/
+
+2-task:
+	${CCMD} ${LIBPY} 2-python.c
+	cp libPython.so tests/
 
 defs:
 
@@ -34,19 +39,27 @@ defs:
 1-test:
 	python3 tests/test-1.py
 
-1-memtest: 
+2-test:
+	python3 tests/test-2.py
+
+######## memory checks
+
+1-memtest:
 	${MEMTEST} python3 tests/test-1.py
 
-######## UTILITY 
+######## UTILITY
 
-betty: 
+betty:
 	@echo "running Betty coding style checks..."
 	@betty-style *.c *.h
 	@echo "running Betty documentation checks..."
 	@betty-doc *.c *.h
 
-clean:
-	@$(RM) -v *~ *.exec *.o *.out *.x  *.c 
+clean: clean-obj clean-lib
+	@$(RM) -v *~ *.exec *.out *.x
 
 clean-obj:
-	@$(RM) -v *~ *.o 
+	@$(RM) -v *.o
+
+clean-lib:
+	@$(RM) -v *.so

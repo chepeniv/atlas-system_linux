@@ -1,19 +1,12 @@
 #include <Python.h>
 
 /*
- * task instructions:
+ * INSTRUCTIONS: create two c functions that print some basic info about
+ * python lists and python byte objects:
+ *     void print_python_list(PyObject *pylist)
+ *     void print_python_bytes(PyObject *pybytes)
  *
- * create two c functions that print some basic info about python lists and
- * python byte objects:
- *
- * `void print_python_list(PyObject *pylist);`
- *
- * `void print_python_bytes(PyObject *pybytes);`
- *      print a maximum of 10 bytes - if `pybytes` is not a valid
- *      `PyBytesObject`
- *      print an error message - resource: `bytesobject.h`
- *
- * prohibitions: `Py_SIZE`, `Py_TYPE`, `PyList_GetItem`, `PyBytes_AS_STRING`,
+ * PROHIBITIONS: `Py_SIZE`, `Py_TYPE`, `PyList_GetItem`, `PyBytes_AS_STRING`,
  * and `PyBytes_GET_SIZE`
  */
 
@@ -75,3 +68,44 @@ void print_python_list(PyObject *pylist)
 }
 
 /******** PRINT PYTHON BYTES ********/
+
+/**
+ * print_python_bytes - printout some basic information about the given python
+ * byte object
+ * @pybytes: python object to parse and analyze as a PyBytesObject
+ *
+ * details:
+ * if argument passed is not a valid `PyBytesObject` print an error message.
+ * output no more than the first 10 bytes
+ *
+ * output:
+ * [.] bytes object info
+ *   size: <n>
+ *   trying string: <text>
+ *   first <m> bytes: %02x %02x ...
+ * Element <i>: <type>
+ * ...
+ */
+
+void print_python_bytes(PyObject *pybytes)
+{
+	Py_ssize_t list_size, list_alloc;
+
+	if (PyList_Check(pybytes))
+	{
+		list_size = PyList_Size(pybytes);
+		list_alloc = ((PyListObject *)pybytes)->allocated;
+
+		printf(
+			"[*] Python list info\n"
+			"[*] Size of the Python List = %ld\n"
+			"[*] Allocated = %ld\n",
+			list_size, list_alloc
+			);
+		print_python_list_items(pybytes, list_size);
+	}
+	else
+	{
+		printf("is not list");
+	}
+}

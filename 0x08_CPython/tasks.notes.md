@@ -47,8 +47,8 @@ files: `2-python.c`
 create two c functions that print some basic info about python lists and python
 byte objects
 
-- compilation: `gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared -Wl,
-  -soname,libPython.so  -o libPython.so -fPIC
+- compilation: `gcc -Wall -Werror -Wextra -pedantic -std=c99 -shared
+  -Wl,-soname,libPython.so  -o libPython.so -fPIC
   -I/usr/include/python3.9 2-python.c`
 - prohibited macros and functions:
 	- `Py_SIZE`

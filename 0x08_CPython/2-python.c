@@ -6,9 +6,16 @@
  *     void print_python_list(PyObject *pylist)
  *     void print_python_bytes(PyObject *pybytes)
  *
- * PROHIBITIONS: `Py_SIZE`, `Py_TYPE`, `PyList_GetItem`, `PyBytes_AS_STRING`,
- * and `PyBytes_GET_SIZE`
+ * PROHIBITIONS:
+ *     Py_SIZE
+ *     Py_TYPE
+ *     PyList_GetItem
+ *     PyBytes_AS_STRING
+ *     PyBytes_GET_SIZE
  */
+
+/******** UTILITY ********/
+
 
 /******** PRINT PYTHON LIST ********/
 
@@ -25,8 +32,8 @@ void print_python_list_items(PyObject *pylist, Py_ssize_t list_len)
 
 	for (Py_ssize_t i = 0; i < list_len; i++)
 	{
-		item = PyList_GetItem(pylist, i);
-		type = Py_TYPE(item);
+		item = ((PyListObject *) pylist)->ob_item[i];
+		type = item->ob_type;
 		printf("Element %ld: %s\n", i, type->tp_name);
 	}
 }
@@ -97,9 +104,10 @@ void print_python_bytes(PyObject *pybytes)
 		list_alloc = ((PyListObject *)pybytes)->allocated;
 
 		printf(
-			"[*] Python list info\n"
-			"[*] Size of the Python List = %ld\n"
-			"[*] Allocated = %ld\n",
+			"[.] bytes object info\n"
+			"  size: %ld\n"
+			"  trying string: %ld\n"
+			"  first <n> bytes: \n",
 			list_size, list_alloc
 			);
 		print_python_list_items(pybytes, list_size);

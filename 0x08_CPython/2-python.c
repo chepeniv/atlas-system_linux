@@ -23,14 +23,13 @@
 void print_bytes(PyObject *obj, Py_ssize_t size)
 {
 	unsigned char *objbytes;
+	int readlen = (size < 10) ? size : 10;
 
 	objbytes = (unsigned char *) ((PyBytesObject *) obj)->ob_sval;
 
-	printf("  first <n> bytes:");
-
-	for (Py_ssize_t x = 0; x < size && x < 10; x++)
+	printf("  first %d bytes:", readlen);
+	for (Py_ssize_t x = 0; x < readlen; x++)
 		printf(" %02x", objbytes[x]);
-
 	putchar('\n');
 }
 
@@ -65,8 +64,7 @@ void print_python_bytes(PyObject *pybytes)
 
 		printf(
 			"  size: %ld\n"
-			"  trying string: %s\n"
-			"  first <n> bytes: \n",
+			"  trying string: %s\n",
 			obj_size, try_string
 			);
 		print_bytes(pybytes, obj_size);

@@ -14,10 +14,68 @@
  *     PyBytes_GET_SIZE
  */
 
-/******** UTILITY ********/
+/**
+ * print_bytes -
+ * @obj:
+ * @size:
+ */
 
+void print_bytes(PyObject *obj, Py_ssize_t size)
+{
+	char *objbytes;
 
-/******** PRINT PYTHON LIST ********/
+	objbytes = ((PyBytesObject *) obj)->ob_sval;
+
+	printf("  first <n> bytes:");
+
+	for (Py_ssize_t x = 0; x < size && x < 10; x++)
+		printf(" %02x", objbytes[x]);
+
+	putchar('\n');
+}
+
+/**
+ * print_python_bytes - printout some basic information about the given python
+ * byte object
+ * @pybytes: python object to parse and analyze as a PyBytesObject
+ *
+ * details:
+ * if argument passed is not a valid `PyBytesObject` print an error message.
+ * output no more than the first 10 bytes
+ *
+ * output:
+ * [.] bytes object info
+ *   size: <n>
+ *   trying string: <text>
+ *   first <m> bytes: %02x %02x ...
+ * Element <i>: <type>
+ * ...
+ */
+
+void print_python_bytes(PyObject *pybytes)
+{
+	Py_ssize_t obj_size;
+	char *try_string;
+
+	printf("[.] bytes object info\n");
+	if (PyBytes_Check(pybytes))
+	{
+		obj_size = PyBytes_Size(pybytes);
+		try_string = (char *) ((PyBytesObject *) pybytes)->ob_sval;
+
+		printf(
+			"  size: %ld\n"
+			"  trying string: %s\n"
+			"  first <n> bytes: \n",
+			obj_size, try_string
+			);
+		print_bytes(pybytes, obj_size);
+	}
+	else
+	{
+		printf(" [ERROR] Invalid Bytes Object\n");
+	}
+}
 
 /**
  * print_python_list_items - prints out each elements position and type
@@ -67,50 +125,6 @@ void print_python_list(PyObject *pylist)
 			list_size, list_alloc
 			);
 		print_python_list_items(pylist, list_size);
-	}
-	else
-	{
-		printf("is not list");
-	}
-}
-
-/******** PRINT PYTHON BYTES ********/
-
-/**
- * print_python_bytes - printout some basic information about the given python
- * byte object
- * @pybytes: python object to parse and analyze as a PyBytesObject
- *
- * details:
- * if argument passed is not a valid `PyBytesObject` print an error message.
- * output no more than the first 10 bytes
- *
- * output:
- * [.] bytes object info
- *   size: <n>
- *   trying string: <text>
- *   first <m> bytes: %02x %02x ...
- * Element <i>: <type>
- * ...
- */
-
-void print_python_bytes(PyObject *pybytes)
-{
-	Py_ssize_t list_size, list_alloc;
-
-	if (PyList_Check(pybytes))
-	{
-		list_size = PyList_Size(pybytes);
-		list_alloc = ((PyListObject *)pybytes)->allocated;
-
-		printf(
-			"[.] bytes object info\n"
-			"  size: %ld\n"
-			"  trying string: %ld\n"
-			"  first <n> bytes: \n",
-			list_size, list_alloc
-			);
-		print_python_list_items(pybytes, list_size);
 	}
 	else
 	{

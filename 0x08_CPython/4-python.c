@@ -27,6 +27,7 @@
 
 void print_python_string(PyObject *obj)
 {
+	char *type;
 	char *data;
 	Py_ssize_t len;
 
@@ -35,25 +36,17 @@ void print_python_string(PyObject *obj)
 	printf("[.] string object info\n");
 	if (PyUnicode_Check(obj))
 	{
+		type = PyUnicode_IS_COMPACT_ASCII(obj) ?
+			"compact ascii" : "compact unicode ascii";
 		len  = PyUnicode_GET_LENGTH(obj);
 		data = PyUnicode_DATA(obj);
 
-		if (PyUnicode_IS_COMPACT_ASCII(obj))
-		{
-			printf(
-					"  type: compact ascii\n"
-					"  length: %ld\n"
-					"  value: %s\n",
-					len, data);
-		}
-		else
-		{
-			printf(
-					"  type: compact unicode object\n"
-					"  length: %ld\n",
-					len);
-			printf("  value: %s\n", data);
-		}
+		printf(
+			"  type: %s\n"
+			"  length: %ld\n"
+			/* unable to output unicode data correctly */
+			"  value: %s\n",
+			type, len, data);
 	}
 	else
 	{

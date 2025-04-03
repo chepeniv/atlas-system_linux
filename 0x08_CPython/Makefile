@@ -20,7 +20,7 @@ MEMTEST := valgrind ${VALFL}
 
 .PHONY: clean clean-obj defs
 
-all: clean 1-task 2-task 3-task 4-task 5-task
+all: clean build_1 build_2 build_3 build_4 
 
 ######## TASKS
 
@@ -36,6 +36,10 @@ build_3:
 	${CCMD} ${LIBPY} 3-python.c
 	cp libPython.so tests/
 
+build_4:
+	${CCMD} ${LIBPY} 4-python.c
+	cp libPython.so tests/
+
 defs:
 
 ######## TESTING
@@ -48,6 +52,9 @@ test_2:
 
 test_3:
 	python3 -u tests/test-3.py
+
+test_4:
+	python3 -u tests/test-4.py
 
 ######## memory checks
 

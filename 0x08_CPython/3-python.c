@@ -29,6 +29,25 @@
  */
 
 /**
+ * get_float_value - create a malloc'd string representation of a given float
+ * variable
+ * @fval: the double to convert into a string
+ */
+
+char *get_float_string(double fval)
+{
+	char *fval_str;
+
+	fval_str = malloc(sizeof(char) * 64);
+	sprintf(fval_str, "%.*g", DBL_DIG + 1, fval);
+
+	if (!strchr(fval_str, '.'))
+		strcat(fval_str, ".0");
+
+	return (fval_str);
+}
+
+/**
  * print_python_float - printout the value of a python PyFloatObject as a c
  * double
  * @obj: the python object to parse
@@ -39,20 +58,12 @@ void print_python_float(PyObject *obj)
 	double fval;
 	char *fval_str;
 
+	printf( "[.] float object info\n");
 	if (PyFloat_Check(obj))
 	{
 		fval = ((PyFloatObject *) obj)->ob_fval;
-		fval_str = malloc(sizeof(char) * 64);
-		sprintf(fval_str, "%.*g", DBL_DIG, fval);
-
-		if (!strchr(fval_str, '.'))
-			strcat(fval_str, ".0");
-
-		printf(
-			"[.] float object info\n"
-			"  value: %s\n",
-			fval_str);
-
+		fval_str = get_float_string(fval);
+		printf( "  value: %s\n", fval_str);
 		free(fval_str);
 	}
 	else

@@ -29,9 +29,11 @@
  */
 
 /**
- * get_float_value - create a malloc'd string representation of a given float
+ * get_float_string - create a malloc'd string representation of a given float
  * variable
  * @fval: the double to convert into a string
+ *
+ * Return: formatted string representation of float value
  */
 
 char *get_float_string(double fval)
@@ -58,12 +60,12 @@ void print_python_float(PyObject *obj)
 	double fval;
 	char *fval_str;
 
-	printf( "[.] float object info\n");
+	printf("[.] float object info\n");
 	if (PyFloat_Check(obj))
 	{
 		fval = ((PyFloatObject *) obj)->ob_fval;
 		fval_str = get_float_string(fval);
-		printf( "  value: %s\n", fval_str);
+		printf("  value: %s\n", fval_str);
 		free(fval_str);
 	}
 	else
@@ -173,13 +175,14 @@ void print_python_list(PyObject *pylist)
 {
 	Py_ssize_t list_size, list_alloc;
 
+	printf("[*] Python list info\n");
+
 	if (PyList_Check(pylist))
 	{
 		list_size = ((PyListObject *)pylist)->ob_base.ob_size;
 		list_alloc = ((PyListObject *)pylist)->allocated;
 
 		printf(
-			"[*] Python list info\n"
 			"[*] Size of the Python List = %ld\n"
 			"[*] Allocated = %ld\n",
 			list_size, list_alloc
@@ -188,6 +191,6 @@ void print_python_list(PyObject *pylist)
 	}
 	else
 	{
-		printf("  [ERROR] Invalid Bytes Object\n");
+		printf("  [ERROR] Invalid List Object\n");
 	}
 }

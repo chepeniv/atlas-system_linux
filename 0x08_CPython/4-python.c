@@ -1,6 +1,6 @@
 #include <Python.h>
-/* #include <wchar.h> */
-/* #include <locale.h> */
+#include <wchar.h>
+#include <locale.h>
 
 /*
  * INSTRUCTIONS:
@@ -27,24 +27,36 @@
 
 void print_python_string(PyObject *obj)
 {
-	char *type, *data;
-	/* char *data; */
+	int type;
+	char *data;
 	Py_ssize_t len;
+
+	/* fwide(stdout, 1); */
+	setlocale(LC_ALL, "en_US.UTF-8");
 
 	printf("[.] string object info\n");
 	if (PyUnicode_Check(obj))
 	{
-		type = (PyUnicode_KIND(obj) == 1) ?
-			"compact ascii" : "compact unicode object";
-		data = PyUnicode_DATA(obj);
+		type = PyUnicode_KIND(obj);
 		len  = PyUnicode_GET_LENGTH(obj);
+		data = PyUnicode_DATA(obj);
 
-		printf(
-			"  type: %s\n"
-			"  length: %ld\n"
-			"  value: %s\n",
-			type, len, data
-			);
+		if (type == PyUnicode_1BYTE_KIND)
+		{
+			printf(
+					"  type: compact ascii\n"
+					"  length: %ld\n"
+					"  value: %s\n",
+					len, data);
+		}
+		else
+		{
+			printf(
+					"  type: compact unicode object\n"
+					"  length: %ld\n",
+					len);
+			printf("  value: %s\n", data);
+		}
 	}
 	else
 	{

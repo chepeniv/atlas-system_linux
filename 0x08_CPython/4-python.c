@@ -27,21 +27,18 @@
 
 void print_python_string(PyObject *obj)
 {
-	int type;
 	char *data;
 	Py_ssize_t len;
 
-	/* fwide(stdout, 1); */
-	setlocale(LC_ALL, "en_US.UTF-8");
+	setlocale(LC_ALL, "C.UTF-8");
 
 	printf("[.] string object info\n");
 	if (PyUnicode_Check(obj))
 	{
-		type = PyUnicode_KIND(obj);
 		len  = PyUnicode_GET_LENGTH(obj);
 		data = PyUnicode_DATA(obj);
 
-		if (type == PyUnicode_1BYTE_KIND)
+		if (PyUnicode_IS_COMPACT_ASCII(obj))
 		{
 			printf(
 					"  type: compact ascii\n"

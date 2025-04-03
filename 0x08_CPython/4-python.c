@@ -25,20 +25,22 @@
 
 void print_python_string(PyObject *obj)
 {
-	PyUnicodeObject *pystr;
-	char *type;
+	char *type, *data;
+	Py_ssize_t len;
 
 	printf("[.] string object info\n");
 	if (PyUnicode_Check(obj))
 	{
-		pystr = (PyUnicodeObject *) obj;
-		type = (PyUnicode_KIND(pystr) == 1) ?
+		type = (PyUnicode_KIND(obj) == 1) ?
 			"compact ascii" : "compact unicode object" ;
+		data = PyUnicode_DATA(obj);
+		len = PyUnicode_GET_LENGTH(obj);
 
 		printf(
-			"  type: \n"
-			"  length: \n"
-			"  value: \n"
+			"  type: %s\n"
+			"  length: %ld\n"
+			"  value: %s\n",
+			type, len, data
 			);
 	}
 	else

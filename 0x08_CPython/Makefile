@@ -24,15 +24,15 @@ all: clean 1-task 2-task 3-task 4-task 5-task
 
 ######## TASKS
 
-1-task:
+build_1:
 	${CCMD} -Wl,-soname=PyList -o libPyList.so 1-python.c
 	cp libPyList.so tests/
 
-2-task:
+build_2:
 	${CCMD} ${LIBPY} 2-python.c
 	cp libPython.so tests/
 
-3-task:
+build_3:
 	${CCMD} ${LIBPY} 3-python.c
 	cp libPython.so tests/
 
@@ -40,13 +40,13 @@ defs:
 
 ######## TESTING
 
-1-test:
+test_1:
 	python3 tests/test-1.py
 
-2-test:
+test_2:
 	python3 tests/test-2.py
 
-3-test:
+test_3:
 	python3 -u tests/test-3.py
 
 ######## memory checks

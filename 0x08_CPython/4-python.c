@@ -52,7 +52,7 @@ void print_python_string(PyObject *obj)
 					"  type: compact unicode object\n"
 					"  length: %ld\n",
 					len);
-			printf("  value: %ls\n", (wchar_t *) data);
+			printf("  value: %s\n", data);
 		}
 	}
 	else

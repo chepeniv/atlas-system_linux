@@ -1,4 +1,5 @@
 #include <Python.h>
+#include <float.h>
 
 /*
  * INSTRUCTIONS:
@@ -35,15 +36,24 @@
 
 void print_python_float(PyObject *obj)
 {
-	double value;
+	double fval;
+	char *fval_str;
 
 	if (PyFloat_Check(obj))
 	{
-		value = ((PyFloatObject *) obj)->ob_fval;
+		fval = ((PyFloatObject *) obj)->ob_fval;
+		fval_str = malloc(sizeof(char) * 64);
+		sprintf(fval_str, "%.*g", DBL_DIG, fval);
+
+		if (!strchr(fval_str, '.'))
+			strcat(fval_str, ".0");
+
 		printf(
 			"[.] float object info\n"
-			"  value: %g\n",
-			value);
+			"  value: %s\n",
+			fval_str);
+
+		free(fval_str);
 	}
 	else
 		printf("  [ERROR] Invalid Float Object\n");

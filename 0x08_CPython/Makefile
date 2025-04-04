@@ -24,42 +24,42 @@ MEMTEST := valgrind ${VALFL}
 
 build_1:
 	${CCMD} -Wl,-soname=PyList -o libPyList.so 1-python.c
-	cp libPyList.so tests/
+	@cp libPyList.so tests/
 
 build_2:
 	${CCMD} ${LIBPY} 2-python.c
-	cp libPython.so tests/
+	@cp libPython.so tests/
 
 build_3:
 	${CCMD} ${LIBPY} 3-python.c
-	cp libPython.so tests/
+	@cp libPython.so tests/
 
 build_4:
 	${CCMD} ${LIBPY} 4-python.c
-	cp libPython.so tests/
+	@cp libPython.so tests/
 
 build_5:
 	${CCMD} ${LIBPY} 5-python.c
-	cp libPython.so tests/
+	@cp libPython.so tests/
 
 defs:
 
 ######## TESTING
 
 test_1:
-	python3 tests/test-1.py
+	@python3 tests/test-1.py
 
 test_2:
-	python3 tests/test-2.py
+	@python3 tests/test-2.py
 
 test_3:
-	python3 -u tests/test-3.py
+	@python3 -u tests/test-3.py
 
 test_4:
-	python3 -u tests/test-4.py
+	@python3 -u tests/test-4.py
 
 test_5:
-	python3 -u tests/test-5.py
+	@python3 -u tests/test-5.py
 
 ######## memory checks
 

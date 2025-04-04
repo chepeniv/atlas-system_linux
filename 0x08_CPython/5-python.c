@@ -13,8 +13,8 @@
  *
  * allowed macros and functions
  *     c standard library
- * 	   PyLong_SHIFT`
- * 	   PyLong_Check`
+ *     PyLong_SHIFT`
+ *     PyLong_Check`
  */
 
 /**
@@ -29,27 +29,20 @@
 
 void print_python_int(PyObject *pyint)
 {
-	char *type;
-	char *data;
-	Py_ssize_t len;
+	unsigned long int value;
+	int overflow = 0;
 
-	printf("[.] string object info\n");
-	if (PyUnicode_Check(pyint))
+	if (PyLong_Check(pyint))
 	{
-		type = PyUnicode_IS_COMPACT_ASCII(pyint) ?
-			"compact ascii" : "compact unicode ascii";
-		len  = PyUnicode_GET_LENGTH(pyint);
-		data = PyUnicode_DATA(pyint);
-
-		printf(
-			"  type: %s\n"
-			"  length: %ld\n"
-			/* unable to output unicode data correctly */
-			"  value: %s\n",
-			type, len, data);
+		value = PyLong_AsLongAndOverflow(pyint, &overflow);
+		if (overflow)
+		{
+			value = PyLong_AsLongAndOverflow(pyint, &overflow);
+			printf("C unsigned long int overflow\n");
+		}
+		else
+			printf("%ld\n", value);
 	}
 	else
-	{
-		printf("  [ERROR] Invalid String Object\n");
-	}
+		printf("Invalid Int Object\n");
 }

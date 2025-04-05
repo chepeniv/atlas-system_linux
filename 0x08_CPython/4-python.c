@@ -28,10 +28,8 @@
 void print_python_string(PyObject *obj)
 {
 	char *type;
-	char *data;
+	const char *data;
 	Py_ssize_t len;
-
-	setlocale(LC_ALL, "C.UTF-8");
 
 	printf("[.] string object info\n");
 	if (PyUnicode_Check(obj))
@@ -39,12 +37,11 @@ void print_python_string(PyObject *obj)
 		type = PyUnicode_IS_COMPACT_ASCII(obj) ?
 			"compact ascii" : "compact unicode ascii";
 		len  = PyUnicode_GET_LENGTH(obj);
-		data = PyUnicode_DATA(obj);
+		data = PyUnicode_AsUTF8(obj);
 
 		printf(
 			"  type: %s\n"
 			"  length: %ld\n"
-			/* unable to output unicode data correctly */
 			"  value: %s\n",
 			type, len, data);
 	}

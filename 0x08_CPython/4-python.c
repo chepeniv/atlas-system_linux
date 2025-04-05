@@ -35,7 +35,7 @@ void print_python_string(PyObject *obj)
 	if (PyUnicode_Check(obj))
 	{
 		type = PyUnicode_IS_COMPACT_ASCII(obj) ?
-			"compact ascii" : "compact unicode ascii";
+			"compact ascii" : "compact unicode object";
 		len  = PyUnicode_GET_LENGTH(obj);
 		data = PyUnicode_AsUTF8(obj);
 

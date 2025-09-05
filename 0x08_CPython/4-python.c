@@ -31,6 +31,8 @@ void print_python_string(PyObject *obj)
 	const char *data;
 	Py_ssize_t len;
 
+	setlocale(1, "C.UTF-8");
+
 	printf("[.] string object info\n");
 	if (PyUnicode_Check(obj))
 	{

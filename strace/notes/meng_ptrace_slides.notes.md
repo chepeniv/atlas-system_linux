@@ -79,6 +79,97 @@ modifying the path parameter of the `open` system call
 ## implementation details
 
 ### system call convention
+
+before an interruption is raised to transfer a call into kernel mode, the
+function number is placed in the gp register EAX and the parameters into EBX,
+ECX, EDX, ESI, EDI, and EBP
+
+in simple terms, for the `open` syscall:
+
+```asm
+open:
+    // calling stack frame
+    mov eax, 5
+    mov ebx, path
+    mov ecx, flags
+    mov edx, mode
+    int 80h         // syscall entry, kernel transfer
+```
+
+by checking the EAX register value of the child process before a syscall entry,
+we obtain the syscall number. we may retrieve and modify the syscall parameters
+as well
+
 ### user register struct
+
+```c
+#include <linux/user.h>
+
+struct user_regs_struct
+{
+    long ebx, ecx, edx, esi, edi, ebp, eax ; // ebx is addr of path
+    unsigned short ds, __ds, es, __es;
+    unsigned short fs, __fs, gs, __gs;
+    long orig_eax, eip;                      // orig_eax is syscall number
+    unsigned short cs, __cs;
+    long eflags, esp;
+    unsigned short ss, __ss;
+}
+```
+
 ### tracing startup
+
+sample code
+
+```c
+/* ... */
+p = fork();
+
+if (p == -1) {
+    exit(-1);
+} else if (p == 0) {
+    /* In Child */
+    ptrace(PTRACE_TRACEME, 0, 0, 0);
+    /* Execute the given process */
+    argv[argc] = 0;
+    execvp(argv[1], argv+1);
+    /* The success of execve will cause a SIGTRAP to be sent to this child process. */
+}
+
+/* In parent */
+/* Wait for execve to finish*/
+wait(&status);
+
+/* Start to trace system calls */
+ptrace(PTRACE_SYSCALL, p, 0, 0);
+/* ... */
+```
+
 ### obtaining the `open` syscall parameters
+
+sample code
+
+```c
+/* ... */
+/* Start to trace system calls */
+ptrace(PTRACE_SYSCALL, p, 0, 0);
+
+/* Wait until the entry to a sys call */
+wait(&status);
+
+/* Check the GP register and get the system call number*/
+int syscall;
+struct user_regs_struct u_in;
+
+/* #include <linux/user.h> */
+ptrace(PTRACE_GETREGS, p, 0, &u_in);
+syscall = u_in.orig_eax;
+
+if(syscall == __NR_open) {
+    printf("%s", syscall_names[syscall-1]); /* System call name */
+    printf("%08lx ", u_in.ebx);             /* Address of the path */
+    printf("%08lx ", u_in.ecx);             /* Flag */
+    printf("%08lx\n “, u_in.edx);           /* Mode */
+}
+/* ... */
+```

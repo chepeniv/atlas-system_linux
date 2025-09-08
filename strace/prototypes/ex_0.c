@@ -5,41 +5,33 @@
 
 int main(int count, char **args)
 {
-	// NOTE : PTRACE_SINGLESTEP suspends the tracee every time the register 'ip'
-	// changes
-
 	pid_t parent = 0;
 	int *wstatus = 0;
 
 	if (count <= 1)
 	{
-		printf("no arguments provided\n");
+		printf("no arguments\n");
 		return 1;
 	}
 
 	parent = fork();
-
 	if (parent) {
 		// wait for child
-		// loop
-		//     call ptrace with request PTRACE_SINGLESTEP
-		//     print 'single step' each iteration
-		// print child's exit status
-		printf("this is the parent process\n");
-
 		wstatus = malloc(sizeof(int));
-		wait(wstatus);
-		printf("wait status: %d\n", *wstatus);
-		free(wstatus);
 
-		for (int i = 1; i < count; i++)
-			printf("parent: %s\n", args[i]);
+		// for (int i = 1; i < count; i++)
+			// call ptrace with request PTRACE_SINGLESTEP
+			// this will suspend the tracee every time the register 'ip' changes
+			// print 'single step' each iteration
+			// printf("single step\n");
+
+		// print child's exit status
+		wait(wstatus);
+		printf("Exit status: %d\n", *wstatus);
+		free(wstatus);
 	} else {
 		// call ptrace with PTRACE_TRACEME
-		// use execve to execute given binary
-		printf("this is the child process\n");
-		for (int i = 1; i < count; i++)
-			printf("child: %s\n", args[i]);
+		execve(args[1], &args[1], NULL);
 	}
 
 	return 0;

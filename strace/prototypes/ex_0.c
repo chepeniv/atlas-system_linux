@@ -1,10 +1,8 @@
 #include <stdio.h>
+#include <unistd.h>
 
 int main(int count, char **args)
 {
-	//// PHASE 1 ////
-	// call binary
-	//
 	//// PHASE 2 ////
 	//
 	// parse arguments
@@ -24,13 +22,25 @@ int main(int count, char **args)
 	// PTRACE_SINGLESTEP suspends the tracee every time the register 'ip'
 	// changes
 
-	if (count > 1) {
-		for (int i = 1; i < count; i++)
-			printf("%s\n", args[i]);
-	}
-	else
+	pid_t parent = 0;
+
+	parent = fork();
+
+	if (count <= 1)
 	{
 		printf("no arguments provided\n");
+		return 1;
 	}
+
+	if (parent) {
+		printf("this is the parent process\n");
+		for (int i = 1; i < count; i++)
+			printf("parent: %s\n", args[i]);
+	} else {
+		printf("this is the child process\n");
+		for (int i = 1; i < count; i++)
+			printf("child: %s\n", args[i]);
+	}
+
 	return 0;
 }

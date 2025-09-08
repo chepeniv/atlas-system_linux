@@ -23,6 +23,11 @@ MEMTEST := valgrind ${VALFL}
 strace_0:
 	${CCMD} strace_0.c -o strace_0
 
+######## RUN
+
+run_0: strace_0
+	./strace_0
+
 ######## TESTING
 
 test_0:

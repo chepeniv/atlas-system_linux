@@ -2,6 +2,7 @@
 #include <stdlib.h>     /* malloc */
 #include <sys/wait.h>
 #include <unistd.h>     /* fork */
+#include <sys/ptrace.h>
 
 int main(int count, char **args)
 {
@@ -19,18 +20,20 @@ int main(int count, char **args)
 		// wait for child
 		wstatus = malloc(sizeof(int));
 
-		// for (int i = 1; i < count; i++)
-			// call ptrace with request PTRACE_SINGLESTEP
-			// this will suspend the tracee every time the register 'ip' changes
-			// print 'single step' each iteration
-			// printf("single step\n");
+		// call ptrace with request PTRACE_SINGLESTEP
+		// this will suspend the tracee every time the register 'ip' changes
+		while(wait(wstatus) > -1)
+		{
+			ptrace(PTRACE_TRACEME, 0, 0, 0);
+			printf("single step\n");
+		}
 
 		// print child's exit status
 		wait(wstatus);
 		printf("Exit status: %d\n", *wstatus);
 		free(wstatus);
 	} else {
-		// call ptrace with PTRACE_TRACEME
+		ptrace(PTRACE_TRACEME, 0, 0, 0);
 		execve(args[1], &args[1], NULL);
 	}
 

@@ -1,10 +1,8 @@
 #include <stdio.h>
 
-int main(void)
+int main(int count, char **args)
 {
 	//// PHASE 1 ////
-	//
-	// parse arguments
 	// call binary
 	//
 	//// PHASE 2 ////
@@ -26,6 +24,13 @@ int main(void)
 	// PTRACE_SINGLESTEP suspends the tracee every time the register 'ip'
 	// changes
 
-	printf("hello, world!\n");
+	if (count > 1) {
+		for (int i = 1; i < count; i++)
+			printf("%s\n", args[i]);
+	}
+	else
+	{
+		printf("no arguments provided\n");
+	}
 	return 0;
 }

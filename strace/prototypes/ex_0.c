@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <unistd.h>
+#include <stdio.h>      /* printf */
+#include <stdlib.h>     /* malloc */
+#include <sys/wait.h>
+#include <unistd.h>     /* fork */
 
 int main(int count, char **args)
 {
@@ -23,8 +25,7 @@ int main(int count, char **args)
 	// changes
 
 	pid_t parent = 0;
-
-	parent = fork();
+	int *wstatus = 0;
 
 	if (count <= 1)
 	{
@@ -32,8 +33,16 @@ int main(int count, char **args)
 		return 1;
 	}
 
+	parent = fork();
+
 	if (parent) {
 		printf("this is the parent process\n");
+
+		wstatus = malloc(sizeof(int));
+		wait(wstatus);
+		printf("wait status: %d\n", *wstatus);
+		free(wstatus);
+
 		for (int i = 1; i < count; i++)
 			printf("parent: %s\n", args[i]);
 	} else {

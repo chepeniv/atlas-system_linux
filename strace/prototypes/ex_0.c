@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <stdio.h>      /* printf */
 #include <stdlib.h>     /* malloc */
 #include <sys/wait.h>
@@ -11,22 +12,20 @@ int main(int count, char **args)
 
 	if (count <= 1)
 	{
-		printf("no arguments\n");
+		printf("no command provided\n");
 		return 1;
 	}
 
 	parent = fork();
 	if (parent) {
-		// wait for child
 		wstatus = malloc(sizeof(int));
 
-		// call ptrace with request PTRACE_SINGLESTEP
-		// this will suspend the tracee every time the register 'ip' changes
-		while(ptrace(PTRACE_SINGLESTEP, parent, 0, 0))
+		while (wait(wstatus) > -1)
+		{
 			printf("single step\n");
+			ptrace(PTRACE_SINGLESTEP, parent, 0, 0);
+		}
 
-		// print child's exit status
-		wait(wstatus);
 		printf("Exit status: %d\n", *wstatus);
 		free(wstatus);
 	} else {

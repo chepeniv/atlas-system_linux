@@ -22,11 +22,8 @@ int main(int count, char **args)
 
 		// call ptrace with request PTRACE_SINGLESTEP
 		// this will suspend the tracee every time the register 'ip' changes
-		while(wait(wstatus) > -1)
-		{
-			ptrace(PTRACE_TRACEME, 0, 0, 0);
+		while(ptrace(PTRACE_SINGLESTEP, parent, 0, 0))
 			printf("single step\n");
-		}
 
 		// print child's exit status
 		wait(wstatus);

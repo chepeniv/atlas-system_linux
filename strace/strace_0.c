@@ -25,15 +25,17 @@ main(int count, char **args)
 		wstatus = malloc(sizeof(int));
 		syscall_regs = malloc(sizeof(struct user_regs_struct));
 
+		wait(wstatus);
 		do {
+			ptrace(PTRACE_SYSCALL, parent, NULL, NULL);
+			wait(wstatus);
+
 			if (syscall_enter)
 			{
-				ptrace(PTRACE_GETREGS, parent, 0, syscall_regs);
+				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
 				printf("%llu\n", syscall_regs->orig_rax);
 			}
-			ptrace(PTRACE_SYSCALL, parent, 0, 0);
 			syscall_enter = !syscall_enter;
-			wait(wstatus);
 		} while (!WIFEXITED(*wstatus));
 
 		free(syscall_regs);

@@ -33,7 +33,7 @@ main(int count, char **args)
 			if (syscall_enter)
 			{
 				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
-				printf("%llu\n", syscall_regs->orig_rax);
+				fprintf(stderr, "%llu\n", syscall_regs->orig_rax);
 			}
 			syscall_enter = !syscall_enter;
 		} while (!WIFEXITED(*wstatus));

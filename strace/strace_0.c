@@ -30,7 +30,7 @@ main(int count, char **args)
 			ptrace(PTRACE_SYSCALL, parent, NULL, NULL);
 			wait(wstatus);
 
-			if (syscall_enter)
+			if (syscall_enter && WIFSTOPPED(*wstatus) && (WSTOPSIG(*wstatus) != SIGALRM))
 			{
 				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
 				fprintf(stderr, "%llu\n", syscall_regs->orig_rax);

@@ -18,10 +18,16 @@ MEMTEST := valgrind ${VALFL}
 ex_0:
 	${CCMD} ex_0.c -o ex_0.exec
 
+ex_1:
+	${CCMD} ex_1.c -o ex_1.exec
+
 ######## RUN
 
 run_0: ex_0
 	./ex_0.exec /usr/bin/echo "successful run"
+
+run_1: ex_1
+	./ex_1.exec /usr/bin/echo "successful run"
 
 ######## memory checks
 

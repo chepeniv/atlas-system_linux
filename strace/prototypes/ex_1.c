@@ -24,8 +24,10 @@ main (int count, char **args)
 
         while (wait (wstatus) > -1)
         {
-            printf ("single step\n");
-            ptrace (PTRACE_SINGLESTEP, parent, 0, 0);
+            ptrace (PTRACE_SYSCALL, parent, 0, 0);
+            printf ("syscall\n");
+            ptrace (PTRACE_SYSCALL, parent, 0, 0);
+            printf ("return\n");
         }
 
         printf ("Exit status: %d\n", *wstatus);

@@ -21,6 +21,9 @@ ex_0:
 ex_1:
 	${CCMD} ex_1.c -o ex_1.exec
 
+ex_2:
+	${CCMD} ex_2.c -o ex_2.exec
+
 ######## RUN
 
 run_0: ex_0
@@ -28,6 +31,9 @@ run_0: ex_0
 
 run_1: ex_1
 	./ex_1.exec /usr/bin/echo "successful run"
+
+run_2: ex_2
+	./ex_2.exec /usr/bin/echo "successful run"
 
 ######## memory checks
 

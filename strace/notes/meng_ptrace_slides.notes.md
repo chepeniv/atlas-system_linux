@@ -49,7 +49,7 @@ in the child's memory
 
 ## `PTRACE_GETREGS`
 
-- more OS and architecture dependant
+- more OS and architecture dependent
 
 reads general purpose registers of the child process into the location `data` of
 the parent

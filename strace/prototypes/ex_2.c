@@ -10,7 +10,7 @@ int
 main(int count, char **args)
 {
     pid_t parent = 0;
-    int *wstatus = 0, syscall_exit = 0;
+    int *wstatus = 0, syscall_enter = 0;
     struct user_regs_struct *syscall_regs;
 
     if (count <= 1)
@@ -27,14 +27,15 @@ main(int count, char **args)
 
         do
         {
-            if (syscall_exit)
+            if (syscall_enter)
             {
                 ptrace(PTRACE_GETREGS, parent, 0, syscall_regs);
                 printf("[ %llu ]\n", syscall_regs->orig_rax);
             }
             ptrace(PTRACE_SYSCALL, parent, 0, 0);
-            syscall_exit = !syscall_exit;
-        } while (wait(wstatus) > -1);
+            syscall_enter = !syscall_enter;
+            wait(wstatus);
+        } while (!WIFEXITED(*wstatus));
 
         printf("Exit status: %d\n", *wstatus);
 

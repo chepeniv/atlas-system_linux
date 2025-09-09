@@ -25,17 +25,16 @@ main(int count, char **args)
         wstatus = malloc(sizeof(int));
         syscall_regs = malloc(sizeof(struct user_regs_struct));
 
-        /* ptrace(request, pid, addr, data) */
-        while (wait(wstatus) > -1)
+        do
         {
-            if (!syscall_exit)
+            if (syscall_exit)
             {
                 ptrace(PTRACE_GETREGS, parent, 0, syscall_regs);
                 printf("[ %llu ]\n", syscall_regs->orig_rax);
             }
             ptrace(PTRACE_SYSCALL, parent, 0, 0);
             syscall_exit = !syscall_exit;
-        }
+        } while (wait(wstatus) > -1);
 
         printf("Exit status: %d\n", *wstatus);
 
@@ -45,7 +44,7 @@ main(int count, char **args)
     else
     {
         ptrace(PTRACE_TRACEME, 0, 0, 0);
-        // raise (SIGSTOP);
+        raise(SIGSTOP);
         execve(args[1], &args[1], NULL);
     }
 

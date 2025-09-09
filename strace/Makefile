@@ -48,6 +48,7 @@ betty:
 
 clean: clean-obj clean-lib
 	@$(RM) -v *~ *.exec *.out *.x
+	@$(RM) -v strace_0 strace_1 strace_2
 
 clean-obj:
 	@$(RM) -v *.o

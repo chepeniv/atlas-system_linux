@@ -20,13 +20,19 @@ MEMTEST := valgrind ${VALFL}
 
 ######## TASKS
 
-strace_0:
+strace_0: clean
 	${CCMD} strace_0.c -o strace_0
+
+strace_1: clean
+	${CCMD} strace_1.c -o strace_1
 
 ######## RUN
 
 run_0: strace_0
-	./strace_0
+	./strace_0 /usr/bin/pwd
+
+run_1: strace_1
+	./strace_1 /usr/bin/pwd
 
 ######## TESTING
 

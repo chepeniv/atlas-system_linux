@@ -5,6 +5,7 @@
 #include <sys/user.h> /* user_regs_struct */
 #include <sys/wait.h>
 #include <unistd.h> /* fork */
+#include "include/syscalls.h"
 
 int
 main(int count, char **args)
@@ -12,6 +13,7 @@ main(int count, char **args)
 	pid_t parent = 0;
 	int wstatus = 0, syscall_enter = 0, first_syscall = 1;
 	struct user_regs_struct *syscall_regs;
+	type_t syscall_code = 0, max_signals = 317;
 
 	if (count <= 1)
 	{
@@ -32,7 +34,10 @@ main(int count, char **args)
 			if (syscall_enter && !first_syscall)
 			{
 				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
-				fprintf(stderr, "%llu\n", syscall_regs->orig_rax);
+
+				syscall_code = syscall_regs->orig_rax;
+				if (0 <= syscall_code && syscall_code <= max_signals)
+					fprintf(stderr, "%u\n", syscall_code);
 			}
 			syscall_enter = !syscall_enter;
 			first_syscall = 0;

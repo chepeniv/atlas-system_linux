@@ -55,7 +55,6 @@ main(int count, char **args)
 	else
 	{
 		ptrace(PTRACE_TRACEME, 0, 0, 0);
-		// raise(SIGSTOP);
 		raise(SIGCHLD);
 		execve(args[1], &args[1], NULL);
 	}

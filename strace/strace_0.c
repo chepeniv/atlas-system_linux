@@ -7,19 +7,29 @@
 #include <unistd.h> /* fork */
 #include "include/syscalls.h"
 
+void
+print_syscall(struct user_regs_struct *syscall_regs)
+{
+	static const type_t max_signals = 317;
+	type_t syscall_code = syscall_regs->orig_rax;
+
+	/* prevent invalids reads over syscalls_64_g */
+	if (0 <= syscall_code && syscall_code <= max_signals)
+	{
+		fprintf(stderr, "%u\n", syscall_code);
+		fflush(stderr);
+	}
+}
+
 int
 main(int count, char **args)
 {
 	pid_t parent = 0;
 	int wstatus = 0, syscall_enter = 0, first_syscall = 1;
 	struct user_regs_struct *syscall_regs;
-	type_t syscall_code = 0, max_signals = 317;
 
 	if (count <= 1)
-	{
-		printf("no command provided\n");
 		return (1);
-	}
 
 	parent = fork();
 	if (parent)
@@ -34,10 +44,7 @@ main(int count, char **args)
 			if (syscall_enter && !first_syscall)
 			{
 				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
-
-				syscall_code = syscall_regs->orig_rax;
-				if (0 <= syscall_code && syscall_code <= max_signals)
-					fprintf(stderr, "%u\n", syscall_code);
+				print_syscall(syscall_regs);
 			}
 			syscall_enter = !syscall_enter;
 			first_syscall = 0;
@@ -48,7 +55,7 @@ main(int count, char **args)
 	else
 	{
 		ptrace(PTRACE_TRACEME, 0, 0, 0);
-		raise(SIGSTOP);
+		raise(SIGSTOP); /* try SIGCHLD or another pattern altogether */
 		execve(args[1], &args[1], NULL);
 	}
 

@@ -15,6 +15,17 @@
  */
 
 void
+print_syscall_name(struct user_regs_struct *syscall_regs)
+{
+	static const type_t max_signals = 317;
+	type_t syscall_code = syscall_regs->orig_rax;
+
+	/* prevent invalids reads over syscalls_64_g */
+	if (0 <= syscall_code && syscall_code <= max_signals)
+		fprintf(stderr, "%s", syscalls_64_g[syscall_code].name);
+}
+
+void
 print_syscall_return(struct user_regs_struct *syscall_regs)
 {
 	long long syscall_return = 0;
@@ -29,17 +40,6 @@ print_syscall_return(struct user_regs_struct *syscall_regs)
 	}
 	else
 		fprintf(stderr, " = ?\n");
-}
-
-void
-print_syscall_name(struct user_regs_struct *syscall_regs)
-{
-	static const type_t max_signals = 317;
-	type_t syscall_code = syscall_regs->orig_rax;
-
-	/* prevent invalids reads over syscalls_64_g */
-	if (0 <= syscall_code && syscall_code <= max_signals)
-		fprintf(stderr, "%s", syscalls_64_g[syscall_code].name);
 }
 
 void

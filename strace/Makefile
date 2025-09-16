@@ -26,6 +26,9 @@ strace_0: clean
 strace_1: clean
 	${CCMD} strace_1.c -o strace_1
 
+strace_2: clean
+	${CCMD} strace_2.c -o strace_2
+
 ######## RUN
 
 run_0: strace_0
@@ -33,6 +36,9 @@ run_0: strace_0
 
 run_1: strace_1
 	./strace_1 /usr/bin/pwd
+
+run_2: strace_2
+	./strace_2 /usr/bin/pwd
 
 ######## TESTING
 

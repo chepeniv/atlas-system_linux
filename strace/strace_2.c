@@ -14,7 +14,8 @@
  * since it doesn't actually return. therefore, just print `?` as `strace` does
  */
 
-void print_syscall_return(struct user_regs_struct *syscall_regs)
+void
+print_syscall_return(struct user_regs_struct *syscall_regs)
 {
 	long long syscall_return = 0;
 
@@ -28,7 +29,6 @@ void print_syscall_return(struct user_regs_struct *syscall_regs)
 	}
 	else
 		fprintf(stderr, " = ?\n");
-
 }
 
 void
@@ -45,12 +45,37 @@ print_syscall_name(struct user_regs_struct *syscall_regs)
 	}
 }
 
+void
+print_syscall_info(pid_t parent, struct user_regs_struct *syscall_regs)
+{
+	static int syscall_exit = 1, first_syscall = 1;
+
+	if (!syscall_exit && !first_syscall)
+	{
+		ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
+		print_syscall_name(syscall_regs);
+	}
+	else if (syscall_exit && !first_syscall)
+	{
+		ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
+		print_syscall_return(syscall_regs);
+	}
+
+	syscall_exit = !syscall_exit;
+
+	if (first_syscall)
+		first_syscall = 0;
+}
+
 int
 main(int count, char **args)
 {
 	pid_t parent = 0;
-	int wstatus = 0, syscall_exit = 1, first_syscall = 1;
+	int wstatus = 0;
 	struct user_regs_struct *syscall_regs;
+	/* optimization. defining syscall_regs outside of print_syscall_info
+	 * reduces malloc() and free() calls
+	 */
 
 	if (count <= 1)
 	{
@@ -68,23 +93,7 @@ main(int count, char **args)
 		{
 			ptrace(PTRACE_SYSCALL, parent, NULL, NULL);
 			wait(&wstatus);
-
-			if (!syscall_exit && !first_syscall)
-			{
-				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
-				print_syscall_name(syscall_regs);
-			}
-			else if (syscall_exit && !first_syscall)
-			{
-				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
-				print_syscall_return(syscall_regs);
-			}
-
-			syscall_exit = !syscall_exit;
-
-			if (first_syscall)
-				first_syscall = 0;
-
+			print_syscall_info(parent, syscall_regs);
 		} while (!WIFEXITED(wstatus));
 
 		free(syscall_regs);

@@ -7,12 +7,32 @@
 #include <sys/wait.h>
 #include <unistd.h> /* fork */
 
-// for every intercepted system call, print its name followed by a newline
-// no need to handle the `PATH`: `command` will be given as a full path to a
-// binary
+/* for every intercepted system call, print its name and it's return value in
+ * hexadecimal, followed by a newline
+ *
+ * NOTE: it is impossible to retrieve the last system call's return value,
+ * since it doesn't actually return. therefore, just print `?` as `strace` does
+ */
+
+void print_syscall_return(struct user_regs_struct *syscall_regs)
+{
+	long long syscall_return = 0;
+
+	if (syscall_regs->orig_rax != 231)
+	{
+		syscall_return = syscall_regs->rax;
+		if (syscall_return != 0)
+			fprintf(stderr, " = 0x%llx\n", syscall_return);
+		else
+			fprintf(stderr, " = %llu\n", syscall_return);
+	}
+	else
+		fprintf(stderr, " = ?\n");
+
+}
 
 void
-print_syscall(struct user_regs_struct *syscall_regs)
+print_syscall_name(struct user_regs_struct *syscall_regs)
 {
 	static const type_t max_signals = 317;
 	type_t syscall_code = syscall_regs->orig_rax;
@@ -25,20 +45,12 @@ print_syscall(struct user_regs_struct *syscall_regs)
 	}
 }
 
-/* for every intercepted system call, print its name and it's return value in
- * hexadecimal, followed by a newline
- *
- * NOTE: it is impossible to retrieve the last system call's return value,
- * since it doesn't actually return. therefore, just print `?` as `strace` does
- */
-
 int
 main(int count, char **args)
 {
 	pid_t parent = 0;
 	int wstatus = 0, syscall_exit = 1, first_syscall = 1;
 	struct user_regs_struct *syscall_regs;
-	long long syscall_return = 0;
 
 	if (count <= 1)
 	{
@@ -60,26 +72,19 @@ main(int count, char **args)
 			if (!syscall_exit && !first_syscall)
 			{
 				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
-				print_syscall(syscall_regs);
+				print_syscall_name(syscall_regs);
 			}
 			else if (syscall_exit && !first_syscall)
 			{
 				ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
-				if (syscall_regs->orig_rax != 231)
-				{
-					syscall_return = syscall_regs->rax;
-					if (syscall_return == 0)
-						fprintf(stderr, " = %llu\n", syscall_return);
-					else
-						fprintf(stderr, " = 0x%llx\n", syscall_return);
-				}
-				else
-					fprintf(stderr, " = ?\n");
+				print_syscall_return(syscall_regs);
 			}
 
 			syscall_exit = !syscall_exit;
+
 			if (first_syscall)
 				first_syscall = 0;
+
 		} while (!WIFEXITED(wstatus));
 
 		free(syscall_regs);

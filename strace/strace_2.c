@@ -67,37 +67,36 @@ print_syscall_info(pid_t parent, struct user_regs_struct *syscall_regs)
 		first_syscall = 0;
 }
 
+void
+intercept_syscalls(pid_t parent)
+{
+	int wstatus = 0;
+	struct user_regs_struct *syscall_regs;
+
+	syscall_regs = malloc(sizeof(struct user_regs_struct));
+
+	wait(&wstatus);
+	do
+	{
+		ptrace(PTRACE_SYSCALL, parent, NULL, NULL);
+		wait(&wstatus);
+		print_syscall_info(parent, syscall_regs);
+	} while (!WIFEXITED(wstatus));
+
+	free(syscall_regs);
+}
+
 int
 main(int count, char **args)
 {
 	pid_t parent = 0;
-	int wstatus = 0;
-	struct user_regs_struct *syscall_regs;
-	/* optimization. defining syscall_regs outside of print_syscall_info
-	 * reduces malloc() and free() calls
-	 */
 
 	if (count <= 1)
-	{
-		printf("no command provided\n");
 		return (1);
-	}
 
 	parent = fork();
 	if (parent)
-	{
-		syscall_regs = malloc(sizeof(struct user_regs_struct));
-
-		wait(&wstatus);
-		do
-		{
-			ptrace(PTRACE_SYSCALL, parent, NULL, NULL);
-			wait(&wstatus);
-			print_syscall_info(parent, syscall_regs);
-		} while (!WIFEXITED(wstatus));
-
-		free(syscall_regs);
-	}
+		intercept_syscalls(parent);
 	else
 	{
 		ptrace(PTRACE_TRACEME, NULL, NULL, NULL);

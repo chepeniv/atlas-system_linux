@@ -39,10 +39,7 @@ print_syscall_name(struct user_regs_struct *syscall_regs)
 
 	/* prevent invalids reads over syscalls_64_g */
 	if (0 <= syscall_code && syscall_code <= max_signals)
-	{
 		fprintf(stderr, "%s", syscalls_64_g[syscall_code].name);
-		fflush(stderr);
-	}
 }
 
 void
@@ -60,6 +57,8 @@ print_syscall_info(pid_t parent, struct user_regs_struct *syscall_regs)
 		ptrace(PTRACE_GETREGS, parent, NULL, syscall_regs);
 		print_syscall_return(syscall_regs);
 	}
+
+	fflush(stderr);
 
 	syscall_exit = !syscall_exit;
 

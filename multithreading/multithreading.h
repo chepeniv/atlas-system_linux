@@ -6,6 +6,7 @@
 
 void *thread_entry(void *arg);
 int tprintf(char const *format, ...);
+void setup_mlocks(void) __attribute__((constructor));
 
 /**
  * struct pixel_s - RGB pixel

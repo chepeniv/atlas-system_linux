@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <pthread.h>
+#include <stdio.h>
 
 /*
  * write function that serves as the entry point into a new thread
@@ -19,8 +19,10 @@
  * Return: pthread_exit(NULL);
  */
 
-void *thread_entry(void *arg) {
-	char *string_data = (char *) arg;
+void *
+thread_entry(void *arg)
+{
+	char *string_data = (char *)arg;
 
 	printf("%s\n", string_data);
 	pthread_exit(NULL);

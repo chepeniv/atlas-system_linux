@@ -1,5 +1,10 @@
+#ifndef _MULTITHREADING_
+#define _MULTITHREADING_
+
 #include <stddef.h>
 #include <stdint.h>
+
+void *thread_entry(void *arg);
 
 /**
  * struct pixel_s - RGB pixel
@@ -103,3 +108,5 @@ typedef struct blur_portion_s
 //     pthread_mutex_t lock;
 // } task_t;
 //
+
+#endif /* _MULTITHREADING_ */

@@ -45,13 +45,13 @@ int
 tprintf(char const *format, ...)
 {
 	va_list args;
-	int thread_id;
+	pthread_t thread_id;
 
 	thread_id = pthread_self();
 	va_start(args, format);
 
 	pthread_mutex_lock(&mlock_print);
-		printf("[%d] ", thread_id);
+		printf("[%lu] ", thread_id);
 		printf(format, args);
 	pthread_mutex_unlock(&mlock_print);
 

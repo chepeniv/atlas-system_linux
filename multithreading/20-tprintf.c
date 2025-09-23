@@ -22,16 +22,27 @@ pthread_mutex_t mlock_print;
  * run Betty with `--allow-global-variables`
  */
 
+/* placed gcc attribute here for betty to correctly parse func doc */
 __attribute__((constructor))
-
 /**
  * setup_mlocks - initialize needed mutex locks so that the main function
  * doesn't have to
  */
-
-void setup_mlocks(void)
+void
+setup_mlocks(void)
 {
 	pthread_mutex_init(&mlock_print, NULL);
+}
+
+__attribute__((destructor))
+/**
+ * teardown_mlocks - free mutex lock resources so that the main function
+ * doesn't have to
+ */
+void
+teardown_mlocks(void)
+{
+	pthread_mutex_destroy(&mlock_print);
 }
 
 /**

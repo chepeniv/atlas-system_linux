@@ -19,10 +19,10 @@ defined as a constructor would run before `main()` starts, whereas a destructor
 would execute after `main()` has concluded
 
 ```c
-__attributeS__((constructor))
-__attributeS__((destructor))
-__attributeS__((constructor (PRIORITY)))
-__attributeS__((destructor (PRIORITY)))
+__attribute__((constructor))
+__attribute__((destructor))
+__attribute__((constructor (PRIORITY)))
+__attribute__((destructor (PRIORITY)))
 
 /* example */
 
@@ -31,10 +31,10 @@ void end(void) __attributeS__((destructor));
 
 /* alternatively */
 
-__attributeS__((constructor)) void begin(void)
+__attribute__((constructor)) void begin(void)
 { /* func body */ }
 
-__attributeS__((destructor)) void end(void)
+__attribute__((destructor)) void end(void)
 { /* func body */ }
 ```
 

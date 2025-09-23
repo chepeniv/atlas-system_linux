@@ -15,7 +15,7 @@ in `C` the POSIX `pthreads` library is used to implement this
 # Creating a Thread
 
 ```c
-pthreadS_create(
+pthread_create(
 	thread,  // pointer to a pthread_t wherein the thread ID is stored
 	attr,    // pointer to a thread attributes object which defines a threads
 			 // properties. NULL specifies defaults

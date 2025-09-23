@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 void *thread_entry(void *arg);
+int tprintf(char const *format, ...);
 
 /**
  * struct pixel_s - RGB pixel

@@ -3,10 +3,12 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "list.h"
 
 void *thread_entry(void *arg);
 int tprintf(char const *format, ...);
 void setup_mlocks(void) __attribute__((constructor));
+list_t *prime_factors(char const *s);
 
 /**
  * struct pixel_s - RGB pixel

@@ -12,7 +12,7 @@
  */
 typedef struct node_s
 {
-	void		*content;
+	void		    *content;
 	struct node_s	*prev;
 	struct node_s	*next;
 } node_t;

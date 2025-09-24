@@ -62,6 +62,7 @@ tprintf(char const *format, ...)
 	va_start(args, format);
 
 	pthread_mutex_lock(&mlock_print);
+		fflush(stdout);
 		printf("[%lu] ", thread_id);
 		printf(format, args);
 	pthread_mutex_unlock(&mlock_print);

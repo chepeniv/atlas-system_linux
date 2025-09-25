@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 void
 prime_factors(unsigned long number)
 {
-	unsigned long dividend = number, divisor = 2;
+	unsigned long dividend = number, divisor = 2, sqrt_limit;
+
+	sqrt_limit = sqrt(number);
 
 	printf("=");
 	do
@@ -13,7 +16,6 @@ prime_factors(unsigned long number)
 		{
 			dividend /= divisor;
 			printf(" %lu x", divisor);
-			fflush(stdout);
 		}
 		else
 		{
@@ -22,10 +24,12 @@ prime_factors(unsigned long number)
 			else
 				divisor += 2;
 		}
-	} while (dividend > divisor);
+	} while (divisor < sqrt_limit);
 
 	if (dividend > 1)
 		printf(" %lu\n", dividend);
+	else
+		printf(" 1\n");
 }
 
 int

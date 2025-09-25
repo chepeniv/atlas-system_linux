@@ -83,6 +83,7 @@ void list_destroy(list_t *list,  node_func_t free_func)
  *
  * @func: Pointer to a function to call with the content of each node
  */
+
 void list_each(list_t *list, node_func_t func)
 {
 	node_t *node;
@@ -90,4 +91,3 @@ void list_each(list_t *list, node_func_t func)
 	for (node = list->head; node; node = node->next)
 		func(node->content);
 }
-

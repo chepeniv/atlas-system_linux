@@ -32,6 +32,10 @@ scenario_4: clean
 	$(CCMD) ../20-tprintf.c 4-test.c -o 4-test.x
 	./4-test.x
 
+scenario_5: clean
+	$(CCMD) ../21-prime_factors.c ../list.c 5-test.c -lm -o 5-test.x
+	./5-test.x 18446744073709551612 18446744073709551609 18446744073709551608
+
 ######## UTILITY
 
 betty:

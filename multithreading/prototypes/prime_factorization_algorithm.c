@@ -1,4 +1,3 @@
-// #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,21 +13,16 @@ prime_factors(unsigned long number)
 		{
 			dividend /= divisor;
 			printf(" %lu x", divisor);
+			fflush(stdout);
 		}
 		else
 		{
-			/*
-			 * alternatively, use a data structure to log multiples of previous
-			 * divisors in order to skip them -- that is if we already tested 3
-			 * we can then skip 9, 15, 21, ... (evens already skipped)
-			 */
 			if (divisor == 2)
 				divisor++;
 			else
 				divisor += 2;
 		}
-
-	} while (divisor < dividend);
+	} while (dividend > divisor);
 
 	if (dividend > 1)
 		printf(" %lu\n", dividend);

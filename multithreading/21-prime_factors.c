@@ -1,5 +1,4 @@
 #include "list.h"
-#include <math.h>
 #include <stdlib.h>
 
 /*
@@ -13,6 +12,70 @@
  * **note**: this task does not require multithreading and will not be linked
  * to the `pthread` library
  */
+
+unsigned long
+power(unsigned long base, unsigned long exponent)
+{
+	unsigned long result = base;
+
+	if (exponent < 1)
+		return (1);
+
+	while (exponent > 1)
+	{
+		result *= base;
+		--exponent;
+	}
+
+	return (result);
+}
+
+unsigned long
+init_estimate(unsigned long number)
+{
+	unsigned long estimate, upper_bound, lower_bound, upper_tens, lower_tens = 0;
+
+	/* determine `number`s order of magnitude */
+	while (number > 10)
+	{
+		lower_tens++;
+		number /= 10;
+	}
+
+	/* calculate lower bound */
+	if (lower_tens % 2 == 1)
+	{
+		/* adjust for odd order of magnitude */
+		lower_tens = (lower_tens - 1) / 2;
+		lower_bound = (power(10, lower_tens) + power(10, lower_tens + 1)) / 2;
+	} else {
+		lower_tens = lower_tens / 2;
+		lower_bound = power(10, lower_tens);
+	}
+
+	/* calculate upper bound */
+	upper_tens = lower_tens + 1;
+	upper_bound = power(10, upper_tens);
+
+	/* final estimate */
+	estimate = (upper_bound +  lower_bound) / 2;
+
+	return (estimate);
+}
+
+unsigned long sq_root(unsigned long number)
+{
+	unsigned long left, right;
+
+	left = init_estimate(number);
+
+	do {
+		right = number / left;
+		left = (left + right) / 2;
+	} while (left != right);
+
+	return (left);
+}
 
 /**
  * list_add_pfactor - adds a given number to the given list
@@ -48,7 +111,7 @@ prime_factors(char const *s)
 	prime_factor_list = malloc(sizeof(list_t));
 	list_init(prime_factor_list);
 
-	sqrt_limit = sqrt(number);
+	sqrt_limit = sq_root(number);
 	dividend = number;
 	divisor = 2;
 

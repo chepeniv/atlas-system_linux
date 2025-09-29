@@ -1,6 +1,5 @@
 #include "list.h"
 #include <stdlib.h>
-#include <limits.h>
 
 /*
  * write a functions that factorizes a number into a list of prime numbers
@@ -34,11 +33,11 @@ power(unsigned long base, unsigned long exponent)
 unsigned long
 init_estimate(unsigned long number)
 {
-	unsigned long estimate, upper_bound, lower_bound, twos = 1;
+	unsigned long estimate, upper_bound = 2, lower_bound, twos = 1;
 
-	while (upper_bound <= number)
+	while (upper_bound * 2 <= number && upper_bound * 2 != 0)
 	{
-		upper_bound *= 2;
+		upper_bound *=  2;
 		twos++;
 	}
 
@@ -120,7 +119,7 @@ prime_factors(char const *s)
 			else
 				divisor += 2;
 		}
-	} while (divisor < sqrt_limit);
+	} while (divisor <= sqrt_limit);
 
 	if (dividend > 1)
 		list_add_pfactor(prime_factor_list, dividend);

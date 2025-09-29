@@ -1,5 +1,6 @@
 #include "list.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /*
  * write a functions that factorizes a number into a list of prime numbers
@@ -33,9 +34,9 @@ power(unsigned long base, unsigned long exponent)
 unsigned long
 init_estimate(unsigned long number)
 {
-	unsigned long estimate, upper_bound = 2, lower_bound, twos = 1;
+	unsigned long estimate, upper_bound = 1, lower_bound, twos = 0;
 
-	while (upper_bound * 2 <= number && upper_bound * 2 != 0)
+	while (upper_bound <= number && upper_bound * 2 != 0)
 	{
 		upper_bound *=  2;
 		twos++;
@@ -44,10 +45,10 @@ init_estimate(unsigned long number)
 	if (twos % 2 == 0)
 		twos /= 2;
 	else
-	 	twos = (twos - 1) / 2;
+		twos = (twos - 1) / 2;
 
-	upper_bound = power(2, twos);
-	lower_bound = power(2, twos - 1);
+	upper_bound = power(2, twos + 1);
+	lower_bound = power(2, twos);
 
 	estimate = (upper_bound + lower_bound) / 2;
 
@@ -96,15 +97,20 @@ list_t *
 prime_factors(char const *s)
 {
 	list_t *prime_factor_list;
-	unsigned long number, sqrt_limit, dividend, divisor;
+	unsigned long number, sqrt_limit, dividend, divisor = 2;
 
 	number = strtoul(s, NULL, 10);
 	prime_factor_list = malloc(sizeof(list_t));
 	list_init(prime_factor_list);
 
+	if (number <= 2)
+	{
+		list_add_pfactor(prime_factor_list, number);
+		return (prime_factor_list);
+	}
+
 	sqrt_limit = sq_root(number);
 	dividend = number;
-	divisor = 2;
 
 	do {
 		if (dividend % divisor == 0)

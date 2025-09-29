@@ -1,5 +1,6 @@
 #include "list.h"
 #include <stdlib.h>
+#include <limits.h>
 
 /*
  * write a functions that factorizes a number into a list of prime numbers
@@ -33,32 +34,23 @@ power(unsigned long base, unsigned long exponent)
 unsigned long
 init_estimate(unsigned long number)
 {
-	unsigned long estimate, upper_bound, lower_bound, upper_tens, lower_tens = 0;
+	unsigned long estimate, upper_bound, lower_bound, twos = 1;
 
-	/* determine `number`s order of magnitude */
-	while (number > 10)
+	while (upper_bound <= number)
 	{
-		lower_tens++;
-		number /= 10;
+		upper_bound *= 2;
+		twos++;
 	}
 
-	/* calculate lower bound */
-	if (lower_tens % 2 == 1)
-	{
-		/* adjust for odd order of magnitude */
-		lower_tens = (lower_tens - 1) / 2;
-		lower_bound = (power(10, lower_tens) + power(10, lower_tens + 1)) / 2;
-	} else {
-		lower_tens = lower_tens / 2;
-		lower_bound = power(10, lower_tens);
-	}
+	if (twos % 2 == 0)
+		twos /= 2;
+	else
+	 	twos = (twos - 1) / 2;
 
-	/* calculate upper bound */
-	upper_tens = lower_tens + 1;
-	upper_bound = power(10, upper_tens);
+	upper_bound = power(2, twos);
+	lower_bound = power(2, twos - 1);
 
-	/* final estimate */
-	estimate = (upper_bound +  lower_bound) / 2;
+	estimate = (upper_bound + lower_bound) / 2;
 
 	return (estimate);
 }

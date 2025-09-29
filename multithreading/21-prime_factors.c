@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 /*
- * write a functions that factorizes a number into a list of prime numbers
+ * ******** INSTRUCTIONS ********
+ * write a function that factorizes a number into a list of prime numbers
  *
  * prototype: `list_t *prime_factors(char const *s);`
  *     `s` is the string representation of of the number to factorize
@@ -11,6 +12,14 @@
  * code will be compiled with the file `list.c`
  * **note**: this task does not require multithreading and will not be linked
  * to the `pthread` library
+ */
+
+/**
+ * power - an exponentiation function
+ * @base: number to raise
+ * @exponent: the power to raise to
+ *
+ * Return: calculation
  */
 
 unsigned long
@@ -30,6 +39,14 @@ power(unsigned long base, unsigned long exponent)
 	return (result);
 }
 
+/**
+ * init_estimate - get a rough (order of magnitude) approximation of a square
+ * root
+ * @number: the number for which to find the estimate
+ *
+ * Return: calculation
+ */
+
 unsigned long
 init_estimate(unsigned long number)
 {
@@ -37,7 +54,7 @@ init_estimate(unsigned long number)
 
 	while (upper_bound <= number && upper_bound * 2 != 0)
 	{
-		upper_bound *=  2;
+		upper_bound *= 2;
 		twos++;
 	}
 
@@ -54,7 +71,15 @@ init_estimate(unsigned long number)
 	return (estimate);
 }
 
-unsigned long sq_root(unsigned long number)
+/**
+ * sq_root - get an integer approximation of a number's square root
+ * @number: the number for which to find this root
+ *
+ * Return: final square root calculation
+ */
+
+unsigned long
+sq_root(unsigned long number)
 {
 	unsigned long left, right;
 

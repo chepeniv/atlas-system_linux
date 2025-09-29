@@ -34,6 +34,7 @@ scenario_4: clean
 
 scenario_5: clean
 	$(CCMD) ../21-prime_factors.c ../list.c 5-test.c -lm -o 5-test.x
+	./5-test.x 4566
 	./5-test.x 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
 	./5-test.x 18446744073709551609 18446744073709551608 18446744073709551612 
 

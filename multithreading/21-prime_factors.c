@@ -1,6 +1,5 @@
 #include "list.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 /*
  * write a functions that factorizes a number into a list of prime numbers
@@ -64,7 +63,7 @@ unsigned long sq_root(unsigned long number)
 	do {
 		right = number / left;
 		left = (left + right) / 2;
-	} while (left != right);
+	} while (right - left > 1);
 
 	return (left);
 }

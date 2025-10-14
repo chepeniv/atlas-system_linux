@@ -52,21 +52,24 @@ init_estimate(unsigned long number)
 {
 	unsigned long estimate, upper_bound = 1, lower_bound, twos = 0;
 
-	while (upper_bound <= number && upper_bound * 2 != 0)
+	/* n * 2^s <=> n << s */
+	/* n / 2^s <=> n >> s */
+	/* n % 2^s <=> n & (2^s - 1) */
+	while (upper_bound <= number && upper_bound << 1 != 0)
 	{
-		upper_bound *= 2;
+		upper_bound <<= 1;
 		twos++;
 	}
 
-	if (twos % 2 == 0)
-		twos /= 2;
+	if ((twos & 1) == 0)
+		twos >>= 1;
 	else
-		twos = (twos - 1) / 2;
+		twos = (twos - 1) >> 1;
 
-	upper_bound = power(2, twos + 1);
-	lower_bound = power(2, twos);
+	upper_bound = 2 << (twos + 1); /* = power(2, twos + 1); */
+	lower_bound = 2 << twos; /* = power(2, twos); */
 
-	estimate = (upper_bound + lower_bound) / 2;
+	estimate = (upper_bound + lower_bound) >> 1;
 
 	return (estimate);
 }
@@ -87,7 +90,7 @@ sq_root(unsigned long number)
 
 	do {
 		right = number / left;
-		left = (left + right) / 2;
+		left = (left + right) >> 1;
 	} while (right - left > 1);
 
 	return (left);
